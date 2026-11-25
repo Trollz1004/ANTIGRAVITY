@@ -561,7 +561,7 @@ test('mail-in section in index.html has the exact required copy, USPS Publicatio
   }
 
   // Exactly one link to USPS
-  const links = [...sectionHtml.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)];
+  const links = [...sectionHtml.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a\s*>/gi)];
   const uspsLinks = links.filter((m) => /usps\.com/i.test(m[1]));
   assert.equal(uspsLinks.length, 1, 'mail-in section must contain exactly one link to USPS');
 

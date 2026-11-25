@@ -268,6 +268,18 @@
                   </svg>
                   <span>Central FL Pickup</span>
                 </button>
+                <button
+                  type="button"
+                  class="service-tab"
+                  id="tab-mailin"
+                  data-service="mailin"
+                  role="tab"
+                  aria-selected="false"
+                  hidden
+                  style="display: none"
+                >
+                  <span>US Mail-In</span>
+                </button>
               </div>
             </div>
 
@@ -524,6 +536,151 @@
                   Schedule another window
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="spin-card-stage stage-scheduler-slot align-center"
+          id="mailin-section"
+          hidden
+          style="display: none; min-height: auto; padding: 24px 0; margin-bottom: 4vh"
+        >
+          <div class="booking-section" id="card-mailin" style="width: 100%; max-width: 780px">
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">02.2 / US MAIL-IN INTAKE</span>
+              <span class="stop-telemetry">STOP 02 / 06 · MAIL-IN</span>
+            </div>
+
+            <div class="booking-header">
+              <div>
+                <h2 style="margin-bottom: 8px">Mail-In Electronics Recycling</h2>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Mail-in is for phones, tablets, laptops and small electronics from anywhere in the United States. You
+                  pay the postage. We do not pay for mailed devices.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  How: fill in the short form, get a reference and the mailing address, write the reference inside the
+                  box.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Packing, from USPS Publication 52 section 349: a used device with a lithium battery goes by ground
+                  only, never air. Use a rigid box, cushion each device so it cannot move, switch it off. Two devices
+                  per box at most. Write 'Restricted Electronic Device' and 'Surface Transportation Only' on the
+                  address side.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Do not mail a device with a swollen, leaking or punctured battery. USPS does not allow it. Use
+                  drop-off or pickup for those.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  What happens to it: storage wiped or destroyed with reasonable effort; working gear reused, the rest
+                  recycled. Nothing is mailed back.
+                </p>
+                <p style="margin-bottom: 0; font-size: 0.96rem">
+                  <a
+                    href="https://www.usps.com/ship/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="color: var(--accent); font-weight: 700"
+                  >
+                    USPS postage and scheduling a package pickup
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <form id="mailin-form" novalidate>
+              <div class="booking-form-grid">
+                <div class="form-field">
+                  <label for="mi-name">Name *</label>
+                  <input
+                    type="text"
+                    id="mi-name"
+                    name="fullName"
+                    maxlength="120"
+                    autocomplete="name"
+                    placeholder="Jane Doe"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-email">Email *</label>
+                  <input
+                    type="email"
+                    id="mi-email"
+                    name="email"
+                    maxlength="200"
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-state">State *</label>
+                  <input
+                    type="text"
+                    id="mi-state"
+                    name="state"
+                    maxlength="60"
+                    autocomplete="address-level1"
+                    placeholder="FL"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-count">Device Count (1 or 2 per box) *</label>
+                  <input
+                    type="number"
+                    id="mi-count"
+                    name="deviceCount"
+                    min="1"
+                    max="2"
+                    value="1"
+                    required
+                  />
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="mi-kind">What is being sent (device kind) *</label>
+                  <input
+                    type="text"
+                    id="mi-kind"
+                    name="deviceKind"
+                    maxlength="500"
+                    placeholder="Phones, tablets, laptops, or small electronics"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div
+                id="mailin-error"
+                role="alert"
+                style="display: none; margin-top: 14px; color: #ffd21e; font-weight: 700; font-size: 0.92rem"
+              ></div>
+
+              <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                <button type="submit" class="btn btn-primary" id="mi-submit-btn">
+                  <span id="mi-submit-btn-label">Get Reference &amp; Mailing Address</span>
+                </button>
+              </div>
+            </form>
+
+            <div class="booking-confirm-box" id="mailin-confirm-box" role="status" aria-live="polite">
+              <h3 id="mailin-confirm-title">Mail-In Reference Issued</h3>
+              <p id="mailin-confirm-ref" style="color: var(--text); font-size: 0.96rem; margin-bottom: 8px"></p>
+              <p
+                id="mailin-confirm-address"
+                style="color: var(--accent); font-weight: 700; font-size: 1rem; margin-bottom: 8px"
+              ></p>
+              <p id="mailin-confirm-note" style="color: var(--text); font-size: 0.94rem; margin-bottom: 0">
+                Write this reference inside the box. Write 'Restricted Electronic Device' and 'Surface Transportation
+                Only' on the address side.
+              </p>
             </div>
           </div>
         </div>
@@ -1997,6 +2154,171 @@
           syncProgressUI();
           renderAll(performance.now());
         });
+      })();
+    </script>
+
+    <!-- Mail-In Option & Request Logic -->
+    <script>
+      (function () {
+        const sectionEl = document.getElementById('mailin-section');
+        const tabBtn = document.getElementById('tab-mailin');
+        const formEl = document.getElementById('mailin-form');
+        const errEl = document.getElementById('mailin-error');
+        const confirmBoxEl = document.getElementById('mailin-confirm-box');
+        const confirmRefEl = document.getElementById('mailin-confirm-ref');
+        const confirmAddrEl = document.getElementById('mailin-confirm-address');
+        const submitBtn = document.getElementById('mi-submit-btn');
+        const submitBtnLabel = document.getElementById('mi-submit-btn-label');
+
+        function setMailInVisible(visible) {
+          const show = Boolean(visible);
+          if (sectionEl) {
+            sectionEl.hidden = !show;
+            sectionEl.style.display = show ? 'flex' : 'none';
+          }
+          if (tabBtn) {
+            tabBtn.hidden = !show;
+            tabBtn.style.display = show ? 'inline-flex' : 'none';
+          }
+        }
+
+        setMailInVisible(false);
+
+        if (tabBtn && sectionEl) {
+          tabBtn.addEventListener('click', function () {
+            if (typeof sectionEl.scrollIntoView === 'function') {
+              sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+
+        if (typeof fetch === 'function') {
+          fetch('/api/mailin-config')
+            .then(function (r) {
+              if (!r || r.ok === false || typeof r.json !== 'function') return null;
+              return r.json();
+            })
+            .then(function (cfg) {
+              const enabled = Boolean(cfg && cfg.ok && (cfg.available || cfg.enabled || cfg.mailInAvailable));
+              setMailInVisible(enabled);
+            })
+            .catch(function () {
+              setMailInVisible(false);
+            });
+        }
+
+        if (formEl) {
+          formEl.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            if (errEl) errEl.style.display = 'none';
+
+            const nameEl = document.getElementById('mi-name');
+            const emailEl = document.getElementById('mi-email');
+            const stateEl = document.getElementById('mi-state');
+            const kindEl = document.getElementById('mi-kind');
+            const countEl = document.getElementById('mi-count');
+
+            const fullName = nameEl ? String(nameEl.value || '').trim() : '';
+            const email = emailEl ? String(emailEl.value || '').trim() : '';
+            const state = stateEl ? String(stateEl.value || '').trim() : '';
+            const deviceKind = kindEl ? String(kindEl.value || '').trim() : '';
+            const rawCount = countEl ? String(countEl.value || '').trim() : '';
+            const deviceCount = rawCount === '' ? NaN : Number(rawCount);
+
+            if (Number.isFinite(deviceCount) && deviceCount > 2) {
+              if (errEl) {
+                errEl.textContent = 'Two devices per box at most. Please send at most 2 devices per box.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!Number.isInteger(deviceCount) || deviceCount < 1) {
+              if (errEl) {
+                errEl.textContent = 'Please enter a device count of 1 or 2.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!fullName || !email || !state || !deviceKind) {
+              if (errEl) {
+                errEl.textContent = 'Please fill in your name, email, state, device kind, and device count (1 or 2).';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              if (errEl) {
+                errEl.textContent = 'Please enter a valid email address.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtnLabel) submitBtnLabel.textContent = 'Sending...';
+
+            fetch('/api/mailin', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                fullName: fullName,
+                email: email,
+                state: state,
+                deviceKind: deviceKind,
+                deviceCount: deviceCount
+              })
+            })
+              .then(function (r) {
+                const readRaw =
+                  typeof r.text === 'function'
+                    ? r.text()
+                    : r.json().then(function (v) {
+                        return JSON.stringify(v);
+                      });
+                return readRaw.then(function (raw) {
+                  let res;
+                  try {
+                    res = JSON.parse(raw);
+                  } catch (e) {
+                    res = { ok: false, error: 'Could not submit mail-in request. Please try again.' };
+                  }
+                  return res;
+                });
+              })
+              .then(function (res) {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnLabel) submitBtnLabel.textContent = 'Get Reference & Mailing Address';
+                if (!res || !res.ok) {
+                  if (errEl) {
+                    errEl.textContent = (res && res.error) || 'Could not submit mail-in request. Please try again.';
+                    errEl.style.display = 'block';
+                  }
+                  return;
+                }
+                const refId = res.referenceId || res.bookingId || (res.booking && res.booking.bookingId) || '';
+                if (confirmRefEl) {
+                  confirmRefEl.textContent = 'Reference: ' + refId + ' (' + deviceCount + ' — ' + deviceKind + ')';
+                }
+                if (confirmAddrEl) {
+                  confirmAddrEl.textContent = 'Mail to: ' + (res.mailingAddress || '');
+                }
+                if (confirmBoxEl) {
+                  confirmBoxEl.style.display = 'block';
+                  if (typeof confirmBoxEl.scrollIntoView === 'function') {
+                    confirmBoxEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                  }
+                }
+              })
+              .catch(function () {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnLabel) submitBtnLabel.textContent = 'Get Reference & Mailing Address';
+                if (errEl) {
+                  errEl.textContent = 'Network error — please try again.';
+                  errEl.style.display = 'block';
+                }
+              });
+          });
+        }
       })();
     </script>
 

@@ -43,7 +43,11 @@ html {
       rgba(26, 30, 37, 0.52) 6px
     ),
     var(--carbon-weave-svg);
-  background-size: 100% 100%, 8px 8px, 8px 8px, 12px 12px;
+  background-size:
+    100% 100%,
+    8px 8px,
+    8px 8px,
+    12px 12px;
   background-attachment: fixed;
   color: var(--text);
 }
@@ -84,7 +88,10 @@ body {
       rgba(24, 28, 36, 0.58) 6px
     ),
     var(--carbon-weave-svg);
-  background-size: 8px 8px, 8px 8px, 12px 12px;
+  background-size:
+    8px 8px,
+    8px 8px,
+    12px 12px;
   overflow: hidden;
 }
 
@@ -251,7 +258,9 @@ body {
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: border-color 150ms ease, color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease;
 }
 
 .mobile-menu-btn:hover,
@@ -508,7 +517,9 @@ body {
 
 .card-face-front,
 .card-face-back {
-  transition: opacity 220ms ease, transform 260ms ease;
+  transition:
+    opacity 220ms ease,
+    transform 260ms ease;
 }
 
 .spin-card[data-flippable='true'] .card-face-back {
@@ -557,7 +568,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .card-flip-btn:hover,
@@ -679,7 +692,10 @@ p {
   font-size: 0.98rem;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    background-color 150ms ease;
 }
 
 .btn-primary {
@@ -744,6 +760,8 @@ p {
 
 .service-tabs {
   display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
   background: var(--bg);
   border: 1px solid var(--line);
   padding: 5px;
@@ -810,7 +828,9 @@ p {
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .date-page-toggle:hover,
@@ -1054,7 +1074,13 @@ p {
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--accent);
-  background: linear-gradient(180deg, rgba(10, 11, 13, 0.55) 0%, transparent 32%, transparent 68%, rgba(10, 11, 13, 0.72) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 11, 13, 0.55) 0%,
+    transparent 32%,
+    transparent 68%,
+    rgba(10, 11, 13, 0.72) 100%
+  );
 }
 
 .pan-zoom-controls {

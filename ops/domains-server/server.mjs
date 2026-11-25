@@ -6,39 +6,39 @@
 //
 // Start: node ops/domains-server/server.mjs
 
-import http from "node:http";
-import { createServer as createServerFor } from "node:http";
-import fs from "node:fs";
-import fsp from "node:fs/promises";
-import path from "node:path";
-import crypto from "node:crypto";
-import { fileURLToPath } from "node:url";
-import { notifyBooking, isBookingNotifyConfigured } from "./booking-notify.mjs";
-import { recordPageView, recordBooking } from "./booking-stats.mjs";
-import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
-import { logStartupEnvCheck } from "../agents/env-required.mjs";
-import { buildPublicHealthLight } from "../agents/node-light.mjs";
+import http from 'node:http';
+import { createServer as createServerFor } from 'node:http';
+import fs from 'node:fs';
+import fsp from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { notifyBooking, isBookingNotifyConfigured } from './booking-notify.mjs';
+import { recordPageView, recordBooking } from './booking-stats.mjs';
+import { getBindHost, getNodeIp, getService } from '../fleet/fleet-map.mjs';
+import { logStartupEnvCheck } from '../agents/env-required.mjs';
+import { buildPublicHealthLight } from '../agents/node-light.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, "..", "..");
-const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const DOMAINS_ROOT = path.join(REPO_ROOT, 'domains');
 const BOOKINGS_DIR = process.env.ORC_BOOKINGS_DIR
   ? path.resolve(process.env.ORC_BOOKINGS_DIR)
-  : path.join(REPO_ROOT, "data", "ewaste-intake");
-const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
-const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
-const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
+  : path.join(REPO_ROOT, 'data', 'ewaste-intake');
+const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, 'bookings.jsonl');
+const INQUIRIES_DIR = path.join(BOOKINGS_DIR, 'inquiries');
+const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, 'stats');
 
 // Fleet Map authority (ops/fleet/fleet-map.json): T5500 (192.168.0.15) hosts
 // domains-server bound on 0.0.0.0:9160 unless overridden via DOMAINS_SERVER_HOST.
-const T5500_IP = getNodeIp("t5500");
-const DOMAINS_SERVICE = getService("domains-server");
+const T5500_IP = getNodeIp('t5500');
+const DOMAINS_SERVICE = getService('domains-server');
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || DOMAINS_SERVICE.port);
 
 function resolveDomainsServerBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
-  const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || "").trim();
-  const explicit = String(env?.DOMAINS_SERVER_HOST || "")
-    .split(",")
+  const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || '').trim();
+  const explicit = String(env?.DOMAINS_SERVER_HOST || '')
+    .split(',')
     .map((h) => h.trim())
     .filter(Boolean);
   if (explicit.length > 0) {
@@ -46,12 +46,12 @@ function resolveDomainsServerBind(env = process.env, { port = PORT, warn = conso
   }
   if (!token) {
     warn?.(
-      `[domains-server] WARNING: FLEET_SHARED_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+      `[domains-server] WARNING: FLEET_SHARED_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`,
     );
-    return ["127.0.0.1"];
+    return ['127.0.0.1'];
   }
-  return getBindHost("domains-server")
-    .split(",")
+  return getBindHost('domains-server')
+    .split(',')
     .map((h) => h.trim())
     .filter(Boolean);
 }
@@ -61,18 +61,18 @@ const HOSTS = resolveDomainsServerBind(process.env, { port: PORT });
 // Host header -> document root (relative to DOMAINS_ROOT).
 // onlinerecycle.net serves the restored static recycling site from site/
 const VHOSTS = {
-  "dream-online.net": "dream-online.net",
-  "www.dream-online.net": "dream-online.net",
-  "untilnokidinneed.com": "untilnokidinneed.com",
-  "www.untilnokidinneed.com": "untilnokidinneed.com",
-  "onlinerecycle.net": path.join("onlinerecycle.net", "site"),
-  "www.onlinerecycle.net": path.join("onlinerecycle.net", "site"),
+  'dream-online.net': 'dream-online.net',
+  'www.dream-online.net': 'dream-online.net',
+  'untilnokidinneed.com': 'untilnokidinneed.com',
+  'www.untilnokidinneed.com': 'untilnokidinneed.com',
+  'onlinerecycle.net': path.join('onlinerecycle.net', 'site'),
+  'www.onlinerecycle.net': path.join('onlinerecycle.net', 'site'),
 };
 
-const SITES = ["dream-online.net", "untilnokidinneed.com", "onlinerecycle.net"];
+const SITES = ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'];
 
 // The booking APIs belong to onlinerecycle.net only.
-const BOOKING_HOSTS = new Set(["onlinerecycle.net", "www.onlinerecycle.net"]);
+const BOOKING_HOSTS = new Set(['onlinerecycle.net', 'www.onlinerecycle.net']);
 
 // Public, unauthenticated booking form: cap submissions per client so a
 // script cannot fill the disk. In-memory, resets on restart.
@@ -84,14 +84,14 @@ const bookHits = new Map();
 // cf-connecting-ip is trusted only from the local T5500 tunnel connector;
 // an external LAN client could otherwise invent a fresh address per request.
 function clientIp(req) {
-  const remote = String(req.socket.remoteAddress || "unknown");
+  const remote = String(req.socket.remoteAddress || 'unknown');
   const viaTunnel =
-    remote === "127.0.0.1" ||
-    remote === "::1" ||
-    remote === "::ffff:127.0.0.1" ||
+    remote === '127.0.0.1' ||
+    remote === '::1' ||
+    remote === '::ffff:127.0.0.1' ||
     remote === T5500_IP ||
     remote === `::ffff:${T5500_IP}`;
-  return viaTunnel && req.headers["cf-connecting-ip"] ? String(req.headers["cf-connecting-ip"]) : remote;
+  return viaTunnel && req.headers['cf-connecting-ip'] ? String(req.headers['cf-connecting-ip']) : remote;
 }
 
 function bookingAllowed(ip, now = Date.now()) {
@@ -117,37 +117,45 @@ function bookingAllowed(ip, now = Date.now()) {
 }
 
 const MIME = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".mjs": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".gif": "image/gif",
-  ".ico": "image/x-icon",
-  ".webp": "image/webp",
-  ".woff": "font/woff",
-  ".woff2": "font/woff2",
-  ".txt": "text/plain; charset=utf-8",
-  ".xml": "application/xml; charset=utf-8",
-  ".webmanifest": "application/manifest+json",
-  ".ics": "text/calendar; charset=utf-8",
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.webp': 'image/webp',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.webmanifest': 'application/manifest+json',
+  '.ics': 'text/calendar; charset=utf-8',
 };
 
 function contentTypeFor(filePath) {
-  return MIME[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+  return MIME[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
 }
 
 function hostOnly(hostHeader) {
-  if (!hostHeader) return "";
-  return hostHeader.split(",")[0].trim().split(":")[0].toLowerCase();
+  if (!hostHeader) return '';
+  return hostHeader.split(',')[0].trim().split(':')[0].toLowerCase();
 }
 
 function readEnvValue(key) {
-  return String(process.env[key] || "").trim();
+  return String(process.env[key] || '').trim();
+}
+
+function readMailInAddress(env = process.env) {
+  return String(env?.RECYCLE_MAILIN_ADDRESS || '').trim();
+}
+
+function isMailInEnabled(env = process.env) {
+  return readMailInAddress(env).length > 0;
 }
 
 // Every booking, cached and re-read only when bookings.jsonl changes on disk.
@@ -158,7 +166,7 @@ function readBookings() {
     const stat = fs.statSync(BOOKINGS_JSONL);
     if (stat.mtimeMs === bookingCache.mtimeMs && stat.size === bookingCache.size) return bookingCache.list;
     const list = fs
-      .readFileSync(BOOKINGS_JSONL, "utf8")
+      .readFileSync(BOOKINGS_JSONL, 'utf8')
       .split(/\r?\n/)
       .filter(Boolean)
       .map((l) => {
@@ -188,11 +196,7 @@ function updateBookingNotified(bookingId, notified) {
       return b;
     });
     if (changed) {
-      fs.writeFileSync(
-        BOOKINGS_JSONL,
-        `${updated.map((b) => JSON.stringify(b)).join("\n")}\n`,
-        "utf8"
-      );
+      fs.writeFileSync(BOOKINGS_JSONL, `${updated.map((b) => JSON.stringify(b)).join('\n')}\n`, 'utf8');
       bookingCache = { mtimeMs: -1, size: -1, list: [] };
     }
   } catch {
@@ -201,36 +205,40 @@ function updateBookingNotified(bookingId, notified) {
 }
 
 function countUnnotifiedBookings() {
-  return readBookings().filter((b) => b && b.status !== "CANCELLED" && b.notified !== true).length;
+  return readBookings().filter((b) => b && b.status !== 'CANCELLED' && b.notified !== true).length;
 }
 
 function bookingCreatedDayInFlorida(booking) {
-  if (!booking || !booking.createdAt) return "";
+  if (!booking || !booking.createdAt) return '';
   const d = new Date(booking.createdAt);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(d);
+  if (Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(d);
 }
 
 function countTodayBookings() {
   const today = todayInFlorida();
   return readBookings().filter(
-    (b) => b && b.status !== "CANCELLED" && (b.date === today || bookingCreatedDayInFlorida(b) === today)
+    (b) => b && b.status !== 'CANCELLED' && (b.date === today || bookingCreatedDayInFlorida(b) === today),
   ).length;
 }
 
 function countTotalBookings() {
-  return readBookings().filter((b) => b && b.status !== "CANCELLED").length;
+  return readBookings().filter((b) => b && b.status !== 'CANCELLED').length;
 }
 
 function toGoogleCalDateRange(dateStr, slotStr) {
   // dateStr: YYYY-MM-DD, slotStr e.g. "09:00-09:30" or "08:00-10:00"
-  const cleanDate = String(dateStr || "").replace(/-/g, "");
-  const m = String(slotStr || "").match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
+  const cleanDate = String(dateStr || '').replace(/-/g, '');
+  const m = String(slotStr || '').match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
   if (!/^\d{8}$/.test(cleanDate) || !m) {
     const now = new Date();
     const start = new Date(now.getTime() + 86400000);
     const end = new Date(start.getTime() + 3600000);
-    const fmt = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+    const fmt = (d) =>
+      d
+        .toISOString()
+        .replace(/[-:]/g, '')
+        .replace(/\.\d{3}Z$/, 'Z');
     return { startCompact: fmt(start), endCompact: fmt(end) };
   }
   return {
@@ -241,12 +249,12 @@ function toGoogleCalDateRange(dateStr, slotStr) {
 
 function buildGoogleCalendarUrl(booking) {
   const { startCompact, endCompact } = toGoogleCalDateRange(booking.date, booking.slotCode);
-  const typeLabel = booking.serviceType === "pickup" ? "Electronics Pickup" : "Electronics Drop-Off";
+  const typeLabel = booking.serviceType === 'pickup' ? 'Electronics Pickup' : 'Electronics Drop-Off';
   const title = `OnlineRecycle.net ${typeLabel} — ${booking.fullName} (${booking.bookingId})`;
   const location =
-    booking.serviceType === "pickup"
-      ? `${booking.address || ""}, ${booking.city || "Central Florida"} ${booking.zip || ""}`.trim()
-      : "Sorrento, FL 32776 (Exact drop-off address confirmed by text/email)";
+    booking.serviceType === 'pickup'
+      ? `${booking.address || ''}, ${booking.city || 'Central Florida'} ${booking.zip || ''}`.trim()
+      : 'Sorrento, FL 32776 (Exact drop-off address confirmed by text/email)';
   const details = [
     `Booking ID: ${booking.bookingId}`,
     `Service: ${typeLabel} (${booking.slotLabel || booking.slotCode})`,
@@ -254,21 +262,21 @@ function buildGoogleCalendarUrl(booking) {
     `Phone: ${booking.phone}`,
     `Email: ${booking.email}`,
     booking.organization ? `Organization: ${booking.organization}` : null,
-    booking.serviceType === "pickup" ? `Pickup Address: ${location}` : null,
+    booking.serviceType === 'pickup' ? `Pickup Address: ${location}` : null,
     `Estimated Device Count: ${booking.deviceCount}`,
     `Devices: ${booking.deviceList}`,
     booking.notes ? `Notes / Data Handling: ${booking.notes}` : null,
-    "",
-    "OnlineRecycle.net | Trash Or Treasure Online Recycler LLC | Call/Text: (321) 396-2008",
+    '',
+    'OnlineRecycle.net | Trash Or Treasure Online Recycler LLC | Call/Text: (321) 396-2008',
   ]
     .filter(Boolean)
-    .join("\n");
+    .join('\n');
 
   const params = new URLSearchParams({
-    action: "TEMPLATE",
+    action: 'TEMPLATE',
     text: title,
     dates: `${startCompact}/${endCompact}`,
-    ctz: "America/New_York",
+    ctz: 'America/New_York',
     details,
     location,
   });
@@ -277,22 +285,25 @@ function buildGoogleCalendarUrl(booking) {
 
 // RFC 5545 TEXT escaping: customer text must never start a new property line.
 function icsText(value) {
-  return String(value || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,")
-    .replace(/\r\n|\r|\n/g, "\\n");
+  return String(value || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\r\n|\r|\n/g, '\\n');
 }
 
 function buildIcsContent(booking) {
   const { startCompact, endCompact } = toGoogleCalDateRange(booking.date, booking.slotCode);
-  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
-  const typeLabel = booking.serviceType === "pickup" ? "Electronics Pickup" : "Electronics Drop-Off";
+  const stamp = new Date()
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}Z$/, 'Z');
+  const typeLabel = booking.serviceType === 'pickup' ? 'Electronics Pickup' : 'Electronics Drop-Off';
   const summary = `OnlineRecycle.net ${typeLabel} - ${booking.fullName} (${booking.bookingId})`;
   const location =
-    booking.serviceType === "pickup"
-      ? `${booking.address || ""} ${booking.city || ""} ${booking.zip || ""}`.trim()
-      : "Sorrento, FL 32776";
+    booking.serviceType === 'pickup'
+      ? `${booking.address || ''} ${booking.city || ''} ${booking.zip || ''}`.trim()
+      : 'Sorrento, FL 32776';
   const desc = [
     `Booking ID: ${booking.bookingId}`,
     `Service: ${typeLabel} (${booking.slotLabel || booking.slotCode})`,
@@ -300,19 +311,19 @@ function buildIcsContent(booking) {
     `Email: ${booking.email}`,
     `Device Count: ${booking.deviceCount}`,
     `Devices: ${booking.deviceList}`,
-    booking.notes ? `Notes: ${booking.notes}` : "",
-    "OnlineRecycle.net - (321) 396-2008",
+    booking.notes ? `Notes: ${booking.notes}` : '',
+    'OnlineRecycle.net - (321) 396-2008',
   ]
     .filter(Boolean)
-    .join("\n");
+    .join('\n');
 
   return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//OnlineRecycle.net//Live Appointment Scheduler//EN",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VEVENT",
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//OnlineRecycle.net//Live Appointment Scheduler//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
     `UID:${booking.bookingId}@onlinerecycle.net`,
     `DTSTAMP:${stamp}`,
     `DTSTART;TZID=America/New_York:${startCompact}`,
@@ -320,11 +331,11 @@ function buildIcsContent(booking) {
     `SUMMARY:${icsText(summary)}`,
     `LOCATION:${icsText(location)}`,
     `DESCRIPTION:${icsText(desc)}`,
-    "STATUS:CONFIRMED",
-    "END:VEVENT",
-    "END:VCALENDAR",
-    "",
-  ].join("\r\n");
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR',
+    '',
+  ].join('\r\n');
 }
 
 class BadRequest extends Error {
@@ -341,29 +352,29 @@ function readJsonBody(req, maxBytes = 32768) {
     let bytes = 0;
     let tooLarge = false;
     const chunks = [];
-    req.on("data", (chunk) => {
+    req.on('data', (chunk) => {
       bytes += chunk.length;
       if (bytes > maxBytes) {
         if (!tooLarge) {
           tooLarge = true;
           req.pause?.();
-          reject(new BadRequest(413, "That request was too large. Please shorten the device list or notes."));
+          reject(new BadRequest(413, 'That request was too large. Please shorten the device list or notes.'));
         }
         return;
       }
       chunks.push(chunk);
     });
-    req.on("end", () => {
+    req.on('end', () => {
       if (tooLarge) return;
       try {
-        const raw = Buffer.concat(chunks).toString("utf8");
+        const raw = Buffer.concat(chunks).toString('utf8');
         const parsed = raw ? JSON.parse(raw) : {};
-        resolve(parsed && typeof parsed === "object" ? parsed : {});
+        resolve(parsed && typeof parsed === 'object' ? parsed : {});
       } catch {
-        reject(new BadRequest(400, "We could not read that booking request. Please try again."));
+        reject(new BadRequest(400, 'We could not read that booking request. Please try again.'));
       }
     });
-    req.on("error", (err) => {
+    req.on('error', (err) => {
       if (!tooLarge) reject(err);
     });
   });
@@ -371,14 +382,21 @@ function readJsonBody(req, maxBytes = 32768) {
 
 const SLOT_CODES = {
   dropoff: new Set([
-    "08:00-08:30", "09:00-09:30", "10:00-10:30", "11:00-11:30", "13:00-13:30",
-    "14:00-14:30", "15:00-15:30", "16:00-16:30", "17:00-17:30",
+    '08:00-08:30',
+    '09:00-09:30',
+    '10:00-10:30',
+    '11:00-11:30',
+    '13:00-13:30',
+    '14:00-14:30',
+    '15:00-15:30',
+    '16:00-16:30',
+    '17:00-17:30',
   ]),
-  pickup: new Set(["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00"]),
+  pickup: new Set(['08:00-10:00', '10:00-12:00', '12:00-14:00', '14:00-16:00', '16:00-18:00']),
 };
 
 function todayInFlorida() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
 }
 
 // A real calendar date, YYYY-MM-DD, from today to 14 days ahead (Florida time).
@@ -393,22 +411,22 @@ function validBookingDate(date) {
 
 function extractPickupZip(rawZip, city, address) {
   for (const src of [rawZip, city, address]) {
-    const matches = String(src || "").match(/\b(\d{5})(?:-\d{4})?\b/g);
+    const matches = String(src || '').match(/\b(\d{5})(?:-\d{4})?\b/g);
     if (matches && matches.length > 0) {
       return matches[matches.length - 1].slice(0, 5);
     }
   }
-  return "";
+  return '';
 }
 
 function sendJson(res, status, payload) {
-  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(payload));
 }
 
 async function resolveFile(docRootAbs, urlPath) {
-  let cleanPath = decodeURIComponent(urlPath.split("?")[0]);
-  if (cleanPath === "/" || cleanPath === "") cleanPath = "/index.html";
+  let cleanPath = decodeURIComponent(urlPath.split('?')[0]);
+  if (cleanPath === '/' || cleanPath === '') cleanPath = '/index.html';
 
   const requested = path.normalize(path.join(docRootAbs, cleanPath));
   if (!requested.startsWith(docRootAbs)) {
@@ -418,7 +436,7 @@ async function resolveFile(docRootAbs, urlPath) {
   try {
     let stat = await fsp.stat(requested);
     if (stat.isDirectory()) {
-      const indexPath = path.join(requested, "index.html");
+      const indexPath = path.join(requested, 'index.html');
       stat = await fsp.stat(indexPath);
       if (stat.isFile()) return indexPath;
       return null;
@@ -427,8 +445,8 @@ async function resolveFile(docRootAbs, urlPath) {
     return null;
   } catch {
     const last = path.basename(cleanPath);
-    if (!last.includes(".")) {
-      const htmlCandidate = `${requested.replace(/[\\/]+$/, "")}.html`;
+    if (!last.includes('.')) {
+      const htmlCandidate = `${requested.replace(/[\\/]+$/, '')}.html`;
       if (htmlCandidate.startsWith(docRootAbs)) {
         try {
           const htmlStat = await fsp.stat(htmlCandidate);
@@ -437,7 +455,7 @@ async function resolveFile(docRootAbs, urlPath) {
           // fall through to index.html
         }
       }
-      const indexPath = path.join(docRootAbs, "index.html");
+      const indexPath = path.join(docRootAbs, 'index.html');
       try {
         const stat = await fsp.stat(indexPath);
         if (stat.isFile()) return indexPath;
@@ -450,39 +468,39 @@ async function resolveFile(docRootAbs, urlPath) {
 }
 
 const DROPOFF_SLOTS = [
-  { code: "08:00-08:30", label: "8:00 AM – 8:30 AM" },
-  { code: "09:00-09:30", label: "9:00 AM – 9:30 AM" },
-  { code: "10:00-10:30", label: "10:00 AM – 10:30 AM" },
-  { code: "11:00-11:30", label: "11:00 AM – 11:30 AM" },
-  { code: "13:00-13:30", label: "1:00 PM – 1:30 PM" },
-  { code: "14:00-14:30", label: "2:00 PM – 2:30 PM" },
-  { code: "15:00-15:30", label: "3:00 PM – 3:30 PM" },
-  { code: "16:00-16:30", label: "4:00 PM – 4:30 PM" },
-  { code: "17:00-17:30", label: "5:00 PM – 5:30 PM" },
+  { code: '08:00-08:30', label: '8:00 AM – 8:30 AM' },
+  { code: '09:00-09:30', label: '9:00 AM – 9:30 AM' },
+  { code: '10:00-10:30', label: '10:00 AM – 10:30 AM' },
+  { code: '11:00-11:30', label: '11:00 AM – 11:30 AM' },
+  { code: '13:00-13:30', label: '1:00 PM – 1:30 PM' },
+  { code: '14:00-14:30', label: '2:00 PM – 2:30 PM' },
+  { code: '15:00-15:30', label: '3:00 PM – 3:30 PM' },
+  { code: '16:00-16:30', label: '4:00 PM – 4:30 PM' },
+  { code: '17:00-17:30', label: '5:00 PM – 5:30 PM' },
 ];
 
 const PICKUP_SLOTS = [
-  { code: "08:00-10:00", label: "8:00 AM – 10:00 AM" },
-  { code: "10:00-12:00", label: "10:00 AM – 12:00 PM" },
-  { code: "12:00-14:00", label: "12:00 PM – 2:00 PM" },
-  { code: "14:00-16:00", label: "2:00 PM – 4:00 PM" },
-  { code: "16:00-18:00", label: "4:00 PM – 6:00 PM" },
+  { code: '08:00-10:00', label: '8:00 AM – 10:00 AM' },
+  { code: '10:00-12:00', label: '10:00 AM – 12:00 PM' },
+  { code: '12:00-14:00', label: '12:00 PM – 2:00 PM' },
+  { code: '14:00-16:00', label: '2:00 PM – 4:00 PM' },
+  { code: '16:00-18:00', label: '4:00 PM – 6:00 PM' },
 ];
 
 function getNewYorkNowParts(nowInput = new Date()) {
   const d = nowInput instanceof Date ? nowInput : new Date(nowInput);
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/New_York",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   }).formatToParts(d);
   const map = {};
   for (const p of parts) {
-    if (p.type !== "literal") map[p.type] = p.value;
+    if (p.type !== 'literal') map[p.type] = p.value;
   }
   const hour = Number(map.hour) === 24 ? 0 : Number(map.hour);
   const minute = Number(map.minute);
@@ -501,16 +519,16 @@ export function buildNextDays(count = 14, now = new Date()) {
   for (let i = 0; i < count; i++) {
     const d = new Date(Date.UTC(ny.year, ny.month - 1, ny.day + i, 12, 0, 0));
     const yyyy = d.getUTCFullYear();
-    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const dd = String(d.getUTCDate()).padStart(2, "0");
+    const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(d.getUTCDate()).padStart(2, '0');
     const iso = `${yyyy}-${mm}-${dd}`;
     const dow =
       i === 0
-        ? "Today"
+        ? 'Today'
         : i === 1
-          ? "Tomorrow"
-          : d.toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" });
-    const dom = d.toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric" });
+          ? 'Tomorrow'
+          : d.toLocaleDateString('en-US', { timeZone: 'America/New_York', weekday: 'short' });
+    const dom = d.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
     days.push({ iso, dow, dom });
   }
   return days;
@@ -528,14 +546,14 @@ export function isSlotElapsed(dateIso, slotCode, now = new Date()) {
 }
 
 export function selectDefaultSlot({
-  serviceType = "dropoff",
-  date = "",
+  serviceType = 'dropoff',
+  date = '',
   bookedSlots = [],
-  currentSlotCode = "",
+  currentSlotCode = '',
   now = new Date(),
 } = {}) {
-  const normalizedType = serviceType === "pickup" ? "pickup" : "dropoff";
-  const slots = normalizedType === "pickup" ? PICKUP_SLOTS : DROPOFF_SLOTS;
+  const normalizedType = serviceType === 'pickup' ? 'pickup' : 'dropoff';
+  const slots = normalizedType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
   const isUnavailable = (code) =>
     bookedSlots.some((b) => b.date === date && b.slotCode === code && b.serviceType === normalizedType) ||
     isSlotElapsed(date, code, now);
@@ -549,11 +567,11 @@ export function selectDefaultSlot({
 }
 
 export function isValidBookingPhone(phone) {
-  return String(phone || "").replace(/\D/g, "").length >= 10;
+  return String(phone || '').replace(/\D/g, '').length >= 10;
 }
 
 export function isValidBookingEmail(email) {
-  const trimmed = String(email || "").trim();
+  const trimmed = String(email || '').trim();
   if (!trimmed) return true;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
 }
@@ -562,25 +580,25 @@ function buildDomainsHealthPayload(
   env = process.env,
   {
     manifestDir = __dirname,
-    driftPath = "",
+    driftPath = '',
     unnotifiedBookings = countUnnotifiedBookings(),
     todayBookings = countTodayBookings(),
     totalBookings = countTotalBookings(),
-  } = {}
+  } = {},
 ) {
   const baseLight = buildPublicHealthLight({ manifestDir, env, driftPath });
   const noticesOn = isBookingNotifyConfigured(env);
   const unnotifiedCount = Math.max(0, Number(unnotifiedBookings) || 0);
   const todayCount = Math.max(0, Number(todayBookings) || 0);
   const totalCount = Math.max(0, Number(totalBookings) || 0);
-  const nodeLight = !noticesOn || unnotifiedCount > 0 || baseLight.nodeLight !== "green" ? "amber" : "green";
+  const nodeLight = !noticesOn || unnotifiedCount > 0 || baseLight.nodeLight !== 'green' ? 'amber' : 'green';
   return {
-    service: "domains-server",
+    service: 'domains-server',
     sites: SITES,
     ...baseLight,
     nodeLight,
-    bookingNotices: noticesOn ? "on" : "off",
-    bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
+    bookingNotices: noticesOn ? 'on' : 'off',
+    bookingNoticesStatus: `booking notices: ${noticesOn ? 'on' : 'off'}`,
     unnotifiedBookings: unnotifiedCount,
     todayBookings: todayCount,
     totalBookings: totalCount,
@@ -590,11 +608,11 @@ function buildDomainsHealthPayload(
 const server = http.createServer(async (req, res) => {
   try {
     const host = hostOnly(req.headers.host);
-    const rawUrl = req.url || "/";
+    const rawUrl = req.url || '/';
     const parsedUrl = new URL(rawUrl, `http://${host || T5500_IP}`);
     const urlPath = parsedUrl.pathname;
 
-    if (urlPath === "/health" || urlPath === "/health/" || urlPath === "/api/health") {
+    if (urlPath === '/health' || urlPath === '/health/' || urlPath === '/api/health') {
       sendJson(res, 200, buildDomainsHealthPayload(process.env, { manifestDir: __dirname }));
       return;
     }
@@ -602,36 +620,197 @@ const server = http.createServer(async (req, res) => {
     // OnlineRecycle.net native appointment booking APIs
     const isBookingHost = BOOKING_HOSTS.has(host);
 
-    if (isBookingHost && urlPath === "/api/booking-config" && req.method === "GET") {
+    if (
+      isBookingHost &&
+      (urlPath === '/api/mailin-config' ||
+        urlPath === '/api/mail-in-config' ||
+        urlPath === '/api/mailin' ||
+        urlPath === '/api/mail-in') &&
+      req.method === 'GET'
+    ) {
+      const available = isMailInEnabled(process.env);
+      sendJson(res, 200, {
+        ok: true,
+        available,
+        enabled: available,
+        mailInAvailable: available,
+      });
+      return;
+    }
+
+    const handleMailInBooking = async (preParsedBody = null) => {
+      const mailingAddress = readMailInAddress(process.env);
+      if (!mailingAddress) {
+        sendJson(res, 404, { ok: false, error: 'Not found' });
+        return;
+      }
+      let body = preParsedBody;
+      if (!body) {
+        try {
+          body = await readJsonBody(req);
+        } catch (err) {
+          if (err instanceof BadRequest) {
+            if (err.status === 413) {
+              const closeSocket = () => {
+                req.socket?.destroy?.();
+                req.destroy?.();
+              };
+              if (typeof res.once === 'function') res.once('finish', closeSocket);
+              res.writeHead(413, {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Cache-Control': 'no-store',
+                Connection: 'close',
+              });
+              res.end(JSON.stringify({ ok: false, error: err.message }));
+              if (typeof res.once !== 'function') closeSocket();
+              return;
+            }
+            sendJson(res, err.status, { ok: false, error: err.message });
+            return;
+          }
+          throw err;
+        }
+      }
+
+      const field = (key, fallback = '', max = 500) =>
+        String(body[key] ?? fallback)
+          .trim()
+          .slice(0, max);
+      const fullName = field('fullName', '', 120) || field('name', '', 120);
+      const email = field('email', '', 200);
+      const state = field('state', '', 60);
+      const deviceKind =
+        field('deviceKind', '', 500) ||
+        field('kind', '', 500) ||
+        field('deviceType', '', 500) ||
+        field('deviceList', '', 500);
+      const rawCount = body.deviceCount ?? body.count;
+      const rawCountStr = String(rawCount ?? '').trim();
+      const parsedCount = rawCountStr === '' ? NaN : Number(rawCountStr);
+
+      if (Number.isFinite(parsedCount) && parsedCount > 2) {
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Two devices per box at most. Please send at most 2 devices per box.',
+        });
+        return;
+      }
+      if (!Number.isInteger(parsedCount) || parsedCount < 1) {
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please enter a device count of 1 or 2.',
+        });
+        return;
+      }
+      if (!fullName || !email || !state || !deviceKind) {
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please fill in your name, email, state, device kind, and device count (1 or 2).',
+        });
+        return;
+      }
+      if (!isValidBookingEmail(email)) {
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please enter a valid email address.',
+        });
+        return;
+      }
+      if (!bookingAllowed(clientIp(req))) {
+        sendJson(res, 429, { ok: false, error: 'Too many booking requests. Please call or text (321) 396-2008.' });
+        return;
+      }
+
+      const dayCompact = todayInFlorida().replace(/-/g, '');
+      const rand = crypto.randomBytes(8).toString('hex').toUpperCase();
+      const bookingId = `OR-${dayCompact}-${rand}`;
+      const createdAt = new Date().toISOString();
+      const deviceList = `${parsedCount} (${deviceKind})`;
+
+      const booking = {
+        bookingId,
+        referenceId: bookingId,
+        createdAt,
+        serviceType: 'mailin',
+        fullName,
+        email,
+        state,
+        deviceKind,
+        deviceCount: parsedCount,
+        deviceList,
+        status: 'SCHEDULED',
+        notified: false,
+      };
+
+      await fsp.mkdir(BOOKINGS_DIR, { recursive: true });
+      fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, 'utf8');
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
+
+      const inquiryMd = [
+        'Service: mail-in',
+        `Reference ID: ${bookingId}`,
+        `Full Name: ${fullName}`,
+        `Email: ${email}`,
+        `State: ${state}`,
+        `Device Kind: ${deviceKind}`,
+        `Device Count: ${parsedCount}`,
+      ].join('\n');
+      try {
+        await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
+        await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, 'utf8');
+      } catch {
+        // secondary inquiry file failure must never abort a saved booking
+      }
+
+      const notified = await notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => false);
+      booking.notified = Boolean(notified);
+      updateBookingNotified(bookingId, booking.notified);
+      recordBooking(STATS_DIR);
+
+      sendJson(res, 200, {
+        ok: true,
+        referenceId: bookingId,
+        bookingId,
+        mailingAddress,
+        booking,
+      });
+    };
+
+    if (isBookingHost && (urlPath === '/api/mailin' || urlPath === '/api/mail-in') && req.method === 'POST') {
+      await handleMailInBooking(null);
+      return;
+    }
+
+    if (isBookingHost && urlPath === '/api/booking-config' && req.method === 'GET') {
       const dropoffScheduleUrl =
-        readEnvValue("GOOGLE_CALENDAR_DROPOFF_URL") || readEnvValue("GOOGLE_CALENDAR_SCHEDULE_URL") || "";
+        readEnvValue('GOOGLE_CALENDAR_DROPOFF_URL') || readEnvValue('GOOGLE_CALENDAR_SCHEDULE_URL') || '';
       const pickupScheduleUrl =
-        readEnvValue("GOOGLE_CALENDAR_PICKUP_URL") || readEnvValue("GOOGLE_CALENDAR_SCHEDULE_URL") || "";
+        readEnvValue('GOOGLE_CALENDAR_PICKUP_URL') || readEnvValue('GOOGLE_CALENDAR_SCHEDULE_URL') || '';
       const today = todayInFlorida();
       const bookedSlots = readBookings()
-        .filter((b) => String(b.date || "") >= today && b.status !== "CANCELLED")
+        .filter((b) => String(b.date || '') >= today && b.status !== 'CANCELLED')
         .map((b) => ({
-        date: b.date,
-        slotCode: b.slotCode,
-        serviceType: b.serviceType,
-      }));
-      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+          date: b.date,
+          slotCode: b.slotCode,
+          serviceType: b.serviceType,
+        }));
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(
         JSON.stringify({
           ok: true,
-          timezone: "America/New_York",
+          timezone: 'America/New_York',
           upcomingDays: buildNextDays(14),
           googleScheduleEmbed: {
             dropoffUrl: dropoffScheduleUrl,
             pickupUrl: pickupScheduleUrl,
           },
           bookedSlots,
-        })
+        }),
       );
       return;
     }
 
-    if (isBookingHost && urlPath === "/api/book" && req.method === "POST") {
+    if (isBookingHost && urlPath === '/api/book' && req.method === 'POST') {
       let body;
       try {
         body = await readJsonBody(req);
@@ -642,14 +821,14 @@ const server = http.createServer(async (req, res) => {
               req.socket?.destroy?.();
               req.destroy?.();
             };
-            if (typeof res.once === "function") res.once("finish", closeSocket);
+            if (typeof res.once === 'function') res.once('finish', closeSocket);
             res.writeHead(413, {
-              "Content-Type": "application/json; charset=utf-8",
-              "Cache-Control": "no-store",
-              Connection: "close",
+              'Content-Type': 'application/json; charset=utf-8',
+              'Cache-Control': 'no-store',
+              Connection: 'close',
             });
             res.end(JSON.stringify({ ok: false, error: err.message }));
-            if (typeof res.once !== "function") closeSocket();
+            if (typeof res.once !== 'function') closeSocket();
             return;
           }
           sendJson(res, err.status, { ok: false, error: err.message });
@@ -657,62 +836,79 @@ const server = http.createServer(async (req, res) => {
         }
         throw err;
       }
-      const field = (key, fallback = "", max = 500) => String(body[key] ?? fallback).trim().slice(0, max);
-      const serviceType = field("serviceType", "dropoff").toLowerCase() === "pickup" ? "pickup" : "dropoff";
-      const fullName = field("fullName", "", 120);
-      const phone = field("phone", "", 40);
-      const email = field("email", "", 200);
-      const date = field("date", "", 10);
-      const slotCode = field("slotCode", "", 20);
-      const slotLabel = field("slotLabel", slotCode, 60);
-      const deviceCount = field("deviceCount", "1-5", 20);
-      const deviceList = field("deviceList", "", 2000);
-      const organization = field("organization", "", 200);
-      const address = field("address", "", 200);
-      const city = field("city", "", 100);
-      const rawZip = field("zip", "", 10);
-      const zip = serviceType === "pickup" ? extractPickupZip(rawZip, city, address) || rawZip : rawZip;
-      const notes = field("notes", "", 2000);
+      const field = (key, fallback = '', max = 500) =>
+        String(body[key] ?? fallback)
+          .trim()
+          .slice(0, max);
+      const rawServiceType = field('serviceType', 'dropoff').toLowerCase();
+      if (rawServiceType === 'mailin' || rawServiceType === 'mail-in') {
+        await handleMailInBooking(body);
+        return;
+      }
+      const serviceType = rawServiceType === 'pickup' ? 'pickup' : 'dropoff';
+      const fullName = field('fullName', '', 120);
+      const phone = field('phone', '', 40);
+      const email = field('email', '', 200);
+      const date = field('date', '', 10);
+      const slotCode = field('slotCode', '', 20);
+      const slotLabel = field('slotLabel', slotCode, 60);
+      const deviceCount = field('deviceCount', '1-5', 20);
+      const deviceList = field('deviceList', '', 2000);
+      const organization = field('organization', '', 200);
+      const address = field('address', '', 200);
+      const city = field('city', '', 100);
+      const rawZip = field('zip', '', 10);
+      const zip = serviceType === 'pickup' ? extractPickupZip(rawZip, city, address) || rawZip : rawZip;
+      const notes = field('notes', '', 2000);
 
       if (!fullName || !phone || !date || !slotCode || !deviceList) {
         sendJson(res, 400, {
           ok: false,
-          error: "Please fill in your name, phone number, preferred date/time window, and device list.",
+          error: 'Please fill in your name, phone number, preferred date/time window, and device list.',
         });
         return;
       }
-      if (phone.replace(/\D/g, "").length < 10) {
-        sendJson(res, 400, { ok: false, error: "Please enter a valid 10-digit phone number." });
+      if (phone.replace(/\D/g, '').length < 10) {
+        sendJson(res, 400, { ok: false, error: 'Please enter a valid 10-digit phone number.' });
         return;
       }
       if (!validBookingDate(date) || !SLOT_CODES[serviceType].has(slotCode)) {
-        sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please choose a date from today onward and one of the listed time windows.',
+        });
         return;
       }
       if (isSlotElapsed(date, slotCode)) {
-        sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please choose a date from today onward and one of the listed time windows.',
+        });
         return;
       }
       if (!isValidBookingPhone(phone)) {
-        sendJson(res, 400, { ok: false, error: "Please enter a valid 10-digit phone number so we can confirm your appointment." });
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Please enter a valid 10-digit phone number so we can confirm your appointment.',
+        });
         return;
       }
       if (!isValidBookingEmail(email)) {
-        sendJson(res, 400, { ok: false, error: "Please enter a valid email address or leave the email field blank." });
+        sendJson(res, 400, { ok: false, error: 'Please enter a valid email address or leave the email field blank.' });
         return;
       }
-      if (serviceType === "pickup" && (!address || !city)) {
+      if (serviceType === 'pickup' && (!address || !city)) {
         sendJson(res, 400, {
           ok: false,
-          error: "Please provide the pickup street address and city so we can route your Central Florida pickup.",
+          error: 'Please provide the pickup street address and city so we can route your Central Florida pickup.',
         });
         return;
       }
 
-      const dayCompact = date.replace(/-/g, "");
+      const dayCompact = date.replace(/-/g, '');
       // The ID is the only key to /api/calendar.ics, which returns the
       // customer's contact details, so it must not be guessable.
-      const rand = crypto.randomBytes(8).toString("hex").toUpperCase();
+      const rand = crypto.randomBytes(8).toString('hex').toUpperCase();
       const bookingId = `OR-${dayCompact}-${rand}`;
       const createdAt = new Date().toISOString();
 
@@ -733,7 +929,7 @@ const server = http.createServer(async (req, res) => {
         deviceCount,
         deviceList,
         notes,
-        status: "SCHEDULED",
+        status: 'SCHEDULED',
         notified: false,
       };
 
@@ -741,39 +937,39 @@ const server = http.createServer(async (req, res) => {
       // Check and record in one synchronous step so two requests for the same
       // window cannot both pass the check.
       const taken = readBookings().some(
-        (b) => b.date === date && b.slotCode === slotCode && b.serviceType === serviceType && b.status !== "CANCELLED"
+        (b) => b.date === date && b.slotCode === slotCode && b.serviceType === serviceType && b.status !== 'CANCELLED',
       );
       if (taken) {
-        sendJson(res, 409, { ok: false, error: "That time window was just booked. Please pick another one." });
+        sendJson(res, 409, { ok: false, error: 'That time window was just booked. Please pick another one.' });
         return;
       }
       if (!bookingAllowed(clientIp(req))) {
-        sendJson(res, 429, { ok: false, error: "Too many booking requests. Please call or text (321) 396-2008." });
+        sendJson(res, 429, { ok: false, error: 'Too many booking requests. Please call or text (321) 396-2008.' });
         return;
       }
-      fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, "utf8");
+      fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, 'utf8');
       bookingCache = { mtimeMs: -1, size: -1, list: [] };
 
       const inquiryMd = [
         `Full Name: ${fullName}`,
-        `Email: ${email || "not provided"}`,
+        `Email: ${email || 'not provided'}`,
         `Phone: ${phone}`,
         organization ? `Organization: ${organization}` : null,
-        serviceType === "pickup" ? `Pickup Address: ${address}` : null,
+        serviceType === 'pickup' ? `Pickup Address: ${address}` : null,
         city ? `City: ${city}` : null,
         zip ? `ZIP: ${zip}` : null,
         `Estimated Device Count: ${deviceCount}`,
-        serviceType === "pickup"
+        serviceType === 'pickup'
           ? `Preferred Pickup Window: ${date} (${slotLabel})`
           : `Preferred Drop-Off Window: ${date} (${slotLabel})`,
         `Device List: ${deviceList}`,
         notes ? `Security / Data Wipe Notes: ${notes}` : null,
       ]
         .filter(Boolean)
-        .join("\n");
+        .join('\n');
       try {
         await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
-        await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
+        await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, 'utf8');
       } catch {
         // secondary inquiry file failure must never abort a saved booking
       }
@@ -786,11 +982,11 @@ const server = http.createServer(async (req, res) => {
       const googleCalendarUrl = buildGoogleCalendarUrl(booking);
       const icsUrl = `/api/calendar.ics?id=${encodeURIComponent(bookingId)}`;
       const smsBody = `OnlineRecycle.net ${serviceType.toUpperCase()} Booking ${bookingId}: ${fullName}, ${date} (${slotLabel}). Items (${deviceCount}): ${deviceList}${
-        serviceType === "pickup" ? ` | Address: ${address}, ${city} ${zip}` : ""
+        serviceType === 'pickup' ? ` | Address: ${address}, ${city} ${zip}` : ''
       }`;
       const smsUrl = `sms:+13213962008?body=${encodeURIComponent(smsBody)}`;
 
-      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(
         JSON.stringify({
           ok: true,
@@ -798,23 +994,23 @@ const server = http.createServer(async (req, res) => {
           googleCalendarUrl,
           icsUrl,
           smsUrl,
-        })
+        }),
       );
       return;
     }
 
-    if (isBookingHost && urlPath === "/api/calendar.ics" && req.method === "GET") {
-      const id = String(parsedUrl.searchParams.get("id") || "").trim();
+    if (isBookingHost && urlPath === '/api/calendar.ics' && req.method === 'GET') {
+      const id = String(parsedUrl.searchParams.get('id') || '').trim();
       const found = /^OR-\d{8}-[0-9A-F]{4,16}$/.test(id) ? readBookings().find((b) => b.bookingId === id) : null;
       if (!found) {
-        res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-        res.end("Booking not found\n");
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Booking not found\n');
         return;
       }
       const ics = buildIcsContent(found);
       res.writeHead(200, {
-        "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": `attachment; filename="${found.bookingId}.ics"`,
+        'Content-Type': 'text/calendar; charset=utf-8',
+        'Content-Disposition': `attachment; filename="${found.bookingId}.ics"`,
       });
       res.end(ics);
       return;
@@ -822,34 +1018,34 @@ const server = http.createServer(async (req, res) => {
 
     const relDocRoot = VHOSTS[host];
     if (!relDocRoot) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-      res.end(`No site configured for Host: ${req.headers.host || "(none)"}\n`);
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(`No site configured for Host: ${req.headers.host || '(none)'}\n`);
       return;
     }
 
     const docRootAbs = path.join(DOMAINS_ROOT, relDocRoot);
     const filePath = await resolveFile(docRootAbs, rawUrl);
     if (!filePath) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-      res.end("Not found\n");
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Not found\n');
       return;
     }
 
     const data = await fsp.readFile(filePath);
-    res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
+    res.writeHead(200, { 'Content-Type': contentTypeFor(filePath) });
     res.end(data);
-    if (isBookingHost && urlPath === "/" && req.method === "GET") {
-      recordPageView(STATS_DIR, new Date(), req.headers["user-agent"]);
+    if (isBookingHost && urlPath === '/' && req.method === 'GET') {
+      recordPageView(STATS_DIR, new Date(), req.headers['user-agent']);
     }
   } catch (err) {
     if (res.headersSent || res.destroyed) return;
-    res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
-    res.end("Internal error\n");
+    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Internal error\n');
   }
 });
 
 const IS_MAIN_MODULE = Boolean(
-  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url)),
 );
 
 if (IS_MAIN_MODULE) {
@@ -858,14 +1054,14 @@ if (IS_MAIN_MODULE) {
 
 const listeners = IS_MAIN_MODULE
   ? HOSTS.map((host) => {
-      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
-      srv.on("error", (err) => {
+      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners('request')[0]);
+      srv.on('error', (err) => {
         // eslint-disable-next-line no-console
         console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
       });
       srv.listen(PORT, host, () => {
         // eslint-disable-next-line no-console
-        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(', ')})`);
       });
       return srv;
     })
@@ -892,4 +1088,6 @@ export {
   bookHits,
   validBookingDate,
   extractPickupZip,
+  readMailInAddress,
+  isMailInEnabled,
 };
