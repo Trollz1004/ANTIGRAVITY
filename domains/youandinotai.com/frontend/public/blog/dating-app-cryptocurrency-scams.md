@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/dating-app-cryptocurrency-scams/'
 
 # How to avoid dating app cryptocurrency scams and fake investment schemes
 
-Dating app cryptocurrency scams target singles looking for honest connections. Fraud operators create fake profiles to gain trust and steer conversations toward financial speculation. In February 2024, the [Federal Trade Commission report](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) stated that romance fraud reports showed scammers steering people into bogus cryptocurrency investment schemes. Recognizing these patterns helps people spot fraud early.
+Dating app cryptocurrency scams target singles looking for honest connections. Fraud operators create fake profiles to gain trust and steer conversations toward financial speculation. On February 13, 2024, a [Federal Trade Commission Business Blog post](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) stated that romance fraud caused $1.14 billion in reported losses in 2023 across 64,003 reports. Recognizing these patterns helps people spot fraud early.
 
 ## How crypto romance fraud unfolds
 
