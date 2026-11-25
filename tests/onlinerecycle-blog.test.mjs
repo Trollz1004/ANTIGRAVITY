@@ -45,6 +45,21 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-sanford-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-sanford-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-electronics-in-apopka-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-electronics-in-apopka-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
