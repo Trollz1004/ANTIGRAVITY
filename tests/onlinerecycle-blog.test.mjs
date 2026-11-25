@@ -106,6 +106,52 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-lake-mary-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-car-audio-head-units-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-car-audio-head-units-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-docking-stations-and-cables-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-docking-stations-and-cables-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-leesburg-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-leesburg-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-winter-park-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-winter-park-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-oviedo-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-oviedo-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-laptops-and-macbooks-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-laptops-and-macbooks-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-nas-units-and-external-drives-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-nas-units-and-external-drives-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html',
+    canonical:
+      'https://onlinerecycle.net/blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
