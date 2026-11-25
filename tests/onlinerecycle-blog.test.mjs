@@ -75,6 +75,21 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/how-to-recycle-game-consoles-in-central-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-car-audio-head-units-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-car-audio-head-units-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-docking-stations-and-cables-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-docking-stations-and-cables-in-central-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
