@@ -91,6 +91,21 @@ const BLOG_PAGES = [
       'https://onlinerecycle.net/blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-clermont-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-clermont-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-winter-garden-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-winter-garden-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-lake-mary-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-lake-mary-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
