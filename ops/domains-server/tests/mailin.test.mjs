@@ -541,13 +541,7 @@ test('mail-in section in index.html has the exact required copy, USPS Publicatio
   const endIdx = html.indexOf('<!-- STOP 03 (#how-it-works)', startIdx);
   assert.notEqual(endIdx, -1, '#mailin-section must sit before STOP 03');
   const sectionHtml = html.slice(startIdx, endIdx);
-  const plainText = sectionHtml
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const plainText = sectionHtml.replace(/\s+/g, ' ').trim();
 
   const requiredLines = [
     'Mail-in is for phones, tablets, laptops and small electronics from anywhere in the United States. You pay the postage. We do not pay for mailed devices.',
