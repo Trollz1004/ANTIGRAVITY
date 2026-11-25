@@ -91,6 +91,21 @@ const BLOG_PAGES = [
       'https://onlinerecycle.net/blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-leesburg-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-leesburg-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-winter-park-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-winter-park-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-oviedo-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-oviedo-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
