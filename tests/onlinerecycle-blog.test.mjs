@@ -76,6 +76,22 @@ const BLOG_PAGES = [
     isPost: true,
   },
   {
+    file: 'blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-servers-and-network-gear-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-servers-and-network-gear-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
+    canonical:
+      'https://onlinerecycle.net/blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
+    isPost: true,
+  },
+  {
     file: 'blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
     canonical: 'https://onlinerecycle.net/blog/how-to-recycle-ups-battery-backups-in-central-florida.html',
     isPost: true,
@@ -265,5 +281,72 @@ test('blog/index.html links to all posts', () => {
   for (const post of BLOG_PAGES.filter((p) => p.isPost)) {
     const expectedHref = `/${post.file}`;
     assert.ok(hrefs.includes(expectedHref), `blog/index.html must link to ${expectedHref}`);
+  }
+});
+
+test('blog posts visible text contains no disallowed claims or words', () => {
+  const blogDir = path.join(SITE, 'blog');
+  const postFiles = fs
+    .readdirSync(blogDir)
+    .filter((f) => f.endsWith('.html') && f !== 'index.html')
+    .sort();
+
+  const BANNED_TERMS = [
+    'facility',
+    'warehouse',
+    'van',
+    'vans',
+    'truck',
+    'trucks',
+    'driver',
+    'drivers',
+    'landfill',
+    'landfills',
+    'reminder',
+    'toner',
+    'ink tank',
+    'scanner',
+    'scanners',
+    'copier',
+    'copiers',
+    'mail-in',
+    'mail in',
+    'takes under',
+    'only a few minutes',
+    'a couple of minutes',
+    'takes only',
+    'guarantee',
+    'guaranteed',
+    'certified',
+    'certificate',
+  ];
+
+  const violations = [];
+
+  for (const file of postFiles) {
+    const raw = fs.readFileSync(path.join(blogDir, file), 'utf8');
+    const text = visibleText(raw);
+
+    for (const term of BANNED_TERMS) {
+      const escaped = term.replace(/[-\\/\\^$*+?.()|[\\]{}]/g, '\\$&');
+      const re = new RegExp(`(^|[^a-zA-Z0-9])${escaped}([^a-zA-Z0-9]|$)`, 'i');
+      if (re.test(text)) {
+        violations.push(`${file}: disallowed word '${term}'`);
+      }
+    }
+
+    // The word 'minutes' is allowed only inside '30-minute'. Make the test fail on any other use of 'minute' or 'minutes'.
+    const minuteRe = /\b([a-zA-Z0-9]+-)?(minutes?)\b/gi;
+    let match;
+    while ((match = minuteRe.exec(text)) !== null) {
+      const full = match[0].toLowerCase();
+      if (full !== '30-minute') {
+        violations.push(`${file}: disallowed word '${match[2]}' (in '${match[0]}')`);
+      }
+    }
+  }
+
+  if (violations.length > 0) {
+    assert.fail(`Disallowed words found in blog posts:\n${violations.join('\n')}`);
   }
 });
