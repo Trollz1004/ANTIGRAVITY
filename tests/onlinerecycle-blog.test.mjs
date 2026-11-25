@@ -40,6 +40,11 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/what-to-do-with-a-broken-laptop-in-orlando.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
