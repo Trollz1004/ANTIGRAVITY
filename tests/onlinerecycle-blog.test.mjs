@@ -61,6 +61,21 @@ const BLOG_PAGES = [
     isPost: true,
   },
   {
+    file: 'blog/how-to-recycle-printers-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-printers-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-computer-monitors-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-computer-monitors-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-game-consoles-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-game-consoles-in-central-florida.html',
+    isPost: true,
+  },
+  {
     file: 'blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
     canonical: 'https://onlinerecycle.net/blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
     isPost: true,
