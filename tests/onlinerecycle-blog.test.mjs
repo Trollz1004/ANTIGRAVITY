@@ -46,6 +46,21 @@ const BLOG_PAGES = [
     isPost: true,
   },
   {
+    file: 'blog/where-to-recycle-old-computers-in-sanford-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-sanford-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-electronics-in-apopka-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-electronics-in-apopka-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
+    isPost: true,
+  },
+  {
     file: 'blog/how-to-recycle-printers-in-central-florida.html',
     canonical: 'https://onlinerecycle.net/blog/how-to-recycle-printers-in-central-florida.html',
     isPost: true,
