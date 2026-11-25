@@ -4,7 +4,7 @@ These files are candidates only. Nothing was checked by running it.
 
 Criteria: PowerShell, JSON, workflow, agent (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`), and skill (`SKILL.md`) files whose file name appears nowhere else in the tracked files and whose last commit is older than 90 days.
 
-Total candidates found: 111
+Total candidates found: 113
 
 | Path | Category | Last Commit | Size |
 | --- | --- | --- | ---: |
@@ -119,3 +119,12 @@ Total candidates found: 111
 | `.github/workflows/ci-action-drift-scan.yml` | workflow | 2026-08-16 | 1.9 KB (1923 B) |
 | `.github/workflows/mission-control-ci.yml` | workflow | 2026-08-16 | 1.1 KB (1127 B) |
 | `apps/youandinotai-static/tests/afterglow-static.test.ps1` | powershell | 2026-08-20 | 1.9 KB (1965 B) |
+| `mission-control/lib/mcp-server.mjs` | mcp | 2026-09-29 | 7.6 KB (7818 B) |
+| `ops/mcp/gemini-node-mcp` | mcp | 2026-10-06 | 10.7 KB (10964 B) |
+
+## Stale MCP Servers
+
+| Path | Category | Last Commit | Size | Reason | Report |
+| --- | --- | --- | ---: | --- | --- |
+| `ops/mcp/gemini-node-mcp` | mcp | 2026-10-06 | 10.7 KB (10964 B) | Zero-dependency synchronous stdio loop not referenced in root .mcp.json, fleet-map, or keepalive; references retired misses-trollz and easy-button.ps1 | `ops/handoffs/SCOUT-MCP-TASKS-ANTIGRAVITY-2026-11-25.md` |
+| `mission-control/lib/mcp-server.mjs` | mcp | 2026-09-29 | 7.6 KB (7818 B) | Mounted only on retired :9150 JARVIS server; not mounted or imported by live Mission OS (:3130) | `ops/handoffs/SCOUT-MCP-TASKS-ANTIGRAVITY-2026-11-25.md` |
