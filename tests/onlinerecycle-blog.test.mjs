@@ -91,6 +91,22 @@ const BLOG_PAGES = [
       'https://onlinerecycle.net/blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/how-to-recycle-laptops-and-macbooks-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-laptops-and-macbooks-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-nas-units-and-external-drives-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-nas-units-and-external-drives-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html',
+    canonical:
+      'https://onlinerecycle.net/blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
