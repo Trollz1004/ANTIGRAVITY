@@ -15,6 +15,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { notifyBooking, isBookingNotifyConfigured } from './booking-notify.mjs';
 import { recordPageView, recordBooking } from './booking-stats.mjs';
+import { buildOnlineRecycleBlogIndex, buildOnlineRecycleSitemap } from './onlinerecycle-blog.mjs';
 import { getBindHost, getNodeIp, getService } from '../fleet/fleet-map.mjs';
 import { logStartupEnvCheck } from '../agents/env-required.mjs';
 import { buildPublicHealthLight } from '../agents/node-light.mjs';
@@ -1044,6 +1045,21 @@ const server = http.createServer(async (req, res) => {
     }
 
     const docRootAbs = path.join(DOMAINS_ROOT, relDocRoot);
+    if (isBookingHost && (req.method === 'GET' || req.method === 'HEAD')) {
+      if (urlPath === '/blog' || urlPath === '/blog/' || urlPath === '/blog/index.html') {
+        const html = buildOnlineRecycleBlogIndex(docRootAbs);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(req.method === 'HEAD' ? undefined : html);
+        return;
+      }
+      if (urlPath === '/sitemap.xml') {
+        const xml = buildOnlineRecycleSitemap(docRootAbs);
+        res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
+        res.end(req.method === 'HEAD' ? undefined : xml);
+        return;
+      }
+    }
+
     const filePath = await resolveFile(docRootAbs, rawUrl);
     if (!filePath) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });

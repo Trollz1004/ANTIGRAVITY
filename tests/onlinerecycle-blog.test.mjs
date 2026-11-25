@@ -223,7 +223,13 @@ for (const page of BLOG_PAGES) {
 test('blog/index.html links to all posts and matches existing posts byte-for-byte', () => {
   const indexPath = path.join(SITE, 'blog/index.html');
   assert.ok(fs.existsSync(indexPath), 'missing blog/index.html');
+  const committed = fs.readFileSync(indexPath, 'utf8');
   const raw = buildOnlineRecycleBlogIndex(SITE);
+  assert.equal(
+    raw,
+    committed,
+    'generated blog index must match today’s blog/index.html byte-for-byte for current posts',
+  );
   const mains = findTagBlocks(raw, 'main');
   assert.equal(mains.length, 1, 'blog/index.html must have <main>');
   const hrefs = findOpenTags(mains[0].innerHtml, 'a').map((a) => a.href);
@@ -255,9 +261,10 @@ test('adding a new post file alone adds its title, description, and canonical to
     fs.writeFileSync(path.join(tmpSite, 'blog', newPostFile), newPostHtml, 'utf8');
 
     const generatedIndex = buildOnlineRecycleBlogIndex(tmpSite);
+    const generatedVisible = visibleText(generatedIndex);
     assert.ok(generatedIndex.includes(`/blog/${newPostFile}`), 'generated index must link to the new post');
-    assert.ok(generatedIndex.includes(newPostTitle), 'generated index must include the new post title');
-    assert.ok(generatedIndex.includes(newPostDescription), 'generated index must include the new post description');
+    assert.ok(generatedVisible.includes(newPostTitle), 'generated index must include the new post title');
+    assert.ok(generatedVisible.includes(newPostDescription), 'generated index must include the new post description');
 
     const generatedSitemap = buildOnlineRecycleSitemap(tmpSite);
     assert.ok(
