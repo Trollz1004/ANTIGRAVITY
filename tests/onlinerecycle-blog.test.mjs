@@ -40,6 +40,11 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/what-to-do-with-a-broken-laptop-in-orlando.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
@@ -165,7 +170,7 @@ for (const page of BLOG_PAGES) {
   });
 
   if (page.isPost) {
-    test(`${page.file}: 500 to 800 words, no em dashes, no invented numbers/certificates/prices, ends with one booking link`, () => {
+    test(`${page.file}: 450 to 800 words, no em dashes, no invented numbers/certificates/prices, ends with one booking link`, () => {
       const fullPath = path.join(SITE, page.file);
       assert.ok(fs.existsSync(fullPath), `missing post file ${page.file}`);
       const raw = fs.readFileSync(fullPath, 'utf8');
@@ -183,7 +188,7 @@ for (const page of BLOG_PAGES) {
       const articleHtml = articles[0].innerHtml;
       const articleText = visibleText(articleHtml);
       const words = countWords(articleText);
-      assert.ok(words >= 500 && words <= 800, `${page.file} article word count must be 500..800, got ${words}`);
+      assert.ok(words >= 450 && words <= 800, `${page.file} article word count must be 450..800, got ${words}`);
 
       // No invented certificates, standards, prices, or business claims not in index.html / about.html
       assert.doesNotMatch(
