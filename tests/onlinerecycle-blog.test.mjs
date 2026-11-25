@@ -60,6 +60,21 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/how-to-recycle-printers-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-printers-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-computer-monitors-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-computer-monitors-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-game-consoles-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-game-consoles-in-central-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
