@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-check-a-dating-profile-photo-wi
 
 # How to check a dating profile photo with a reverse image search
 
-Checking a dating profile photo with a reverse image search helps you find where else an image appears on the web. Online scammers take photos from social media accounts, modeling portfolios, and public websites to build fake profiles. In August 2022, the [Federal Trade Commission](https://consumer.ftc.gov/articles/what-you-need-know-about-romance-scams) published consumer advice explaining that scammers use photos of real people to create fake profiles. The Federal Trade Commission advises performing a reverse image search on a profile picture to check if the image connects to another name or details that do not match what the person told you.
+Checking a dating profile photo with a reverse image search helps you find where else an image appears on the web. Online scammers take photos from social media accounts, modeling portfolios, and public websites to build fake profiles. In August 2022, the [Federal Trade Commission](https://consumer.ftc.gov/articles/what-know-about-romance-scams) published consumer advice explaining that scammers use photos of real people to create fake profiles. The Federal Trade Commission advises performing a reverse image search on a profile picture to check if the image connects to another name or details that do not match what the person told you.
 
 ## How to perform a reverse image search
 
