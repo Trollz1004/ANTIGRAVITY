@@ -13,8 +13,8 @@ Three posts a week, at most one a day, alternating sites (for example Tuesday On
 1. The drawer cleanout: a real junk drawer or garage box, booked a slot, handed it over, done.
 2. What happens to a drive: storage media is wiped or physically destroyed (home page says so).
 3. What we take: one category a week from the home page list.
-4. How booking works: Sorrento drop-off windows and route pickup windows (check exact times on the booking page).
-5. Office cleanout: the batch sizes from the booking page.
+4. How booking works: free drop-off in Sorrento or scheduled route pickup across Lake, Orange and Seminole Counties, in the home page's own words.
+5. Office cleanout: only the batch sizes the home page itself lists; if it lists none, skip this idea.
 6. Consoles and discs: one item, an honest caption about whether it still powers on.
 
 ## Post ideas, YouAndINotAI (18 and over in every post)
