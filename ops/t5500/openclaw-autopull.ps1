@@ -62,9 +62,28 @@ if (-not $RepoPath) {
     $RepoPath = (Resolve-Path $RepoPath).Path
 }
 
+function Write-AutopullSkip([string]$Message) {
+    try {
+        $skipDir = Join-Path $RepoPath 'logs\autopull'
+        if (-not (Test-Path $skipDir)) {
+            New-Item -ItemType Directory -Force -Path $skipDir | Out-Null
+        }
+        $skipLogPath = Join-Path $skipDir 'autopull-skips.log'
+        $stampUtc = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $cleanMsg = (($Message -replace "`r?`n", ' ').Trim())
+        if (-not $cleanMsg.StartsWith('SKIP:', [System.StringComparison]::OrdinalIgnoreCase)) {
+            $cleanMsg = "SKIP: $cleanMsg"
+        }
+        $line = "$stampUtc $cleanMsg`n"
+        [IO.File]::AppendAllText($skipLogPath, $line, (New-Object Text.UTF8Encoding $false))
+    } catch {}
+}
+
 $PauseFile = Join-Path $RepoPath 'ops\t5500\PAUSE-AUTOPULL'
 if (Test-Path $PauseFile) {
-    Write-Output "SKIP: ops\t5500\PAUSE-AUTOPULL exists ($PauseFile) - autopull paused."
+    $skipMsg = "SKIP: ops\t5500\PAUSE-AUTOPULL exists ($PauseFile) - autopull paused."
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
@@ -508,7 +527,9 @@ function Invoke-AutopullShootPage([string]$PageAddress, [string]$PublicUrl, [str
 if (-not $SkipFetch) {
     $fetchRes = Invoke-Git @('fetch', $Remote, $Branch, '--quiet')
     if ($fetchRes.ExitCode -ne 0) {
-        Write-Output ("SKIP: git fetch $Remote $Branch failed: " + $fetchRes.Output)
+        $skipMsg = ("SKIP: git fetch $Remote $Branch failed: " + $fetchRes.Output)
+        Write-AutopullSkip -Message $skipMsg
+        Write-Output $skipMsg
         exit 0
     }
 }
@@ -518,7 +539,9 @@ $headRes = Invoke-Git @('rev-parse', 'HEAD')
 $remoteRes = Invoke-Git @('rev-parse', $RemoteRef)
 
 if ($headRes.ExitCode -ne 0 -or -not $headRes.Output -or $remoteRes.ExitCode -ne 0 -or -not $remoteRes.Output) {
-    Write-Output "SKIP: unable to resolve HEAD or $RemoteRef."
+    $skipMsg = "SKIP: unable to resolve HEAD or $RemoteRef."
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
@@ -526,13 +549,17 @@ $OldCommit = $headRes.Output.Trim()
 $NewCommit = $remoteRes.Output.Trim()
 
 if ($OldCommit -eq $NewCommit) {
-    Write-Output "SKIP: $RemoteRef is already at HEAD ($OldCommit) - nothing to do."
+    $skipMsg = "SKIP: $RemoteRef is already at HEAD ($OldCommit) - nothing to do."
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
 $ancestorRes = Invoke-Git @('merge-base', '--is-ancestor', 'HEAD', $RemoteRef)
 if ($ancestorRes.ExitCode -ne 0) {
-    Write-Output "SKIP: $RemoteRef ($NewCommit) is not straight ahead of HEAD ($OldCommit) - refusing non-fast-forward."
+    $skipMsg = "SKIP: $RemoteRef ($NewCommit) is not straight ahead of HEAD ($OldCommit) - refusing non-fast-forward."
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
@@ -542,7 +569,9 @@ if ($aheadRes.ExitCode -eq 0 -and $aheadRes.Output) {
     [void][int]::TryParse($aheadRes.Output.Trim(), [ref]$aheadCount)
 }
 if ($aheadCount -le 0) {
-    Write-Output "SKIP: $RemoteRef ($NewCommit) is not straight ahead of HEAD ($OldCommit)."
+    $skipMsg = "SKIP: $RemoteRef ($NewCommit) is not straight ahead of HEAD ($OldCommit)."
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
@@ -586,7 +615,9 @@ foreach ($lf in $LocalTrackedFiles) {
 }
 
 if ($OverlappingFiles.Count -gt 0) {
-    Write-Output ('SKIP: tracked local change touches file(s) the pull would change: ' + ($OverlappingFiles -join ', '))
+    $skipMsg = ('SKIP: tracked local change touches file(s) the pull would change: ' + ($OverlappingFiles -join ', '))
+    Write-AutopullSkip -Message $skipMsg
+    Write-Output $skipMsg
     exit 0
 }
 
