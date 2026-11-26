@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-keep-a-conversation-going-witho
 
 # How to keep a conversation going without small talk
 
-Repetitive small talk makes dating conversations feel like chores. Exchanging simple greetings like "how are you" or "how was your day" often leads to stalled chats. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) reported that nearly 70,000 consumers reported romance scams in 2022, with total reported losses of $1.3 billion. Automated accounts and scammers rely on vague pleasantries because generic greetings require no effort. Focusing on specific topics helps you bypass small talk and connect with real people.
+Repetitive small talk makes dating conversations feel like chores. Exchanging simple greetings like "how are you" or "how was your day" often leads to stalled chats. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) reported that nearly 70,000 consumers reported romance scams in 2022, with total reported losses of $1.3 billion. Automated accounts and scammers rely on vague pleasantries because generic greetings require no effort. Focusing on specific topics helps you bypass small talk and connect with real people.
 
 ## Why small talk stalls online conversations
 
