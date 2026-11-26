@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/what-to-ask-on-a-first-date/'
 
 # What to ask on a first date
 
-Meeting someone in person for a first date should feel engaging and comfortable. Many people worry about awkward silences or running out of things to say. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-insights/data-spotlights/2023/02/romance-scammers-favorite-lies-exposed) reported that nearly 70,000 consumers reported losing $1.3 billion to romance scams in 2022. The report noted that scammers often invent elaborate backstories to avoid meeting in person or answering specific local questions. Real people enjoy sharing simple details about their everyday lives and interests. Asking direct, open questions helps you learn about your date while confirming they are genuine.
+Meeting someone in person for a first date should feel engaging and comfortable. Many people worry about awkward silences or running out of things to say. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) reported that nearly 70,000 consumers reported losing $1.3 billion to romance scams in 2022. The report noted that scammers often build an excuse not to meet into their fake identity, such as a faraway military base or an offshore oil rig. Real people enjoy sharing simple details about their everyday lives and interests. Asking direct, open questions helps you learn about your date while confirming they are genuine.
 
 ## Why open questions make first dates easier
 
