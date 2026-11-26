@@ -102,15 +102,30 @@ test('visibleText decodes HTML entities in a single pass without double-unescapi
 });
 
 test('blog test discovers posts from domains/onlinerecycle.net/site/blog without a hand-kept list', () => {
-  assert.ok(POST_FILES.length >= 18, `expected at least 18 blog posts, found ${POST_FILES.length}`);
+  assert.ok(POST_FILES.length >= 27, `expected at least 27 blog posts, found ${POST_FILES.length}`);
   const testSource = fs.readFileSync(fileURLToPath(import.meta.url), 'utf8');
-  assert.doesNotMatch(
-    testSource,
-    /what-to-do-with-old-office-computers\.html/,
-    'blog test must not hard-code individual post filenames',
+  const builderSource = fs.readFileSync(
+    path.join(here, '..', 'ops', 'domains-server', 'onlinerecycle-blog.mjs'),
+    'utf8',
   );
+  for (const postFile of POST_FILES) {
+    assert.equal(testSource.includes(postFile), false, `blog test must not hard-code post filename ${postFile}`);
+    assert.equal(
+      builderSource.includes(postFile),
+      false,
+      `onlinerecycle-blog.mjs must not hard-code post filename ${postFile}`,
+    );
+  }
   const discovered = discoverOnlineRecycleBlogPosts(SITE);
   assert.equal(discovered.length, POST_FILES.length);
+  const committedSitemap = fs.readFileSync(path.join(SITE, 'sitemap.xml'), 'utf8');
+  const generatedSitemap = buildOnlineRecycleSitemap(SITE);
+  assert.equal(generatedSitemap, committedSitemap, 'generated sitemap must match committed sitemap.xml');
+  for (const postFile of POST_FILES) {
+    const loc = `<loc>https://onlinerecycle.net/blog/${postFile}</loc>`;
+    const occurrences = committedSitemap.split(loc).length - 1;
+    assert.equal(occurrences, 1, `sitemap.xml must include ${postFile} once, found ${occurrences}`);
+  }
 });
 
 test('blog needs no stage.js: blog/stage.js is removed and blog pages work with static HTML, styles.css, and cookie-consent.js', () => {
