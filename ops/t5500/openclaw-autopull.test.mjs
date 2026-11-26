@@ -1518,28 +1518,33 @@ test(
       assert.equal(feSvc1.status, 'WAITING-FOR-REBUILD');
       assert.equal(rec1.publicChecks[0].status, 'WAITING-FOR-REBUILD');
 
-      // Case 2: Port 3200 owner changes after pull starts, but dist/build-commit.txt still has old commit1 -> WAITING-FOR-REBUILD
+      // Case 2: Port 3200 owner changes after pull completes, but dist/build-commit.txt still has old commit0 -> WAITING-FOR-REBUILD
       const commit2 = pushUpstreamCommit(
         fx.seedDir,
         { 'domains/youandinotai.com/frontend/src/App.tsx': 'export const App = () => "v3-stale-commit-file";\n' },
         'Date app frontend update 2 (#562)',
       );
 
-      setTimeout(() => {
+      const watch2 = setInterval(() => {
         try {
-          oldFrontendOwner.kill('SIGKILL');
+          if (git(fx.cloneDir, ['rev-parse', 'HEAD']) === commit2) {
+            clearInterval(watch2);
+            try {
+              oldFrontendOwner.kill('SIGKILL');
+            } catch {}
+            setTimeout(() => {
+              midFrontendOwner = spawn(
+                process.execPath,
+                [
+                  '-e',
+                  `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-mid.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+                ],
+                { stdio: 'ignore', windowsHide: true },
+              );
+            }, 100);
+          }
         } catch {}
-        setTimeout(() => {
-          midFrontendOwner = spawn(
-            process.execPath,
-            [
-              '-e',
-              `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-mid.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
-            ],
-            { stdio: 'ignore', windowsHide: true },
-          );
-        }, 120);
-      }, 250);
+      }, 50);
 
       const resTimeout2 = await runAutopullAsync(fx.cloneDir, [
         '-Apply',
@@ -1554,6 +1559,7 @@ test(
         '-PollIntervalMs',
         '150',
       ]);
+      clearInterval(watch2);
 
       assert.equal(resTimeout2.status, 0);
       const recFiles2 = fs
@@ -1578,22 +1584,27 @@ test(
         'Date app frontend update 3 (#563)',
       );
 
-      setTimeout(() => {
+      const watch3 = setInterval(() => {
         try {
-          midFrontendOwner?.kill('SIGKILL');
+          if (git(fx.cloneDir, ['rev-parse', 'HEAD']) === commit3) {
+            clearInterval(watch3);
+            try {
+              midFrontendOwner?.kill('SIGKILL');
+            } catch {}
+            setTimeout(() => {
+              writeRepoFile(fx.cloneDir, 'domains/youandinotai.com/frontend/dist/build-commit.txt', `${commit3}\n`);
+              newFrontendOwner = spawn(
+                process.execPath,
+                [
+                  '-e',
+                  `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-new.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+                ],
+                { stdio: 'ignore', windowsHide: true },
+              );
+            }, 100);
+          }
         } catch {}
-        setTimeout(() => {
-          writeRepoFile(fx.cloneDir, 'domains/youandinotai.com/frontend/dist/build-commit.txt', `${commit3}\n`);
-          newFrontendOwner = spawn(
-            process.execPath,
-            [
-              '-e',
-              `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-new.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
-            ],
-            { stdio: 'ignore', windowsHide: true },
-          );
-        }, 150);
-      }, 300);
+      }, 50);
 
       const resLive = await runAutopullAsync(fx.cloneDir, [
         '-Apply',
@@ -1608,6 +1619,7 @@ test(
         '-PollIntervalMs',
         '150',
       ]);
+      clearInterval(watch3);
 
       assert.equal(resLive.status, 0, `Expected exit 0 when rebuild completes: ${resLive.stdout}`);
       const recFiles3 = fs

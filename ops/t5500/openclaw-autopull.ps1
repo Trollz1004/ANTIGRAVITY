@@ -746,12 +746,137 @@ if (-not $Apply) {
     exit 0
 }
 
+function Get-AutopullFrontendBuildCommit([string]$RepoRoot) {
+    $commitFile = Join-Path $RepoRoot 'domains\youandinotai.com\frontend\dist\build-commit.txt'
+    if (-not (Test-Path $commitFile)) {
+        return ''
+    }
+    try {
+        return ([IO.File]::ReadAllText($commitFile)).Trim()
+    } catch {
+        return ''
+    }
+}
+
+function Test-AutopullFrontendBuildCommitMatch([string]$ActualBuildCommit, [string]$ExpectedCommit) {
+    if (-not $ActualBuildCommit -or -not $ExpectedCommit) {
+        return $false
+    }
+    $a = $ActualBuildCommit.Trim()
+    $e = $ExpectedCommit.Trim()
+    if ($a -ieq $e) {
+        return $true
+    }
+    if ($a.Length -ge 7 -and $e.StartsWith($a, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $true
+    }
+    if ($e.Length -ge 7 -and $a.StartsWith($e, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $true
+    }
+    return $false
+}
+
+function Wait-AutopullFrontendRebuild([string]$RepoRoot, [string]$ExpectedCommit, [string]$HostIp, [string]$SecondaryHostIp, [int]$Port, [string]$HealthPath, [int]$TimeoutSeconds, [int]$IntervalMs, $BeforePid = $null) {
+    $pathPart = if ($HealthPath -and $HealthPath.StartsWith('/')) { $HealthPath } elseif ($HealthPath) { "/$HealthPath" } else { '/' }
+    $candidateHosts = @()
+    if ($HostIp -and $HostIp.Trim()) {
+        $candidateHosts += $HostIp.Trim()
+    }
+    if ($SecondaryHostIp -and $SecondaryHostIp.Trim() -and ($candidateHosts -notcontains $SecondaryHostIp.Trim())) {
+        $candidateHosts += $SecondaryHostIp.Trim()
+    }
+    $hdr = Get-AutopullProbeHeaders
+    $deadline = (Get-Date).AddSeconds([Math]::Max(0, $TimeoutSeconds))
+    $attempt = 0
+    $reqTimeoutSec = [Math]::Max(1, [Math]::Min(5, [Math]::Ceiling([Math]::Max(1, $TimeoutSeconds))))
+    $lastUrl = ''
+    $lastAnswered = $null
+    $lastOwner = Get-AutopullPortOwner -Port $Port
+    $lastBuildCommit = Get-AutopullFrontendBuildCommit -RepoRoot $RepoRoot
+    $ownerChanged = $false
+    $commitMatched = $false
+
+    do {
+        $attempt++
+        $lastOwner = Get-AutopullPortOwner -Port $Port
+        $ownerChanged = ($null -ne $lastOwner.ProcessId) -and ([int]$lastOwner.ProcessId -gt 0) -and ($lastOwner.ProcessId -ne $BeforePid)
+        $lastBuildCommit = Get-AutopullFrontendBuildCommit -RepoRoot $RepoRoot
+        $commitMatched = Test-AutopullFrontendBuildCommitMatch -ActualBuildCommit $lastBuildCommit -ExpectedCommit $ExpectedCommit
+
+        $iterAnswered = $null
+        foreach ($candidateHost in $candidateHosts) {
+            $probeUrl = "http://${candidateHost}:${Port}${pathPart}"
+            $lastUrl = $probeUrl
+            try {
+                $resp = Invoke-WebRequest -Uri $probeUrl -Headers $hdr -UseBasicParsing -TimeoutSec $reqTimeoutSec -ErrorAction Stop
+                if ([int]$resp.StatusCode -ge 200 -and [int]$resp.StatusCode -lt 400) {
+                    $iterAnswered = [pscustomobject]@{
+                        Answered        = $true
+                        AnsweredHost    = $candidateHost
+                        AnsweredAddress = "${candidateHost}:${Port}"
+                        Url             = $probeUrl
+                        StatusCode      = [int]$resp.StatusCode
+                        TriedHosts      = $candidateHosts
+                        Attempts        = $attempt
+                    }
+                    $lastAnswered = $iterAnswered
+                    break
+                }
+            } catch {}
+        }
+
+        if ($ownerChanged -and $commitMatched -and ($null -ne $iterAnswered)) {
+            return [pscustomobject]@{
+                Answered           = $true
+                AnsweredHost       = $iterAnswered.AnsweredHost
+                AnsweredAddress    = $iterAnswered.AnsweredAddress
+                Url                = $iterAnswered.Url
+                StatusCode         = $iterAnswered.StatusCode
+                TriedHosts         = $candidateHosts
+                Attempts           = $attempt
+                AfterOwner         = $lastOwner
+                OwnerChanged       = $true
+                BuildCommit        = $lastBuildCommit
+                BuildCommitMatched = $true
+                RebuildReady       = $true
+            }
+        }
+
+        if ((Get-Date) -lt $deadline) {
+            Start-Sleep -Milliseconds ([Math]::Max(50, $IntervalMs))
+        }
+    } while ((Get-Date) -lt $deadline)
+
+    $ansHost = if ($null -ne $lastAnswered) { $lastAnswered.AnsweredHost } else { '' }
+    $ansAddr = if ($null -ne $lastAnswered) { $lastAnswered.AnsweredAddress } else { '' }
+    $ansUrl = if ($null -ne $lastAnswered) { $lastAnswered.Url } else { $lastUrl }
+    $ansCode = if ($null -ne $lastAnswered) { $lastAnswered.StatusCode } else { 0 }
+
+    return [pscustomobject]@{
+        Answered           = ($null -ne $lastAnswered)
+        AnsweredHost       = $ansHost
+        AnsweredAddress    = $ansAddr
+        Url                = $ansUrl
+        StatusCode         = $ansCode
+        TriedHosts         = $candidateHosts
+        Attempts           = $attempt
+        AfterOwner         = $lastOwner
+        OwnerChanged       = $ownerChanged
+        BuildCommit        = $lastBuildCommit
+        BuildCommitMatched = $commitMatched
+        RebuildReady       = ($ownerChanged -and $commitMatched)
+    }
+}
+
 Write-Output "Mode: APPLY"
 $PrePullOwners = @{}
 foreach ($svc in $MappedServices) {
     if ($svc.kind -eq 'port') {
         $PrePullOwners[[string]$svc.service] = Get-AutopullPortOwner -Port ([int]$svc.stopPort)
     }
+}
+if ($frontendChanged) {
+    $PrePullOwners['date-app-web'] = Get-AutopullPortOwner -Port $FrontendPort
 }
 $PullTimeUtc = (Get-Date).ToUniversalTime()
 $PullIsoTime = $PullTimeUtc.ToString('o')
@@ -844,22 +969,37 @@ foreach ($svc in $MappedServices) {
 }
 
 if ($frontendChanged) {
+    $feBeforeOwner = if ($PrePullOwners.ContainsKey('date-app-web')) {
+        $PrePullOwners['date-app-web']
+    } else {
+        Get-AutopullPortOwner -Port $FrontendPort
+    }
     Write-Output "Frontend changed (domains/youandinotai.com/frontend): no action needed because the keepalive rebuilds the site."
     $RecordedServices += [ordered]@{
-        service         = 'date-app-web'
-        kind            = 'frontend'
-        port            = 3200
-        checkPort       = $FrontendPort
-        healthPath      = '/'
-        publicAddress   = 'youandinotai.com'
-        pageAddress     = 'youandinotai.com'
-        publicUrl       = $PublicWebUrl
-        publicPageUrl   = $PublicWebUrl
-        expectedContent = '(?:assets/index-|YouAndINotAI|<!DOCTYPE html>)'
-        isPublicPage    = $true
-        target          = '3200'
-        action          = 'keepalive-rebuild:3200'
-        status          = 'PENDING'
+        service            = 'date-app-web'
+        kind               = 'frontend'
+        port               = 3200
+        checkPort          = $FrontendPort
+        healthPath         = '/'
+        publicAddress      = 'youandinotai.com'
+        pageAddress        = 'youandinotai.com'
+        publicUrl          = $PublicWebUrl
+        publicPageUrl      = $PublicWebUrl
+        expectedContent    = '(?:assets/index-|YouAndINotAI|<!DOCTYPE html>)'
+        isPublicPage       = $true
+        target             = '3200'
+        action             = 'keepalive-rebuild:3200'
+        beforePid          = $feBeforeOwner.ProcessId
+        beforeStartTime    = $feBeforeOwner.StartTimeIso
+        afterPid           = $null
+        afterStartTime     = $null
+        pullTime           = $PullIsoTime
+        ownerChanged       = $false
+        restarted          = $false
+        buildCommit        = ''
+        buildCommitMatched = $false
+        rebuilt            = $false
+        status             = 'PENDING'
     }
 }
 
@@ -867,6 +1007,7 @@ $PublicChecks = @()
 $Pictures = @()
 $FailedReasons = @()
 $RestartFailedReasons = @()
+$WaitingForRebuildReasons = @()
 
 foreach ($rec in $RecordedServices) {
     if ([int]$rec.checkPort -le 0) {
@@ -880,12 +1021,26 @@ foreach ($rec in $RecordedServices) {
     }
 
     $isPortKind = ($rec.kind -eq 'port')
+    $isFrontendKind = ($rec.kind -eq 'frontend')
     $stopWasRefused = ($isPortKind -and [bool]$rec.stopRefused)
     $waitForNewOwner = ($isPortKind -and (-not $SkipProcessStop) -and (-not $stopWasRefused) -and ($null -ne $rec.beforePid) -and ([int]$rec.beforePid -gt 0))
     $effectiveWaitSec = if ($stopWasRefused) { [Math]::Min($WaitTimeoutSeconds, 3) } else { $WaitTimeoutSeconds }
     $beforePidInt = if ($isPortKind -and $null -ne $rec.beforePid) { [int]$rec.beforePid } else { 0 }
+    $frontendRebuildReady = $true
 
-    $portCheck = Wait-AutopullServicePort -HostIp $NodeHost -SecondaryHostIp $FallbackHost -Port ([int]$rec.checkPort) -HealthPath ([string]$rec.healthPath) -TimeoutSeconds $effectiveWaitSec -IntervalMs $PollIntervalMs -BeforePid $beforePidInt -WaitForNewOwner $waitForNewOwner
+    if ($isFrontendKind) {
+        $portCheck = Wait-AutopullFrontendRebuild -RepoRoot $RepoPath -ExpectedCommit $AppliedCommit -HostIp $NodeHost -SecondaryHostIp $FallbackHost -Port ([int]$rec.checkPort) -HealthPath ([string]$rec.healthPath) -TimeoutSeconds $effectiveWaitSec -IntervalMs $PollIntervalMs -BeforePid $rec.beforePid
+        $frontendRebuildReady = [bool]$portCheck.RebuildReady
+        $rec['afterPid'] = $portCheck.AfterOwner.ProcessId
+        $rec['afterStartTime'] = $portCheck.AfterOwner.StartTimeIso
+        $rec['ownerChanged'] = [bool]$portCheck.OwnerChanged
+        $rec['restarted'] = [bool]$portCheck.OwnerChanged
+        $rec['buildCommit'] = [string]$portCheck.BuildCommit
+        $rec['buildCommitMatched'] = [bool]$portCheck.BuildCommitMatched
+        $rec['rebuilt'] = $frontendRebuildReady
+    } else {
+        $portCheck = Wait-AutopullServicePort -HostIp $NodeHost -SecondaryHostIp $FallbackHost -Port ([int]$rec.checkPort) -HealthPath ([string]$rec.healthPath) -TimeoutSeconds $effectiveWaitSec -IntervalMs $PollIntervalMs -BeforePid $beforePidInt -WaitForNewOwner $waitForNewOwner
+    }
     $localPassed = [bool]$portCheck.Answered
     $rec['portHost'] = [string]$portCheck.AnsweredHost
     $rec['answeredHost'] = [string]$portCheck.AnsweredHost
@@ -920,19 +1075,20 @@ foreach ($rec in $RecordedServices) {
     $publicPassed = $false
 
     if ($hasPublicCheck) {
+        $pubTimeoutSec = if ($isFrontendKind -and (-not $frontendRebuildReady)) { [Math]::Min($effectiveWaitSec, 5) } else { $effectiveWaitSec }
         if ($rec.service -eq 'domains-server') {
-            $pubCheck = Test-AutopullDomainsHealthContent -Url ([string]$rec.publicUrl) -RequiredFields $DomainsRequiredFields -ExpectedCommit $AppliedCommit -TimeoutSeconds $effectiveWaitSec -IntervalMs $PollIntervalMs
+            $pubCheck = Test-AutopullDomainsHealthContent -Url ([string]$rec.publicUrl) -RequiredFields $DomainsRequiredFields -ExpectedCommit $AppliedCommit -TimeoutSeconds $pubTimeoutSec -IntervalMs $PollIntervalMs
             $rec['requiredHealthFields'] = @($pubCheck.RequiredFields)
             $rec['missingHealthFields'] = @($pubCheck.MissingFields)
             $rec['healthBuildStamp'] = [string]$pubCheck.BuildStamp
         } else {
-            $pubCheck = Test-AutopullPublicContent -Url ([string]$rec.publicUrl) -ExpectedPattern ([string]$rec.expectedContent) -TimeoutSeconds $effectiveWaitSec -IntervalMs $PollIntervalMs
+            $pubCheck = Test-AutopullPublicContent -Url ([string]$rec.publicUrl) -ExpectedPattern ([string]$rec.expectedContent) -TimeoutSeconds $pubTimeoutSec -IntervalMs $PollIntervalMs
         }
         $publicPassed = [bool]$pubCheck.Passed
-        $rec['publicCheckPassed'] = $publicPassed
+        $rec['publicCheckPassed'] = ($publicPassed -and ((-not $isFrontendKind) -or $frontendRebuildReady))
         $picPath = ''
 
-        if ($publicPassed -and $rec.isPublicPage) {
+        if ($publicPassed -and $rec.isPublicPage -and ((-not $isFrontendKind) -or $frontendRebuildReady)) {
             $shootAddr = if ($rec['pageAddress']) { [string]$rec['pageAddress'] } else { [string]$rec.publicAddress }
             $shootUrl = if ($rec['publicPageUrl']) { [string]$rec['publicPageUrl'] } else { [string]$rec.publicUrl }
             $shotRes = Invoke-AutopullShootPage -PageAddress $shootAddr -PublicUrl $shootUrl -OutDir $LogDir -StampPrefix $StampPrefix
@@ -944,16 +1100,26 @@ foreach ($rec in $RecordedServices) {
             }
         }
 
+        $pubStatus = if ($isFrontendKind -and (-not $frontendRebuildReady)) {
+            'WAITING-FOR-REBUILD'
+        } elseif ($publicPassed) {
+            'LIVE'
+        } else {
+            'FAILED'
+        }
+
         $PublicChecks += [ordered]@{
             address         = $rec.publicAddress
             url             = $rec.publicUrl
             expectedContent = $rec.expectedContent
-            passed          = $publicPassed
-            status          = if ($publicPassed) { 'LIVE' } else { 'FAILED' }
+            passed          = ($publicPassed -and ((-not $isFrontendKind) -or $frontendRebuildReady))
+            status          = $pubStatus
             picture         = $picPath
         }
 
-        if ($publicPassed) {
+        if ($isFrontendKind -and (-not $frontendRebuildReady)) {
+            Write-Output ("Public content check deferred to WAITING-FOR-REBUILD for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
+        } elseif ($publicPassed) {
             Write-Output ("Verified public content for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
         } else {
             Write-Output ("Public content check did not pass for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
@@ -964,6 +1130,13 @@ foreach ($rec in $RecordedServices) {
         $rec.status = 'FAILED-TO-RESTART'
         $RestartFailedReasons += "Service $($rec.service): restart refused: access denied (pid=$($rec.beforePid))"
         Write-Output ("FAILED-TO-RESTART: Service {0} - restart refused: access denied" -f $rec.service)
+        continue
+    }
+
+    if ($isFrontendKind -and (-not $frontendRebuildReady)) {
+        $rec.status = 'WAITING-FOR-REBUILD'
+        $WaitingForRebuildReasons += "Service $($rec.service) waiting for rebuild on port $($rec.checkPort) (beforePid=$($rec.beforePid), afterPid=$($rec.afterPid), buildCommit=$($rec.buildCommit), expectedCommit=$AppliedCommit)"
+        Write-Output ("WAITING-FOR-REBUILD: Service {0} waiting for port {1} owner change and dist/build-commit.txt ({2}) to match {3}" -f $rec.service, $rec.checkPort, $rec.buildCommit, $AppliedCommit)
         continue
     }
 
@@ -990,7 +1163,7 @@ foreach ($rec in $RecordedServices) {
     $rec.status = 'LIVE'
 }
 
-$OverallStatus = if ($FailedReasons.Count -gt 0) { 'FAILED' } elseif ($RestartFailedReasons.Count -gt 0) { 'FAILED-TO-RESTART' } else { 'LIVE' }
+$OverallStatus = if ($FailedReasons.Count -gt 0) { 'FAILED' } elseif ($RestartFailedReasons.Count -gt 0) { 'FAILED-TO-RESTART' } elseif ($WaitingForRebuildReasons.Count -gt 0) { 'WAITING-FOR-REBUILD' } else { 'LIVE' }
 $PausedAutopull = $false
 
 if ($OverallStatus -eq 'FAILED') {
