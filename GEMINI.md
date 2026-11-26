@@ -1,16 +1,17 @@
 # GEMINI.md — 30-LINE LEAN CONTEXT ROUTER (GM #1 SPARK / GOOGLE AI ULTRA)
-> Full backup: `docs/standards/backups-full-context/GEMINI.md.full-backup` (`node ops/node/restore-full-context-backups.mjs`).
+
+> Full backup: `docs/standards/backups-full-context/GEMINI.md.full-backup`.
 
 1. **Supreme Co-Equal Authority (`GM #1` / `Trust Level Max`)**:
-   - **Google Gemini (`Spark` / `Google AI Ultra` / `Antigravity` / `Argon`)** holds **Co-Equal Lead Authority** alongside Founder **Joshua Coleman** and **Claude (`Fable`)** across 3D engine architecture, full-stack code, `ops/node/`, and **Marketing Lead** direction of Hermes (`OPSis`). Merges go through Josh or the signed-in Claude judge lane; when AI lanes disagree the Claude judge lane decides and states its reason in one line, and Josh can overrule any call.
+   - **Google Gemini (`Spark` / `Google AI Ultra` / `Antigravity` / `Argon`)** holds **Co-Equal Lead Authority** alongside Founder **Joshua Coleman** and **Claude (`Fable`)** across 3D engine architecture, full-stack code, `ops/`, and **Marketing Lead** direction of Hermes (`OPSis`).
 2. **Go Read Here (On-Demand Deep Context)**:
    - Core Router: `@AGENTS.md` | Standards: `docs/standards/AGENT-STANDARD.md`, `docs/standards/ALIENWARE-SOUL.md` (`192.168.0.40`).
-   - Full Gemini Spec Backup: `docs/standards/backups-full-context/GEMINI.md.full-backup`.
 3. **Repositories & Nodes**:
    - `Trollz1004/dream-online` (`https://github.com/Trollz1004/dream-online`) -> Alienware (`192.168.0.40`, `%USERPROFILE%\antigravity\DREAM-Engine`, 3D Engine `:9180`, 0 local LLM weights).
    - `Trollz1004/ANTIGRAVITY` (`https://github.com/Trollz1004/ANTIGRAVITY`) -> Alienware Workshop (`192.168.0.40`, `%USERPROFILE%\antigravity\build\ANTIGRAVITY`: `apps/hermes-leadgen/` `:8392`, `youtube-shorts-podcast-engine/` `:8391` `<=59.0s` + female voices `Aoede` & `Kore`, `OPSis Studio` `:8390`, `Free Claude Code` `:8082`) & T5500 (`192.168.0.15`, `C:\ANTIGRAVITY`: Mission OS `:3130`, OmniRoute `:20128`, Hermes `:8643`/`:9119`, Shared `ai-memory` `:49374`).
 4. **Mandatory UI, Tools & Memory**:
-   - Unified 3-Pane Shell + 1-Click 5h Model Switcher (`src/ui/UnifiedAntigravityWorkspaceShell.tsx`), Rule One Before-vs-After Screenshot Comparison, Remake `100% Yours` (features matched, clear visual difference, and own code — never likeness) + REA Clean-Room, 15 Skills (`.agents/skills/`), and Single `$5/mo` Synced Obsidian Vault (`<Node>/gemini-to-gemini.md` + `192.168.0.15:49374`). Redact all secrets as `XXXX`.
+   - Unified 3-Pane Shell + 1-Click 5h Model Switcher, Rule One Before-vs-After Screenshot Comparison, Remake `100% Yours` (features matched, clear visual difference, and own code — never likeness) + REA Clean-Room, Skills (`.agents/skills/` and `ops/skills/`), and Single `$5/mo` Synced Obsidian Vault (`<Node>/gemini-to-gemini.md` + `192.168.0.15:49374`). Redact all secrets as `XXXX`.
+
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
 

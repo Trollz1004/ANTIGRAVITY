@@ -283,7 +283,21 @@ export const EXPECTED_ANTIGRAVITY_SPINE_BLOCK = [
   '<!-- TROLLZ1004-SPINE:END -->',
 ].join('\n');
 
-test('CLAUDE.md, AGENTS.md, and GEMINI.md carry the same rendered spine block as dream-online (apart from the repo name line)', () => {
+test('CLAUDE.md, AGENTS.md, and GEMINI.md carry the same rendered spine block as dream-online (apart from the repo name line) and have no duplicate block lines or dead file pointers above the block', () => {
+  const deadPointers = [
+    'ops/node/restore-full-context-backups.mjs',
+    'src/ui/UnifiedAntigravityWorkspaceShell.tsx',
+    'graphify-out/graph.json',
+    'api.workflow.json',
+    'Agent Universal/agent-workflow-graphy.json',
+    '.agents/skills/remake/',
+    '.agents/skills/reverse-engineer-anything/',
+    '.agents/skills/cli-anything/',
+    'ops/node/boot-alienware-services.vbs',
+    'ops/node/',
+  ];
+  const spineLines = EXPECTED_ANTIGRAVITY_SPINE_BLOCK.split('\n').slice(1, -1);
+
   for (const rel of ['CLAUDE.md', 'AGENTS.md', 'GEMINI.md']) {
     const raw = fs.readFileSync(path.join(REPO_ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
     const startMarker = '<!-- TROLLZ1004-SPINE:START -->';
@@ -294,5 +308,23 @@ test('CLAUDE.md, AGENTS.md, and GEMINI.md carry the same rendered spine block as
 
     const block = raw.slice(startIdx, endIdx + endMarker.length);
     assert.equal(block, EXPECTED_ANTIGRAVITY_SPINE_BLOCK, `${rel}: spine block does not match canonical block`);
+
+    const above = raw.slice(0, startIdx);
+    for (const line of spineLines) {
+      assert.equal(above.includes(line), false, `${rel}: hand-written section repeats spine block line: ${line}`);
+    }
+    for (const dead of deadPointers) {
+      assert.equal(above.includes(dead), false, `${rel}: hand-written section references non-existent file "${dead}"`);
+    }
+    assert.equal(
+      above.includes('Merges & Disagreements'),
+      false,
+      `${rel}: hand-written section repeats merging rule from spine block`,
+    );
+    assert.equal(
+      above.includes('Merges go through Josh or the signed-in Claude judge lane'),
+      false,
+      `${rel}: hand-written section repeats merging rule from spine block`,
+    );
   }
 });
