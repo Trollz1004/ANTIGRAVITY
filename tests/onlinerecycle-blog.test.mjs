@@ -152,6 +152,11 @@ const BLOG_PAGES = [
       'https://onlinerecycle.net/blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-eustis-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-eustis-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
