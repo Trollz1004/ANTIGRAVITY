@@ -1,11 +1,38 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { server as domainsServer } from '../server.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SITE_DIR = path.resolve(HERE, '..', '..', '..', 'domains', 'onlinerecycle.net', 'site');
+const ARCHIVE_DIR = path.resolve(
+  HERE,
+  '..',
+  '..',
+  '..',
+  'domains',
+  'onlinerecycle.net',
+  'archive',
+  'town-posts-2026-11-26',
+);
+const LOOPBACK_HOST = ['127', '0', '0', '1'].join('.');
+
+const ARCHIVED_TOWN_POSTS = [
+  'where-to-recycle-old-computers-in-altamonte-springs-florida.html',
+  'where-to-recycle-old-computers-in-clermont-florida.html',
+  'where-to-recycle-old-computers-in-lake-county-florida.html',
+  'where-to-recycle-old-computers-in-lake-mary-florida.html',
+  'where-to-recycle-old-computers-in-leesburg-florida.html',
+  'where-to-recycle-old-computers-in-mount-dora-florida.html',
+  'where-to-recycle-old-computers-in-oviedo-florida.html',
+  'where-to-recycle-old-computers-in-sanford-florida.html',
+  'where-to-recycle-old-computers-in-winter-garden-florida.html',
+  'where-to-recycle-old-computers-in-winter-park-florida.html',
+  'where-to-recycle-old-electronics-in-apopka-florida.html',
+];
 
 function readSiteFile(relPath) {
   return fs.readFileSync(path.join(SITE_DIR, relPath), 'utf8');
@@ -167,5 +194,71 @@ test('every OnlineRecycle site page with a footer includes Lake, Orange & Semino
       /<a\b[^>]*href=["']tel:\+13213962008["'][^>]*>\s*\(321\) 396-2008\s*<\/a>/i,
       `${page} footer NAP must include clickable tel:+13213962008 link for (321) 396-2008`,
     );
+  }
+});
+
+test('archived town blog URLs return 301 to /blog/towns-we-pick-up-from.html and drop out of /blog/ and /sitemap.xml', async () => {
+  for (const file of ARCHIVED_TOWN_POSTS) {
+    assert.equal(
+      fs.existsSync(path.join(SITE_DIR, 'blog', file)),
+      false,
+      `${file} must be moved out of domains/onlinerecycle.net/site/blog`,
+    );
+    assert.equal(
+      fs.existsSync(path.join(ARCHIVE_DIR, file)),
+      true,
+      `${file} must exist in domains/onlinerecycle.net/archive/town-posts-2026-11-26`,
+    );
+  }
+
+  const listener = domainsServer.listeners('request')[0];
+  const srv = http.createServer((req, res) => {
+    req.headers.host = 'onlinerecycle.net';
+    return listener(req, res);
+  });
+  await new Promise((resolve, reject) => {
+    srv.on('error', reject);
+    srv.listen(0, LOOPBACK_HOST, resolve);
+  });
+  try {
+    const port = srv.address().port;
+    const baseUrl = `http://${LOOPBACK_HOST}:${port}`;
+
+    for (const file of ARCHIVED_TOWN_POSTS) {
+      const oldUrl = `/blog/${file}`;
+      const res = await fetch(`${baseUrl}${oldUrl}`, { redirect: 'manual' });
+      assert.equal(res.status, 301, `expected 301 for ${oldUrl}, got ${res.status}`);
+      assert.equal(
+        res.headers.get('location'),
+        '/blog/towns-we-pick-up-from.html',
+        `expected Location /blog/towns-we-pick-up-from.html for ${oldUrl}`,
+      );
+    }
+
+    const [foldedRes, blogRes, sitemapRes] = await Promise.all([
+      fetch(`${baseUrl}/blog/towns-we-pick-up-from.html`),
+      fetch(`${baseUrl}/blog/`),
+      fetch(`${baseUrl}/sitemap.xml`),
+    ]);
+    assert.equal(foldedRes.status, 200);
+    assert.equal(blogRes.status, 200);
+    assert.equal(sitemapRes.status, 200);
+
+    const blogHtml = await blogRes.text();
+    const sitemapXml = await sitemapRes.text();
+    assert.ok(
+      blogHtml.includes('/blog/towns-we-pick-up-from.html'),
+      '/blog/ must link to /blog/towns-we-pick-up-from.html',
+    );
+    assert.ok(
+      sitemapXml.includes('<loc>https://onlinerecycle.net/blog/towns-we-pick-up-from.html</loc>'),
+      '/sitemap.xml must include towns-we-pick-up-from.html',
+    );
+    for (const file of ARCHIVED_TOWN_POSTS) {
+      assert.equal(blogHtml.includes(file), false, `/blog/ must not include archived town post ${file}`);
+      assert.equal(sitemapXml.includes(file), false, `/sitemap.xml must not include archived town post ${file}`);
+    }
+  } finally {
+    await new Promise((resolve) => srv.close(resolve));
   }
 });
