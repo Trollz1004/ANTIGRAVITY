@@ -228,7 +228,17 @@ test('openclaw-autopull.ps1 does nothing when ops\\t5500\\PAUSE-AUTOPULL exists'
     assert.equal(afterHead, oldHead, 'HEAD must not change when PAUSE-AUTOPULL exists');
 
     const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
-    assert.equal(fs.existsSync(logDir), false, 'logs\\autopull must not be written when paused');
+    assert.equal(fs.existsSync(logDir), true, 'logs\\autopull must exist to record autopull-skips.log when paused');
+    assert.equal(
+      fs.readdirSync(logDir).filter((f) => f.endsWith('.json')).length,
+      0,
+      'No pull JSON record may be written when paused',
+    );
+    const skipLogPath = path.join(logDir, 'autopull-skips.log');
+    assert.equal(fs.existsSync(skipLogPath), true, 'autopull-skips.log must be written when paused');
+    const skipLines = fs.readFileSync(skipLogPath, 'utf8').trim().split(/\r?\n/);
+    assert.equal(skipLines.length, 1);
+    assert.match(skipLines[0], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*PAUSE-AUTOPULL/i);
   } finally {
     fs.rmSync(fx.root, { recursive: true, force: true });
   }
@@ -240,12 +250,16 @@ test(
   async () => {
     const fx = createGitFixture();
     try {
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const skipLogPath = path.join(logDir, 'autopull-skips.log');
+
       // 1. Equal: origin/main === HEAD
       const baseHead = git(fx.cloneDir, ['rev-parse', 'HEAD']);
       const equalRes = await runAutopullAsync(fx.cloneDir, ['-Apply', '-SkipProcessStop']);
       assert.equal(equalRes.status, 0, `Expected exit 0 when up-to-date: ${equalRes.stderr}\n${equalRes.stdout}`);
       assert.equal(git(fx.cloneDir, ['rev-parse', 'HEAD']), baseHead);
-      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'logs', 'autopull')), false);
+      assert.equal(fs.existsSync(skipLogPath), true, 'autopull-skips.log must be written when already at HEAD');
+      assert.equal(fs.readdirSync(logDir).filter((f) => f.endsWith('.json')).length, 0);
 
       // 2. Ahead locally (origin/main is behind HEAD)
       writeRepoFile(fx.cloneDir, 'local-only.txt', 'local commit\n');
@@ -256,7 +270,7 @@ test(
       const aheadRes = await runAutopullAsync(fx.cloneDir, ['-Apply', '-SkipProcessStop']);
       assert.equal(aheadRes.status, 0, `Expected exit 0 when local is ahead: ${aheadRes.stderr}\n${aheadRes.stdout}`);
       assert.equal(git(fx.cloneDir, ['rev-parse', 'HEAD']), localAheadHead);
-      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'logs', 'autopull')), false);
+      assert.equal(fs.readdirSync(logDir).filter((f) => f.endsWith('.json')).length, 0);
 
       // 3. Diverged: upstream also has a new commit while local has an unpushed commit
       pushUpstreamCommit(fx.seedDir, {
@@ -269,7 +283,13 @@ test(
         `Expected exit 0 when diverged: ${divergedRes.stderr}\n${divergedRes.stdout}`,
       );
       assert.equal(git(fx.cloneDir, ['rev-parse', 'HEAD']), localAheadHead, 'Diverged HEAD must remain untouched');
-      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'logs', 'autopull')), false);
+      assert.equal(fs.readdirSync(logDir).filter((f) => f.endsWith('.json')).length, 0);
+
+      const skipLines = fs.readFileSync(skipLogPath, 'utf8').trim().split(/\r?\n/);
+      assert.equal(skipLines.length, 3, 'Expected 3 timestamped SKIP lines in autopull-skips.log');
+      assert.match(skipLines[0], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*already at HEAD/i);
+      assert.match(skipLines[1], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*not straight ahead/i);
+      assert.match(skipLines[2], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*not straight ahead/i);
     } finally {
       fs.rmSync(fx.root, { recursive: true, force: true });
     }
@@ -303,7 +323,16 @@ test(
         'print("dirty-local")\n',
         'Local tracked modification must not be overwritten or reset',
       );
-      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'logs', 'autopull')), false);
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const skipLogPath = path.join(logDir, 'autopull-skips.log');
+      assert.equal(fs.existsSync(skipLogPath), true, 'autopull-skips.log must be written on overlapping local change');
+      assert.equal(fs.readdirSync(logDir).filter((f) => f.endsWith('.json')).length, 0);
+      const skipLines = fs.readFileSync(skipLogPath, 'utf8').trim().split(/\r?\n/);
+      assert.equal(skipLines.length, 1);
+      assert.match(
+        skipLines[0],
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*tracked local change touches file\(s\)/i,
+      );
 
       // Restore overlapping file, dirty an unrelated tracked file (like odysseus/note.txt)
       git(fx.cloneDir, ['checkout', '--', 'domains/youandinotai.com/backend/app/main.py']);
@@ -477,6 +506,10 @@ test(
     // When oldOwner exits (killed by openclaw-autopull.ps1), simulate keepalive bringing backendPort, domainsPort, and frontendPort back after 250ms in new child processes
     oldOwner.on('exit', () => {
       setTimeout(() => {
+        try {
+          const headAfterPull = git(fx.cloneDir, ['rev-parse', 'HEAD']);
+          writeRepoFile(fx.cloneDir, 'domains/youandinotai.com/frontend/dist/build-commit.txt', `${headAfterPull}\n`);
+        } catch {}
         for (const [port, body] of [
           [backendPort, JSON.stringify({ status: 'ok', db_connected: true })],
           [domainsPort, JSON.stringify({ status: 'ok', service: 'domains-server' })],
@@ -1341,6 +1374,376 @@ test(
         publicServer.close();
       } catch {}
       fs.rmSync(fxStale.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 appends one timestamped line to logs\\autopull\\autopull-skips.log before every SKIP exit and keeps the exits as they are',
+  { concurrency: true },
+  async () => {
+    const fx = createGitFixture();
+    try {
+      const skipLogPath = path.join(fx.cloneDir, 'logs', 'autopull', 'autopull-skips.log');
+
+      // 1. SKIP when PAUSE-AUTOPULL exists
+      writeRepoFile(fx.cloneDir, 'ops/t5500/PAUSE-AUTOPULL', 'manual pause\n');
+      const r1 = await runAutopullAsync(fx.cloneDir, ['-Apply', '-SkipProcessStop']);
+      assert.equal(r1.status, 0);
+      assert.match(r1.stdout, /SKIP:.*PAUSE-AUTOPULL/i);
+      fs.rmSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL'), { force: true });
+
+      // 2. SKIP when git fetch fails (non-existent remote)
+      const r2 = await runAutopullAsync(fx.cloneDir, ['-Apply', '-SkipProcessStop', '-Remote', 'no-such-remote']);
+      assert.equal(r2.status, 0);
+      assert.match(r2.stdout, /SKIP:.*git fetch no-such-remote main failed/i);
+
+      // 3. SKIP when unable to resolve HEAD or RemoteRef (-SkipFetch with bogus branch)
+      const r3 = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-SkipFetch',
+        '-Branch',
+        'no-such-branch',
+      ]);
+      assert.equal(r3.status, 0);
+      assert.match(r3.stdout, /SKIP:.*unable to resolve HEAD or origin\/no-such-branch/i);
+
+      // 4. SKIP when origin/main is already at HEAD
+      const r4 = await runAutopullAsync(fx.cloneDir, ['-Apply', '-SkipProcessStop']);
+      assert.equal(r4.status, 0);
+      assert.match(r4.stdout, /SKIP:.*already at HEAD/i);
+
+      assert.equal(fs.existsSync(skipLogPath), true, 'logs\\autopull\\autopull-skips.log must exist');
+      const rawBuf = fs.readFileSync(skipLogPath);
+      assert.equal(
+        rawBuf[0] === 0xef && rawBuf[1] === 0xbb && rawBuf[2] === 0xbf,
+        false,
+        'autopull-skips.log must be UTF-8 with no BOM',
+      );
+      const lines = rawBuf.toString('utf8').trim().split(/\r?\n/);
+      assert.equal(lines.length, 4, `Expected 4 skip log lines, found ${lines.length}: ${JSON.stringify(lines)}`);
+      assert.match(lines[0], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*PAUSE-AUTOPULL/i);
+      assert.match(
+        lines[1],
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*git fetch no-such-remote main failed/i,
+      );
+      assert.match(
+        lines[2],
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*unable to resolve HEAD or origin\/no-such-branch/i,
+      );
+      assert.match(lines[3], /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\s+SKIP:.*already at HEAD/i);
+    } finally {
+      fs.rmSync(fx.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 waits for port 3200 owner to change and dist/build-commit.txt to match newCommit before marking date-app-web LIVE, and records WAITING-FOR-REBUILD if the wait runs out',
+  { concurrency: true },
+  async () => {
+    const fx = createGitFixture();
+    const frontendPort = await getFreePort();
+    const publicPort = await getFreePort();
+
+    const oldFrontendOwner = spawn(
+      process.execPath,
+      [
+        '-e',
+        `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-old.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+      ],
+      { stdio: 'ignore', windowsHide: true },
+    );
+
+    const publicServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
+      res.end(
+        '<!DOCTYPE html><html><head><script src="/assets/index-live.js"></script></head><body>YouAndINotAI</body></html>',
+      );
+    });
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    let midFrontendOwner = null;
+    let newFrontendOwner = null;
+
+    try {
+      await waitForPortListen(frontendPort);
+
+      const commit0 = git(fx.cloneDir, ['rev-parse', 'HEAD']);
+      writeRepoFile(fx.cloneDir, 'domains/youandinotai.com/frontend/dist/build-commit.txt', `${commit0}\n`);
+
+      // Case 1: Port 3200 owner does NOT change and dist/build-commit.txt still has commit0 -> WAITING-FOR-REBUILD
+      const commit1 = pushUpstreamCommit(
+        fx.seedDir,
+        { 'domains/youandinotai.com/frontend/src/App.tsx': 'export const App = () => "v2-waiting";\n' },
+        'Date app frontend update 1 (#561)',
+      );
+
+      const resTimeout1 = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-FrontendPort',
+        String(frontendPort),
+        '-PublicWebUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/youandinotai`,
+        '-WaitTimeoutSeconds',
+        '1',
+        '-PollIntervalMs',
+        '150',
+      ]);
+
+      assert.equal(resTimeout1.status, 0, `Expected exit 0 on WAITING-FOR-REBUILD: ${resTimeout1.stdout}`);
+      assert.equal(
+        fs.existsSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')),
+        false,
+        'PAUSE-AUTOPULL must not be created on WAITING-FOR-REBUILD',
+      );
+
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const recFiles1 = fs
+        .readdirSync(logDir)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      assert.equal(recFiles1.length, 1);
+      const rec1 = JSON.parse(fs.readFileSync(path.join(logDir, recFiles1[0]), 'utf8'));
+      assert.equal(rec1.newCommit, commit1);
+      assert.equal(rec1.status, 'WAITING-FOR-REBUILD', 'Overall status must be WAITING-FOR-REBUILD when wait runs out');
+      assert.equal(rec1.live, false);
+      const feSvc1 = rec1.changedServices.find((s) => s.service === 'date-app-web');
+      assert.ok(feSvc1, 'date-app-web must be in changedServices');
+      assert.equal(feSvc1.beforePid, oldFrontendOwner.pid);
+      assert.equal(feSvc1.afterPid, oldFrontendOwner.pid);
+      assert.equal(feSvc1.status, 'WAITING-FOR-REBUILD');
+      assert.equal(rec1.publicChecks[0].status, 'WAITING-FOR-REBUILD');
+
+      // Case 2: Port 3200 owner changes after pull completes, but dist/build-commit.txt still has old commit0 -> WAITING-FOR-REBUILD
+      const commit2 = pushUpstreamCommit(
+        fx.seedDir,
+        { 'domains/youandinotai.com/frontend/src/App.tsx': 'export const App = () => "v3-stale-commit-file";\n' },
+        'Date app frontend update 2 (#562)',
+      );
+
+      const watch2 = setInterval(() => {
+        try {
+          if (git(fx.cloneDir, ['rev-parse', 'HEAD']) === commit2) {
+            clearInterval(watch2);
+            try {
+              oldFrontendOwner.kill('SIGKILL');
+            } catch {}
+            setTimeout(() => {
+              midFrontendOwner = spawn(
+                process.execPath,
+                [
+                  '-e',
+                  `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-mid.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+                ],
+                { stdio: 'ignore', windowsHide: true },
+              );
+            }, 100);
+          }
+        } catch {}
+      }, 50);
+
+      const resTimeout2 = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-FrontendPort',
+        String(frontendPort),
+        '-PublicWebUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/youandinotai`,
+        '-WaitTimeoutSeconds',
+        '2',
+        '-PollIntervalMs',
+        '150',
+      ]);
+      clearInterval(watch2);
+
+      assert.equal(resTimeout2.status, 0);
+      const recFiles2 = fs
+        .readdirSync(logDir)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      const rec2 = JSON.parse(fs.readFileSync(path.join(logDir, recFiles2[recFiles2.length - 1]), 'utf8'));
+      assert.equal(rec2.newCommit, commit2);
+      assert.equal(
+        rec2.status,
+        'WAITING-FOR-REBUILD',
+        'Must remain WAITING-FOR-REBUILD when owner changed but dist/build-commit.txt does not match newCommit',
+      );
+      const feSvc2 = rec2.changedServices.find((s) => s.service === 'date-app-web');
+      assert.equal(feSvc2.status, 'WAITING-FOR-REBUILD');
+
+      // Case 3: Both port 3200 owner changes AND dist/build-commit.txt matches newCommit within timeout -> LIVE
+      await waitForPortListen(frontendPort);
+      const commit3 = pushUpstreamCommit(
+        fx.seedDir,
+        { 'domains/youandinotai.com/frontend/src/App.tsx': 'export const App = () => "v4-rebuilt-live";\n' },
+        'Date app frontend update 3 (#563)',
+      );
+
+      const watch3 = setInterval(() => {
+        try {
+          if (git(fx.cloneDir, ['rev-parse', 'HEAD']) === commit3) {
+            clearInterval(watch3);
+            try {
+              midFrontendOwner?.kill('SIGKILL');
+            } catch {}
+            setTimeout(() => {
+              writeRepoFile(fx.cloneDir, 'domains/youandinotai.com/frontend/dist/build-commit.txt', `${commit3}\n`);
+              newFrontendOwner = spawn(
+                process.execPath,
+                [
+                  '-e',
+                  `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!DOCTYPE html><html><script src="/assets/index-new.js"></script><body>YouAndINotAI</body></html>'); }); srv.listen(${frontendPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+                ],
+                { stdio: 'ignore', windowsHide: true },
+              );
+            }, 100);
+          }
+        } catch {}
+      }, 50);
+
+      const resLive = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-FrontendPort',
+        String(frontendPort),
+        '-PublicWebUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/youandinotai`,
+        '-WaitTimeoutSeconds',
+        '8',
+        '-PollIntervalMs',
+        '150',
+      ]);
+      clearInterval(watch3);
+
+      assert.equal(resLive.status, 0, `Expected exit 0 when rebuild completes: ${resLive.stdout}`);
+      const recFiles3 = fs
+        .readdirSync(logDir)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      const rec3 = JSON.parse(fs.readFileSync(path.join(logDir, recFiles3[recFiles3.length - 1]), 'utf8'));
+      assert.equal(rec3.newCommit, commit3);
+      assert.equal(
+        rec3.status,
+        'LIVE',
+        'Status must be LIVE once owner changed and dist/build-commit.txt matches newCommit',
+      );
+      assert.equal(rec3.live, true);
+      const feSvc3 = rec3.changedServices.find((s) => s.service === 'date-app-web');
+      assert.equal(feSvc3.beforePid, midFrontendOwner.pid);
+      assert.equal(feSvc3.afterPid, newFrontendOwner.pid);
+      assert.notEqual(feSvc3.afterPid, feSvc3.beforePid);
+      assert.equal(feSvc3.status, 'LIVE');
+      assert.equal(rec3.publicChecks[0].status, 'LIVE');
+      assert.equal(rec3.publicChecks[0].passed, true);
+    } finally {
+      try {
+        oldFrontendOwner.kill('SIGKILL');
+      } catch {}
+      try {
+        midFrontendOwner?.kill('SIGKILL');
+      } catch {}
+      try {
+        newFrontendOwner?.kill('SIGKILL');
+      } catch {}
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fx.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'scripts/fables-house/tab-dateapp.cmd triggers rebuild when any file under public/blog is newer than dist/index.html',
+  { concurrency: true },
+  () => {
+    const tabDateappPath = path.join(REPO_ROOT, 'scripts', 'fables-house', 'tab-dateapp.cmd');
+    assert.ok(fs.existsSync(tabDateappPath), 'scripts/fables-house/tab-dateapp.cmd must exist');
+    const cmdText = fs.readFileSync(tabDateappPath, 'utf8');
+    assert.doesNotMatch(
+      cmdText,
+      HARDCODED_USER_PATH_RE,
+      'tab-dateapp.cmd must not contain hardcoded user folder names',
+    );
+    assert.match(
+      cmdText,
+      /public[\\/]blog/i,
+      'tab-dateapp.cmd must check public/blog timestamps against dist/index.html',
+    );
+
+    const psLineMatch = cmdText.match(/powershell\s+-NoProfile\s+-Command\s+"([^"]+)"/i);
+    assert.ok(psLineMatch, 'Expected powershell -NoProfile -Command "..." timestamp check in tab-dateapp.cmd');
+    const psSnippet = psLineMatch[1];
+
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tab-dateapp-test-'));
+    try {
+      const distIndex = path.join(tmpDir, 'dist', 'index.html');
+      const srcFile = path.join(tmpDir, 'src', 'App.tsx');
+      const blogFile = path.join(tmpDir, 'public', 'blog', 'how-to-set-boundaries-early', 'index.html');
+
+      fs.mkdirSync(path.dirname(distIndex), { recursive: true });
+      fs.mkdirSync(path.dirname(srcFile), { recursive: true });
+      fs.mkdirSync(path.dirname(blogFile), { recursive: true });
+
+      fs.writeFileSync(distIndex, '<html>dist</html>', 'utf8');
+      fs.writeFileSync(srcFile, 'export const App = 1;', 'utf8');
+      fs.writeFileSync(blogFile, '<html><h1>How to set boundaries early</h1></html>', 'utf8');
+
+      const tBase = new Date('2026-11-26T12:00:00Z');
+      const tOlder = new Date('2026-11-26T11:00:00Z');
+      const tNewer = new Date('2026-11-26T13:00:00Z');
+
+      // 1. Both src and public/blog are older than dist/index.html -> exit 0 (no rebuild)
+      fs.utimesSync(distIndex, tBase, tBase);
+      fs.utimesSync(srcFile, tOlder, tOlder);
+      fs.utimesSync(blogFile, tOlder, tOlder);
+
+      const upToDateRes = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', psSnippet], {
+        cwd: tmpDir,
+        encoding: 'utf8',
+        windowsHide: true,
+      });
+      assert.equal(
+        upToDateRes.status,
+        0,
+        'Expected exit 0 when both src and public/blog are older than dist/index.html',
+      );
+
+      // 2. src is older than dist/index.html, but a file under public/blog is newer -> exit 1 (rebuild needed)
+      fs.utimesSync(blogFile, tNewer, tNewer);
+      const blogNewerRes = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', psSnippet], {
+        cwd: tmpDir,
+        encoding: 'utf8',
+        windowsHide: true,
+      });
+      assert.equal(
+        blogNewerRes.status,
+        1,
+        'Expected exit 1 (NEEDS_BUILD=1) when any file under public/blog is newer than dist/index.html',
+      );
+
+      // 3. public/blog is older than dist/index.html, but src is newer -> exit 1 (rebuild needed)
+      fs.utimesSync(blogFile, tOlder, tOlder);
+      fs.utimesSync(srcFile, tNewer, tNewer);
+      const srcNewerRes = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', psSnippet], {
+        cwd: tmpDir,
+        encoding: 'utf8',
+        windowsHide: true,
+      });
+      assert.equal(
+        srcNewerRes.status,
+        1,
+        'Expected exit 1 (NEEDS_BUILD=1) when any file under src is newer than dist/index.html',
+      );
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
     }
   },
 );
