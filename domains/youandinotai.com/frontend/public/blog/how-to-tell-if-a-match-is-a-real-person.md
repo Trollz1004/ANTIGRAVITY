@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-tell-if-a-match-is-a-real-perso
 
 # How to tell if a match is a real person
 
-Connecting with a new match online should lead to honest conversation. Knowing how to tell if a match is a real person helps you protect your time and emotional energy. On February 9, 2023, the [Federal Trade Commission reported](https://www.ftc.gov/news-events/news/press-releases/2023/02/new-ftc-data-reveals-top-lies-told-by-romance-scammers) that nearly 70,000 consumers filed romance scam reports in 2022, with losses reaching $1.3 billion. Scammers and automated operations often copy photos and rely on scripted messages to trick singles. Checking for simple communication signals helps you confirm whether a match is authentic.
+Connecting with a new match online should lead to honest conversation. Knowing how to tell if a match is a real person saves time and emotional energy. On February 9, 2023, the [Federal Trade Commission reported](https://www.ftc.gov/news-events/news/press-releases/2023/02/new-ftc-data-reveals-top-lies-told-by-romance-scammers) that nearly 70,000 consumers filed romance scam reports in 2022, with losses reaching $1.3 billion. Scammers and automated operations often copy photos and rely on scripted messages to trick singles. Checking for simple communication signals helps you confirm whether a match is authentic.
 
 ## Watch the timing and flow of messages
 
