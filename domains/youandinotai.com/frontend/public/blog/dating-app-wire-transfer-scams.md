@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/dating-app-wire-transfer-scams/'
 
 # How to avoid dating app wire transfer scams and emergency money requests
 
-Dating app wire transfer scams target singles looking for honest connections online. Fraud operators build quick online rapport and then invent sudden personal emergencies to request urgent bank wires. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) reported that the most common lie told by romance scammers was claiming that they or someone close to them was hurt, sick, or in jail. The publication explained that fraudsters use invented medical or legal emergencies to ask matches for money. Understanding how these requests unfold helps you protect your funds.
+Dating app wire transfer scams target singles looking for honest connections online. Fraud operators build quick online rapport and then invent sudden personal emergencies to request urgent bank wires. On February 9, 2023, a [Federal Trade Commission Data Spotlight](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) reported that people sent more money to romance scammers by bank wire and cryptocurrency than by any other method. Scammers often build a story that keeps them from meeting in person, then ask for money. Understanding how these requests unfold helps you protect your funds.
 
 ## Why scammers demand wire transfers
 
