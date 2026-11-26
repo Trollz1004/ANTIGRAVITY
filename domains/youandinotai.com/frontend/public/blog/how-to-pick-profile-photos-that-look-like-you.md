@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-pick-profile-photos-that-look-l
 
 # How to pick profile photos that look like you
 
-Choosing profile photos that look like you makes dating easier for everyone. When photos show your true appearance, in-person meetings feel natural and comfortable. On February 9, 2023, a [Federal Trade Commission press release](https://www.ftc.gov/news-events/news/press-releases/2023/02/new-ftc-data-reveals-top-lies-told-by-romance-scammers) reported that nearly 70,000 consumers filed romance scam reports in 2022, with reported losses totaling $1.3 billion. Scammers frequently steal glamour shots or generate artificial faces to hide their identities. Using authentic, unfiltered pictures shows you are a genuine person looking for honest connections.
+Choosing profile photos that look like you makes dating easier for everyone. When photos show your true appearance, in-person meetings feel natural and comfortable. On February 9, 2023, a [Federal Trade Commission press release](https://www.ftc.gov/news-events/news/press-releases/2023/02/new-ftc-data-reveals-top-lies-told-romance-scammers) reported that nearly 70,000 consumers filed romance scam reports in 2022, with reported losses totaling $1.3 billion. Scammers frequently steal glamour shots or generate artificial faces to hide their identities. Using authentic, unfiltered pictures shows you are a genuine person looking for honest connections.
 
 ## Core rules for clear profile photos
 
