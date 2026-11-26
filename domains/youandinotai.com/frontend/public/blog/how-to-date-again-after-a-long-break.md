@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-date-again-after-a-long-break/'
 
 # How to date again after a long break
 
-Returning to dating after a long break can feel unfamiliar. The online dating landscape changes quickly, and people often feel unsure about how to begin. On February 9, 2023, the Federal Trade Commission published a Data Spotlight titled [Romance scammers' favorite lies exposed](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed). The report noted that nearly 70,000 people reported romance scams in 2022, with reported losses reaching $1.3 billion. Many of those scams began on dating apps with fake profiles and automated accounts. Taking your time, setting simple boundaries, and looking for genuine signals helps you meet real people at your own pace.
+Returning to dating after a long break can feel unfamiliar. The online dating landscape changes quickly, and people often feel unsure about how to begin. On February 9, 2023, the Federal Trade Commission published a Data Spotlight titled [Romance scammers' favorite lies exposed](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed). The report noted that nearly 70,000 people reported romance scams in 2022, with reported losses reaching $1.3 billion. Of the people who lost money, 40% said the contact started on social media and 19% said it started on a website or app. Taking your time, setting simple boundaries, and looking for genuine signals helps you meet real people at your own pace.
 
 ## Five ways to ease back into dating
 
