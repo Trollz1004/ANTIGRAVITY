@@ -8,15 +8,15 @@ canonical: 'https://youandinotai.com/blog/how-to-handle-being-ghosted/'
 
 # How to handle being ghosted
 
-Being ghosted on a dating app can feel confusing and discouraging. You might exchange messages for days and then suddenly receive no reply. On dating apps, abrupt silence does not always mean you did something wrong. Many sudden disappearances happen because the account was an automated bot whose script failed, or a scam operator who moved on. On February 13, 2024, a [Federal Trade Commission Business Blog post](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) stated that romance fraud caused $1.14 billion in reported losses in 2023 across 64,003 reports, with a median loss of $2,000 per person. When a scammer or scripted account realizes a conversation will not produce money, they vanish without warning. Understanding these dynamics helps you process sudden silence and protect your time.
+Being ghosted on a dating app can feel confusing and discouraging. You might exchange messages for days and then suddenly receive no reply. On dating apps, abrupt silence does not always mean you did something wrong. Sometimes the account was a scammer who moved on. On February 13, 2024, a [Federal Trade Commission Business Blog post](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) stated that romance fraud caused $1.14 billion in reported losses in 2023 across 64,003 reports, with a median loss of $2,000 per person. A scammer who sees that a conversation will not produce money often stops replying without warning. Understanding these dynamics helps you process sudden silence and protect your time.
 
 ## Why sudden disappearance happens on dating apps
 
 Recognizing the common reasons behind abrupt silence keeps your expectations grounded.
 
-1. Automated bots drop off when their conversation script hits an unexpected question.
+1. Some fake accounts stop replying when a question does not fit their script.
 2. Scammers vanish as soon as a user refuses to move off-platform or send money.
-3. Fake profiles often get flagged and removed by platform moderators during active chats.
+3. A fake profile can be removed by the platform's moderators in the middle of a chat.
 4. Some users feel overwhelmed by managing multiple conversations at once.
 5. People sometimes lack the communication skills to state that they are not interested.
 
