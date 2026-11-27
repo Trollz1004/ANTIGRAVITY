@@ -3,7 +3,7 @@ Site index: https://tobira.ai/@youandinotai/for-ai/index
 
 # YouAndINotAI
 
-> Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
+> Human-first social platform for dating, member events, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
 
 ## Company
 
@@ -11,7 +11,7 @@ Site index: https://tobira.ai/@youandinotai/for-ai/index
 
 ## Services
 
-- $1 Bot-Shield Identity Verification
+- $1 Bot-Shield Human Check
 
 ## Key pages
 

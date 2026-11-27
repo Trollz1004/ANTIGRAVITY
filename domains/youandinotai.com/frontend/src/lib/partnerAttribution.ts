@@ -38,6 +38,39 @@ export function capturePartnerId(search: string): string | null {
   return getStoredPartnerId();
 }
 
+/** Short creator names: lower case letters, digits and dashes, 3 to 30 long. */
+export const SHORT_NAME_PATTERN = /^[a-z0-9-]{3,30}$/;
+
+/**
+ * Short creator link: `youandinotai.com/c/<name>`.
+ *
+ * When `pathname` is a `/c/...` path, a valid name is saved exactly the way
+ * `?ref=` saves it (same storage key, same rule: the latest link seen before
+ * sign-up wins, and the code is cleared once the account is created).
+ * Returns `{ isShortLink, code }`; the caller then shows the home page.
+ * An invalid name saves nothing and leaves any earlier code untouched.
+ */
+export function captureShortLink(pathname: string): {
+  isShortLink: boolean;
+  code: string | null;
+} {
+  const match = /^\/c(?:\/([^/]*))?\/?$/.exec(pathname || '');
+  if (!match) return { isShortLink: false, code: null };
+  let name = match[1] || '';
+  try {
+    name = decodeURIComponent(name);
+  } catch {
+    return { isShortLink: true, code: null };
+  }
+  if (!SHORT_NAME_PATTERN.test(name)) return { isShortLink: true, code: null };
+  try {
+    localStorage.setItem(STORAGE_KEY, name);
+  } catch {
+    // Storage unavailable (private mode); nothing else to do.
+  }
+  return { isShortLink: true, code: name };
+}
+
 /** The partner id captured earlier in this browser, if any. */
 export function getStoredPartnerId(): string | null {
   try {

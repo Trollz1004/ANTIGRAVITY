@@ -1,11 +1,12 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
+  Calendar,
   Compass,
   Heart,
   LogOut,
   MessageCircle,
   Plus,
-  Settings,
+  ShieldCheck,
   Sparkles,
   User,
   Users,
@@ -15,19 +16,23 @@ import {
 
 import { useAuth } from '../lib/auth';
 
-const MOBILE_NAV = [
-  { to: '/app', icon: Heart, label: 'Chats', end: true },
-  { to: '/app/inbox', icon: MessageCircle, label: 'Message' },
+export const MOBILE_NAV = [
+  { to: '/app', icon: Compass, label: 'Discover', end: true },
+  { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/create', icon: Plus, label: 'Create', center: true },
-  { to: '/app/matches', icon: Video, label: 'Video' },
-  { to: '/app/profile', icon: Settings, label: 'Settings' },
+  { to: '/app/matches', icon: Heart, label: 'Matches' },
+  { to: '/app/profile', icon: User, label: 'Profile' },
 ] as const;
 
 const DESKTOP_NAV = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/verify', icon: ShieldCheck, label: 'Verify' },
   { to: '/app/boards', icon: Users, label: 'Boards' },
+  { to: '/app/events', icon: Calendar, label: 'Events' },
+  { to: '/app/usa', icon: MessageCircle, label: 'USA chat' },
   { to: '/app/create', icon: Wand2, label: 'Create' },
   { to: '/app/video-lobby', icon: Video, label: 'Video' },
   { to: '/app/avatar', icon: Sparkles, label: 'Animate' },
@@ -59,20 +64,14 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#C9CBCE]">
-                  CLAUDE&apos;s N Joshua&apos;s
-                </div>
                 <div className="font-display text-lg font-bold tracking-tight text-[#F4F1EA]">
                   YouAndINotAI
                 </div>
               </div>
             </div>
           </div>
-          <div className="mt-2 inline-block rounded border border-[#3A3F45] bg-[#1A1E25] px-2 py-0.5 font-mono text-[10px] font-medium text-[#FFD21E]">
-            #TeamClaudeForLife
-          </div>
           <p className="mt-3 text-sm text-[#C9CBCE]">
-            Verified adults 18+. Real video. Account-bound trust.
+            Verified adults 18+. Direct messaging. Account-bound trust.
           </p>
         </div>
 
@@ -98,7 +97,16 @@ export function AppShell() {
             <div className="mt-1 truncate text-sm font-semibold text-[#F4F1EA]">
               {user?.display_name || user?.email || 'Member'}
             </div>
-            <div className="mt-1 text-xs text-[#9DA3AA]">Verified Member</div>
+            {user?.bot_shield_verified ? (
+              <div className="mt-1 text-xs text-[#9DA3AA]">Verified</div>
+            ) : (
+              <NavLink
+                to="/app/verify"
+                className="mt-1 block text-xs font-semibold text-[#FFD21E] hover:underline"
+              >
+                Finish your $1 human check
+              </NavLink>
+            )}
           </div>
           <button
             onClick={handleLogout}
@@ -119,15 +127,18 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9CBCE]">
-                  CLAUDE&apos;s N Joshua&apos;s
-                </div>
-                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA]">
+                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA] max-[430px]:sr-only">
                   YouAndINotAI
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <NavLink to="/app/verify" className="km-chip">
+                {user?.bot_shield_verified ? 'Verified' : 'Verify'}
+              </NavLink>
+              <NavLink to="/app/events" className="km-chip">
+                Events
+              </NavLink>
               <NavLink to="/app/preorder" className="km-chip">
                 Elite
               </NavLink>
@@ -141,13 +152,28 @@ export function AppShell() {
           </div>
         </header>
 
+        {/* Mobile unverified status banner */}
+        {!user?.bot_shield_verified && (
+          <div className="border-b border-[#3A3F45] bg-[#12151A] px-4 py-2 flex items-center justify-between text-xs md:hidden">
+            <span className="truncate text-[#9DA3AA] mr-2">
+              {user?.display_name || user?.email || 'Member'}
+            </span>
+            <NavLink
+              to="/app/verify"
+              className="shrink-0 font-semibold text-[#FFD21E] hover:underline"
+            >
+              Finish your $1 human check
+            </NavLink>
+          </div>
+        )}
+
         <main className="km-workspace min-h-screen pb-28 md:pb-10">
           <Outlet />
         </main>
 
-        {/* Mobile bottom nav — Chats / Message / Create / Video / Settings */}
+        {/* Mobile bottom nav — Discover / Messages / Boards / Create / Matches / Profile */}
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--km-border)] bg-[var(--km-bg)]/92 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl md:hidden">
-          <div className="grid grid-cols-5 items-end gap-1">
+          <div className="grid grid-cols-6 items-end gap-1">
             {MOBILE_NAV.map(item => {
               const isCenter = 'center' in item && item.center;
               return (
@@ -155,6 +181,7 @@ export function AppShell() {
                   key={item.to}
                   to={item.to}
                   end={'end' in item ? item.end : false}
+                  aria-label={isCenter ? item.label : undefined}
                   className={({ isActive }) =>
                     isCenter
                       ? `km-fab-nav ${isActive ? 'km-fab-nav-active' : ''}`

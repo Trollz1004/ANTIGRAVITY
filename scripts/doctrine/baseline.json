@@ -1,6 +1,6 @@
 {
- "note": "Pre-existing violations at gate introduction, measured AFTER the payments de-duplication patch. The gate fails on anything NOT listed here. Shrink this file as cleanup proceeds; never grow it.",
- "generated": "2026-10-23",
+ "note": "Pre-existing violations at gate introduction. Active services, dashboards, launchers, and reports are swept clean; pruned 53 resolved entries on 2026-11-16. Remaining loopback-address entries cover frozen historical journals/audits, retired legacy trees, docker-compose templates, and Stage-3-reserved files (e.g. frontend/src/lib/api.ts).",
+ "generated": "2026-11-16",
  "entries": [
   {
    "fact": "dead-surfaces",
@@ -64,14 +64,6 @@
   },
   {
    "fact": "dead-surfaces",
-   "file": "AGENTS.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "CLAUDE.md"
-  },
-  {
-   "fact": "dead-surfaces",
    "file": "ClawX/docs/COPILOT_AUDIT_RECONCILIATION_2026-08-19.md"
   },
   {
@@ -85,14 +77,6 @@
   {
    "fact": "dead-surfaces",
    "file": "ClawX/src/docs/MASTER-INVENTORY.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "README.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "agents.json"
   },
   {
    "fact": "dead-surfaces",
@@ -169,10 +153,6 @@
   {
    "fact": "dead-surfaces",
    "file": "docs/emergent-jarvis-tie-in-plan.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "docs/omniroute-workflow-api/README.md"
   },
   {
    "fact": "dead-surfaces",
@@ -276,10 +256,6 @@
   },
   {
    "fact": "dead-surfaces",
-   "file": "hermes/AGENTS.md"
-  },
-  {
-   "fact": "dead-surfaces",
    "file": "hermes/dashboard/index.html"
   },
   {
@@ -376,10 +352,6 @@
   },
   {
    "fact": "dead-surfaces",
-   "file": "mission-os/live-tabs-backend.mjs"
-  },
-  {
-   "fact": "dead-surfaces",
    "file": "mission-os/ops-dashboard.test.mjs"
   },
   {
@@ -389,10 +361,6 @@
   {
    "fact": "dead-surfaces",
    "file": "nodes/9020/memory/2026-08-21.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "ops/domains-server/server.mjs"
   },
   {
    "fact": "dead-surfaces",
@@ -425,14 +393,6 @@
   {
    "fact": "dead-surfaces",
    "file": "ops/packets/hermes-youtube-20261008/WATCHDOG-TRO-7-2026-10-09.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "ops/packets/tro9-gateway-voice-live-20261010/README.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "ops/paperclip-ceo/README.md"
   },
   {
    "fact": "dead-surfaces",
@@ -532,10 +492,6 @@
   },
   {
    "fact": "dead-surfaces",
-   "file": "scripts/watchdog/README.md"
-  },
-  {
-   "fact": "dead-surfaces",
    "file": "scripts/watchdog/sentry.py"
   },
   {
@@ -561,10 +517,6 @@
   {
    "fact": "dead-surfaces",
    "file": "specs/011-ultracode-house/tasks.md"
-  },
-  {
-   "fact": "dead-surfaces",
-   "file": "tools/cockpit/README.md"
   },
   {
    "fact": "dead-surfaces",
@@ -664,10 +616,6 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "Personal Vault-Sabretooth.code-workspace"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "agent-contracts/CAPABILITY-BASELINE.md"
   },
   {
@@ -724,10 +672,6 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "docs/omniroute-workflow-api/README.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "docs/omniroute-workflow-api/openapi.yaml"
   },
   {
@@ -744,47 +688,11 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "infra/claude-desktop/claude_desktop_config.json"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "infra/cloudflare/start-tunnel.ps1"
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "mission-os/launchers/fable-claude.cmd"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/launchers/fable-codex.cmd"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/launchers/fable-opencode.cmd"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/launchers/fable-pi.cmd"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/launchers/fable-wrapper.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/perpetual-wheel.mjs"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "mission-os/progress.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "mission-os/server.mjs"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "nodes/9020/AGENTS.md"
   },
   {
    "fact": "hardcoded-user-path",
@@ -825,22 +733,6 @@
   {
    "fact": "hardcoded-user-path",
    "file": "ops/growth-engine/live_autoposter.py"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/heartbeat/autonomous_15min.sh"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/heartbeat/heartbeat.sh"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/heartbeat/t5500-health.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/hermes/DAILY-SUMMARY.md"
   },
   {
    "fact": "hardcoded-user-path",
@@ -952,39 +844,11 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "ops/paperclip-ceo/CEO-AGENTS.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "ops/paperclip-ceo/GROK-OFFICIAL.lock.md"
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "ops/paperclip-ceo/JUDGE-AGENTS.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "ops/paperclip-ceo/X-GROK-STRATEGY.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/paperclip-ceo/X-MARKETING-AGENTS.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/paperclip/fix-codex-toml.py"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/paperclip/reconfigure-agents.mjs"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/paperclip/repair_codex_toml.py"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "ops/paperclip/start-paperclip-hq.ps1"
   },
   {
    "fact": "hardcoded-user-path",
@@ -1040,10 +904,6 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "ops/t5500/keepalive.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "ops/youtube/run_youtube_short.cmd"
   },
   {
@@ -1072,15 +932,7 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "scripts/fables-house/FABLES-HOUSE.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "scripts/fables-house/HOUSEKEEPING.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
-   "file": "scripts/fables-house/tab-dateapp-api.ps1"
   },
   {
    "fact": "hardcoded-user-path",
@@ -1140,10 +992,6 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "scripts/start-t5500-dateapp-cloudflared.ps1"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "scripts/sync-master-env-to-hermes.sh"
   },
   {
@@ -1188,10 +1036,6 @@
   },
   {
    "fact": "hardcoded-user-path",
-   "file": "services/mission-mcp/README.md"
-  },
-  {
-   "fact": "hardcoded-user-path",
    "file": "services/mission-mcp/scripts/seed-income-engine.py"
   },
   {
@@ -1213,6 +1057,1442 @@
   {
    "fact": "hardcoded-user-path",
    "file": "specs/004-repo-consolidation/tasks.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/journals/claude-judge/STATE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/journals/openclaw/STATE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/journals/paperclip-ceo/STATE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/journals/paperclip-judge/STATE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/memory/2026-08-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/memory/shared/current-state.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/memory/shared/decisions.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/brainstorming/visual-companion.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/dateapp-support-desk/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/references/BICEP-EXAMPLE.bicep"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/references/cli-commands.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/references/console-app-example.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/references/first-app-registration.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/entra-app-registration/references/troubleshooting.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/gemini-perpetual-wheel/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/judge-house/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/mission-control/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/openviking/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/orchestrator-preflight/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/paperclip-ceo/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/paperclip/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/rooflo-opsis-cut-and-reach/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/sabretooth-ops/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/self-improving-system/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/ultracode-house/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/webapp-testing/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/webapp-testing/examples/console_logging.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills/webapp-testing/examples/element_discovery.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/azure-hosted-copilot-sdk/references/copilot-sdk.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/azure-hosted-copilot-sdk/references/existing-project-integration.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/azure-prepare/references/runtimes/nodejs.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/unreal-mcp-hermes/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/unreal-mcp-hermes/references/pitfalls.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".agents/skills_disabled/unreal-mcp-hermes/references/tool-surface.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".claude/agents/testing/judge-panel.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".claude/hooks/verify-stack-integrity.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".claude/launch.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".env.staging.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".freebuff/run.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".github/workflows/ci-validate.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".gitignore"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".opencode.env.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".opencode/agent/orchestrator.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": ".specify/specs/001-sabretooth-circular-pr-loop/tasks.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ClawX/docs/OMNIROUTE_DASHBOARD_OBSERVATIONS_2026-08-19.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ClawX/docs/PUBLIC_READINESS_SWEEP_CLASSIFICATION_2026-08-19.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ClawX/src/server/ai-providers.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ClawX/todo.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ClawX/vite.config.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "Dockerfile"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "KrakenJOSHuaGOspel.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/CAPABILITY-BASELINE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/CONTROL-PLANE-RULING-2026-08-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/FCC-STATUS.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/MISSION-CONTROL-GOVERNANCE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/PAPERCLIP-COVERAGE-RULING-2026-08-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent-contracts/PAPERCLIP-READINESS-2026-08-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "agent/skills/brainstorming/visual-companion.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/canonical-record/index.html"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/SABRETOOTH-GEMINI-EASY-BUTTON.bat"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/index.html"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/main.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/renderer.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/default-orchestrator-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/editor-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/fcc-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/harvey-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/kanban-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/notes-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/hermes-leadgen/souls/youtube-agent.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/orbital-studio/components/MissionControlPipeline.tsx"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "apps/orbital-studio/components/ServicesPanel.tsx"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "backend/auth_relay.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "backend/hub.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "backend/server.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "backend/tests/test_ledger_and_services.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "brain-mcp/Dockerfile"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "brain-mcp/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "brain-mcp/docker-compose.t5500.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/COUNCIL-FINAL-ARCHITECTURE-PACKET-2026-08-17.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/CRM-SELFHOST-2026-08-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/GEMINI-MEMORY-REPLACEMENT-2026-08-19.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/GROK-CURRENT-STATE-2026-08-24.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/HERMES-BOT-SYSTEM-FOR-FABLE-2026-08-25.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "briefings/marketing-launch-assets.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "crm/backend/server.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "crm/frontend/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "crm/memory/FABLE5_DISPATCH_PROMPT.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "crm/ops/start-crm.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docker-compose.blue-green.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docker-compose.litellm.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docker-compose.prod.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docker-compose.staging.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docker-compose.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/DOCKER-STACK-README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/FABLE-CLI.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/F_PRODUCTION_SETUP.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/OMNIROUTE-MIGRATION.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/PR-MERGE-GUIDE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/START-STACK.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/omniroute-workflow-api/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/ops/NODE-AND-PORT-MAP.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/security/audit-2026-11-04/run-1/FINDINGS-DETAIL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/security/audit-2026-11-04/run-1/NEEDS-VALIDATION.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/security/audit-2026-11-04/run-1/REPORT.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/standards/backups-full-context/AGENTS.md.full-backup"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/standards/backups-full-context/CLAUDE.md.full-backup"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "docs/standards/backups-full-context/GEMINI.md.full-backup"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/ai-solutions.store/CLAUDE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/ai-solutions.store/jules-code-review-dashboard/src/App.tsx"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/ai-solutions.store/jules-code-review-dashboard/src/workstation/SettingsModal.tsx"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/ai-solutions.store/jules-code-review-dashboard/src/workstation/Sidebar.tsx"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/.env.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/Dockerfile"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/Dockerfile.fixed"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/app/telemetry.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/docker-compose.logging.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/docker-compose.prod.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/docker-compose.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/openapi.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/backend/openapi/exchange.yaml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/frontend/.env.production"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "domains/youandinotai.com/frontend/Dockerfile"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "get_issues.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/AGENTS.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/dashboard/crosslisting/server/_core/index.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/dashboard/crosslisting/server/_core/llm.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/dashboard/crosslisting/vite.config.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/dashboard/index.html"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/design-ui/p5js/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/design-ui/p5js/references/export-pipeline.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/design-ui/p5js/scripts/serve.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/fullstack-session.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/HERMES-JARVIS-PROMPT.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/crm/FABLE-5-CRM-DISPATCH.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/design-refs/standalone/DREAM GM Control.html"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/docs/skills.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/frontend-react/testing/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/scripts/dream-stack.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "hermes/skills/session-memory/memory.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "infra/cloudflare/start-tunnel.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "litellm-config.yaml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "manifests/registry.ollama.ai/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/config/screenshot-targets.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/config/sentry-targets.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/crosslisting-os/server/_core/index.ts"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/lib/bridges.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/lib/config.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/lib/fable-draft.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/lib/ollama.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/scripts/blogger-setup.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/scripts/reddit-setup.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/scripts/tumblr-setup.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/scripts/wordpress-setup.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-control/workflow_api.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-os/findings.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-os/progress.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "mission-os/task_plan.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "nodes/9020/NODE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "nodes/9020/PAPERCLIP-SETUP-PROMPT-2026-08-22.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "nodes/9020/memory/2026-08-21.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "nodes/9020/vaults/agent-workflows/remote-access.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/ADAPTER-SECRET-MAP.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/CLI-COMMANDS-REFERENCE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/FINAL_DEPLOYMENT_SUMMARY.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/T5500-ORNITH-LOCAL-SETUP.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/avatar/T5500-VIDEO-PROBE-2026-10-17.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/avatar/comfyui/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/avatar/comfyui/run.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/avatar/comfyui/workflow_api.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/ceo-harness/NODES.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/check-3130.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/check-mission-control.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/check-mos.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/check-ports.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/dateapp-sandbox/WALK.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/dateapp-sandbox/env.sandbox.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/dateapp-sandbox/start-sandbox.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/env/augment-env.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/growth-engine/live_autoposter.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/growth-engine/live_blitz_publisher.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/hermes/DAILY-SUMMARY.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/hermes/_recovery/bytecode/hermes-youtube/omniroute.txt"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/hermes/_recovery/bytecode/newsvideo/tts.txt"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/hermes/_voice/samples-20261010/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/launch-scc.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-08-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-09-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-10-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-11-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-12-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-13-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-14-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-15-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-16-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-17-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-18-HER-12-support-triage.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-18-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-19-HER-12-support-triage-run-89198f11.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-19-HER-12-support-triage.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-19-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-20-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-20-support-triage-87ae1178.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-21-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/2026-10-22-hermes-daily.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/marketing-inbox/marketing_routine.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/ollama-models/Modelfile.openclaw-sentry"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/omniroute-nodes.env.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261008/WATCHDOG-TRO-7-2026-10-09.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261008/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261008/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261009/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261009/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261010/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261010/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261011/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261011/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261012/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261012/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261013/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261013/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261014/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261014/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261015/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261015/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261016/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261016/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261017/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261018/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261018/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261019/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261019/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261020/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261020/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261021/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261021/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261022/run.json"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/hermes-youtube-20261022/summary.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/tro9-gateway-voice-live-20261010/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/tro9-gateway-voice-live-20261010/probe_google_speech.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/tro9-gateway-voice-live-20261010/probe_router_keyed.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/packets/watchdog-delivery-2026-08-24/ceo-bridge.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/CEO-AGENTS.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/RESTART-CHECK-PROMPT.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/STATE.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/adapter-freebuff/index.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/bridge/.env.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/bridge/bridge.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-ceo/bridge/relay.test.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-chief-of-staff/CHIEF-OF-STAFF-AIS.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/paperclip-chief-of-staff/CHIEF-OF-STAFF-ANT.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/research/engine-build-order-2026-10-25.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/research/google-tier-unused-2026-10-25.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/runbook/BACKUPS-AND-DATA-TOOLS-2026-09-29.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/runbooks/PI-FCC-HERMES-CLI-2026-07-26.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/runbooks/YESTERDAY-NEWS-DROID-2026-08-10.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/skills/date-app-hermes-operations/SKILL.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/startup/seed-agents.cjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "ops/startup/start-stack.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/RECOVERY-README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/SUBAGENT-RESTORE-AND-VERIFY.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/assign-revenue-tasks.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/audit.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/autostart-mission.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/boot-resilience/register-live-npc-lab-task.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/boot-resilience/start-live-npc-lab.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/bootstrap-2dash-1date-self-heal.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/bootstrap-all.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/check-adapters.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/check-share-path.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/.env.example"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/DEPLOY-ENIGMA.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Invoke-CodeX-BrainCheckpoint.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Normalize-OpenClaw-Ollama.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Setup-CloudflaredTunnel.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Start-ClawX-Watch.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Start-McpHttpServer.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Start-OpenClaw-Social.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/Start-OpenClaw-TUI.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/codex-doctor.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/codex-task-sentry.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/codex_task_sentry.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/deploy/T5500-Linux/.env.production"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/deploy/T5500-Linux/deploy.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/clawx-control/deploy/T5500-Linux/docker-compose.yml"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/commit-design-bundle-v1.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/complete-issue.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/dashboard-aidoesitall/apify_content_scout.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/dashboard-aidoesitall/orchestrator.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/dashboard-aidoesitall/social_engine/watchdog.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/deploy-blue-green.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/drift.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/fable/fable.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/fix_hermes_dedup.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/fix_hermes_final.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/funding_cycle.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/funding_loop.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/hermes-dashboard-start.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/hermes-dashboard-start.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/launch-red.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/litellm-health.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/mission-control-watchdog.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/mission-control-watchdog.ps1.bak-20260726234036"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/mission-control-watchdog.ps1.infinite-loop-20260726234439"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/mission_control_automation.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/omniroute-keepalive.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/onlinerecycle/onlinerecycle-local-worker.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/paperweight-dashboard-startup.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/paperweight-keepalive.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/patch_hermes_config.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/post-comment.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/post-reboot-verify.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/post-wipe-bootstrap-T5500.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/post-wipe-bootstrap-helper-node.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/pw-verify.js"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/register-mission-control-task.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/run-benchmarks.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/setup-anythingllm-brain-bridge.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/share-path-check.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-all-services.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-antigravity.bat"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-dao.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-hermes-router.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-mission-control.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-staging.sh"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/start-t5500-dateapp-cloudflared.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/status-antigravity.bat"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500-bind-services-lan.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500-cleanup-final.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500-watchdog.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500/Invoke-DateAppOpsWatchdog.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500/Start-YouAndINotAI-PublicStack.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/t5500/lan-bind.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/test-ceo-fallbacks.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/test-route.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/watchdog/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "scripts/watchdog/serve-dashboard.cmd"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "services/mission-mcp/scripts/draft-content.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "services/mission-mcp/scripts/seed-income-engine.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "specs/002-jarvis-absorb-emergent/plan.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "specs/002-jarvis-absorb-emergent/spec.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "specs/002-jarvis-absorb-emergent/tasks.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "specs/006-jarvis-bridges-voice-mcp/tasks.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "tools/cockpit/README.md"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "tools/cockpit/cockpit.test.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "update_agents_md.py"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/boot-sabretooth-services.ps1"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/inbound-crm-engine.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/sabretooth_opsis_worker.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/server.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/test/opsis-cut-and-reach.test.mjs"
+  },
+  {
+   "fact": "loopback-address",
+   "file": "youtube-shorts-podcast-engine/test_sabretooth_opsis_worker.mjs"
   },
   {
    "fact": "paperclip-retired",
@@ -1248,23 +2528,11 @@
   },
   {
    "fact": "paperclip-retired",
-   "file": "AGENTS.md"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "CLAUDE.md"
-  },
-  {
-   "fact": "paperclip-retired",
    "file": "agent-contracts/MISSION-CONTROL-GOVERNANCE.md"
   },
   {
    "fact": "paperclip-retired",
    "file": "docs/FABLE-CLI.md"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "docs/memory-layer/agent-workflow-graphy.json"
   },
   {
    "fact": "paperclip-retired",
@@ -1300,42 +2568,6 @@
   },
   {
    "fact": "paperclip-retired",
-   "file": "ops/paperclip/assign_10_tasks.py"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/check_agents.py"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/clear-blockers.mjs"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/clear-inbox.mjs"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/import-env-secrets.py"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/patch_agent_states.py"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/reconfigure-agents.mjs"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/paperclip/start-paperclip-hq.ps1"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "ops/t5500/verify-node.ps1"
-  },
-  {
-   "fact": "paperclip-retired",
    "file": "scripts/RECOVERY-README.md"
   },
   {
@@ -1356,15 +2588,7 @@
   },
   {
    "fact": "paperclip-retired",
-   "file": "scripts/doctrine/doctrine-check.py"
-  },
-  {
-   "fact": "paperclip-retired",
    "file": "scripts/fable/fable.mjs"
-  },
-  {
-   "fact": "paperclip-retired",
-   "file": "scripts/fables-house/FABLES-HOUSE.ps1"
   },
   {
    "fact": "paperclip-retired",

@@ -2,43 +2,43 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "mission-control",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
-      "cwd": "mission-control-v5",
-      "port": 3151,
-      "url": "http://localhost:3151"
+      "name": "mission-os",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.mjs"],
+      "cwd": "mission-os",
+      "port": 3130,
+      "url": "http://192.168.0.15:3130"
     },
     {
-      "name": "mission-control-client-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:client"],
-      "cwd": "mission-control-v5",
-      "port": 5173,
-      "url": "http://localhost:5173"
+      "name": "leadgen-desk",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js"],
+      "cwd": "apps/hermes-leadgen",
+      "port": 8392,
+      "url": "http://192.168.0.40:8392"
     },
     {
       "name": "dateapp-frontend",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["tsx", "server.ts"],
-      "cwd": "frontend/react-app",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "domains/youandinotai.com/frontend",
       "port": 3200,
-      "url": "http://localhost:3200"
+      "url": "http://192.168.0.15:3200"
     },
     {
       "name": "omniroute",
       "port": 20128,
-      "url": "http://192.168.0.8:20128"
+      "url": "http://192.168.0.15:20128"
     },
     {
       "name": "hermes-dashboard",
       "port": 9119,
-      "url": "http://127.0.0.1:9119"
+      "url": "http://192.168.0.15:9119"
     },
     {
-      "name": "openclaw",
-      "port": 18789,
-      "url": "http://127.0.0.1:18789"
+      "name": "hermes-api",
+      "port": 8643,
+      "url": "http://192.168.0.15:8643"
     }
   ]
 }

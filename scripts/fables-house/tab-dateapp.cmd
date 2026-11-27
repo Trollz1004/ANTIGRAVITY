@@ -17,11 +17,11 @@ cd /d C:\ANTIGRAVITY\domains\youandinotai.com\frontend
 set "NEEDS_BUILD=0"
 if not exist "dist\index.html" set "NEEDS_BUILD=1"
 if "%NEEDS_BUILD%"=="0" (
-  powershell -NoProfile -Command "$dist = (Get-Item 'dist\index.html').LastWriteTimeUtc; $src = (Get-ChildItem 'src' -Recurse -File | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc; if ($src -gt $dist) { exit 1 } else { exit 0 }"
+  powershell -NoProfile -Command "$dist = (Get-Item 'dist\index.html').LastWriteTimeUtc; $src = (Get-ChildItem 'src' -Recurse -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc; $blog = if (Test-Path 'public\blog') { (Get-ChildItem 'public\blog' -Recurse -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc } else { $null }; if (($null -ne $src -and $src -gt $dist) -or ($null -ne $blog -and $blog -gt $dist)) { exit 1 } else { exit 0 }"
   if errorlevel 1 set "NEEDS_BUILD=1"
 )
 if "%NEEDS_BUILD%"=="1" (
-  echo [dateapp] production build missing or older than src - building first...
+  echo [dateapp] production build missing or older than src or public/blog - building first...
   call npm run build
 )
 
@@ -35,7 +35,8 @@ rem   Check it:    Get-Process cloudflared
 rem   Restart it:  let the House heal it, or rerun FABLES-HOUSE.cmd
 echo [dateapp] tunnel is owned by FABLE'S HOUSE (not this tab).
 
-echo [dateapp] serving production build on http://127.0.0.1:3200
+echo [dateapp] serving production build on http://192.168.0.15:3200 (bind 0.0.0.0:3200)
 set "NODE_ENV=production"
+set "HOST=0.0.0.0"
 set "PORT=3200"
 npx tsx server.ts

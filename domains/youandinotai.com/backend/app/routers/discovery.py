@@ -11,8 +11,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.database import get_db
 from app.models import Match, Profile, Swipe, User
 
@@ -52,13 +53,14 @@ class DiscoveryProfile(BaseModel):
 @router.get("", response_model=list[DiscoveryProfile])
 async def get_discover_feed(
     limit: int = Query(default=20, le=50),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
     """Get candidate profiles for discovery (requires verification). Excludes own profile."""
     # Get verified profiles excluding self
     stmt = (
         select(Profile)
+        .options(selectinload(Profile.user))
         .join(User, Profile.user_id == User.id)
         .where(
             Profile.user_id != user.id,
@@ -96,13 +98,18 @@ async def get_discover_feed(
 @router.get("/preview", response_model=list[DiscoveryProfile])
 async def get_discover_preview(
     limit: int = Query(default=5, le=10),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
-    """Public preview of profiles (no auth required). Shows limited profiles to incentivize signup."""
+    """Preview of verified profiles (requires a signed-in verified member)."""
     stmt = (
         select(Profile)
+        .options(selectinload(Profile.user))
         .join(User, Profile.user_id == User.id)
-        .where(User.bot_shield_verified.is_(True))
+        .where(
+            Profile.user_id != user.id,
+            User.bot_shield_verified.is_(True),
+        )
         .order_by(func.random())
         .limit(limit)
     )
@@ -135,7 +142,7 @@ async def get_discover_preview(
 @router.post("/like", response_model=LikeResponse)
 async def send_like(
     payload: LikeRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
     """Send a like to another user. If mutual, creates a match."""
@@ -144,6 +151,10 @@ async def send_like(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot like your own profile",
         )
+
+    target_user = await db.get(User, payload.target_id)
+    if not target_user or not target_user.bot_shield_verified:
+        raise HTTPException(status_code=404, detail="Profile not found")
 
     # Check for existing match (either direction)
     existing_match = await db.scalar(

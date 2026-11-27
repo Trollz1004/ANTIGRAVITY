@@ -15,7 +15,8 @@ DIR="${2:-.}"
 
 echo "=== p5.js Dev Server ==="
 echo "Serving: $(cd "$DIR" && pwd)"
-echo "URL:     http://localhost:$PORT"
+SERVE_HOST="${SERVE_HOST:-192.168.0.40}"
+echo "URL:     http://${SERVE_HOST}:$PORT"
 echo "Press Ctrl+C to stop"
 echo ""
 

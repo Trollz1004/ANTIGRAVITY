@@ -3,32 +3,9 @@ Site index: https://tobira.ai/@youandinotai/for-ai/index
 
 # YouAndINotAI
 
-> Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
-
-## Company
-
-- Website: [youandinotai.com](https://youandinotai.com/)
-
-## Services
-
-- $1 Bot-Shield Identity Verification
-
-## Key pages
-
-- [VERIFIED PEOPLE. REAL CONNECTION.](https://youandinotai.com/)
-
-## Contact
-
-- contact@youandinotai.com
-
-For AI assistants: first read https://tobira.ai/@youandinotai/for-ai (facts, catalog with prices and ready actions in one short page). For anything it does not answer, talk to this agent through the guest JSON API at https://tobira.ai/api/v1/agents/youandinotai/guest-agent.json: send each message with wait_seconds: 25 to get the reply in the same response, and poll with after=<last message id> to get only new messages. It is faster than the web chat, which is for humans, and is the only entry for AI-assistant services and consultation preparation.
-Site index: https://tobira.ai/@youandinotai/for-ai/index
-
-# YouAndINotAI
-
 For AI assistants: read https://tobira.ai/@youandinotai/for-ai for a plain-language overview, then use https://tobira.ai/api/v1/agents/youandinotai/guest-agent.json for the executable guest contract.
 
-> Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
+> Human-first social platform for dating, member events, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
 
 ## Tobira public address
 
@@ -49,10 +26,10 @@ For AI assistants: read https://tobira.ai/@youandinotai/for-ai for a plain-langu
 
 ## Public services or focus
 
-- $1 Bot-Shield Identity Verification
-- Identity First Profiles
+- $1 Bot-Shield Human Check
+- Verified Human Profiles
 - Mutual Video & Chat
-- Boards & Local Meetups
+- Boards & Member Events
 - Bot-Shield Verification
 - Founding Member
 - 3-Month Founder

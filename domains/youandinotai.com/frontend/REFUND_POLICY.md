@@ -4,7 +4,8 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 30, 2026
+**Effective Date:** March 30, 2026
+**Last Updated:** November 21, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -23,9 +24,9 @@ All refunds are processed through **Square**, our payment processor. Refunds typ
 
 ### 2.1 Bot-Shield Verification — $1
 
-**Non-refundable.**
+**Where the app offers it, you can ask for the dollar back within three days; the badge turns off.**
 
-The $1 Bot-Shield fee pays for the current launch verification flow. Once you start the Bot-Shield challenge and payment checkpoint, the service has been rendered regardless of the outcome. This fee covers challenge processing, payment handling, and verification-state updates tied to your account.
+The $1 Bot-Shield fee pays for the current verification flow. Where the app offers it on the verification screen, a member can request a one-time refund of the $1 fee within three days of payment, and the Verified Human badge turns off; otherwise, once you complete the Bot-Shield challenge and payment checkpoint, the fee is non-refundable except as listed below. This fee covers challenge processing, payment handling, and verification-state updates tied to your account.
 
 Exceptions:
 
@@ -85,7 +86,7 @@ What you should know before purchasing:
 
 ## 3. How to Request a Refund
 
-To request a refund, email **joshlcoleman@gmail.com** with the following information:
+Where the app offers the three-day $1 Bot-Shield refund option on `/app/verify`, you can request it directly on that page; for any other refund request, email **joshlcoleman@gmail.com** with the following information:
 
 - **Subject line:** "Refund Request"
 - **Your name** (as it appears on your account)
@@ -133,7 +134,7 @@ If **you** delete your account:
 
 - Active monthly subscriptions will be canceled at the end of the current billing period (no partial-month refund)
 - Prepaid plans (3-month, 12-month) are eligible for prorated refunds per the terms above
-- Bot-Shield and Royalty Card purchases are non-refundable
+- Royalty Card purchases are non-refundable, and the $1 Bot-Shield fee is non-refundable except where the app offers the three-day refund option before deletion
 
 If **we** terminate your account for violating our Terms of Service:
 
@@ -158,13 +159,13 @@ We may update this Refund Policy from time to time. When we do:
 
 ## 11. Summary Table
 
-| Product              | Price     | Refundable?                  | Details                                      |
-| -------------------- | --------- | ---------------------------- | -------------------------------------------- |
-| Bot-Shield           | $1        | No                           | Service rendered at submission               |
-| Monthly Subscription | $14.99/mo | No partial refund            | Cancel anytime, access through end of period |
-| 3-Month Plan         | $39.99    | 14-day full / prorated after | Full refund if no matches within 14 days     |
-| 12-Month Plan        | $99.99    | 14-day full / prorated after | Full refund if no matches within 14 days     |
-| Royalty Card         | $2,500    | No                           | Limited edition, final sale                  |
+| Product              | Price     | Refundable?                  | Details                                                                                         |
+| -------------------- | --------- | ---------------------------- | ----------------------------------------------------------------------------------------------- |
+| Bot-Shield           | $1        | Where offered within 3 days  | Where the app offers it, you can ask for the dollar back within three days; the badge turns off |
+| Monthly Subscription | $14.99/mo | No partial refund            | Cancel anytime, access through end of period                                                    |
+| 3-Month Plan         | $39.99    | 14-day full / prorated after | Full refund if no matches within 14 days                                                        |
+| 12-Month Plan        | $99.99    | 14-day full / prorated after | Full refund if no matches within 14 days                                                        |
+| Royalty Card         | $2,500    | No                           | Limited edition, final sale                                                                     |
 
 ## 12. Contact
 

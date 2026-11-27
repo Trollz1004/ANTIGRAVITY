@@ -4,8 +4,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import LandingPage from '../App';
+import LandingPage, { PublicSupportPage } from '../App';
+import { UnverifiedGate } from '../app/components/UnverifiedGate';
 import { Login } from '../app/pages/Login';
+import { Verify } from '../app/pages/Verify';
 import { api } from '../lib/api';
 import { useAuth } from '../lib/auth';
 
@@ -80,7 +82,9 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
         .forEach((line, i) => {
           if (!BANNED.test(line)) return;
           if (SOURCE_ALLOWLIST.some(allowed => line.includes(allowed))) return;
-          hits.push(`${path.relative(SRC_ROOT, file)}:${i + 1}: ${line.trim()}`);
+          hits.push(
+            `${path.relative(SRC_ROOT, file)}:${i + 1}: ${line.trim()}`
+          );
         });
     }
     expect(hits).toEqual([]);
@@ -91,9 +95,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
       path.resolve(SRC_ROOT, '../PRIVACY_POLICY.md'),
       'utf8'
     );
-    expect(policy.split(/\r?\n/).filter(line => BANNED.test(line))).toEqual(
-      []
-    );
+    expect(policy.split(/\r?\n/).filter(line => BANNED.test(line))).toEqual([]);
   });
 
   it('landing page shows no banned word anywhere a visitor reads', () => {
@@ -155,7 +157,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     expect(container.textContent).not.toMatch(/founder code/i);
   });
 
-  it('header "Join" opens the register flow; brand marks and API Live stay', () => {
+  it('header "Join" opens the register flow; tribute phrase stays off and API Live stays', () => {
     const { container, getAllByText } = renderLanding();
     const nav = container.querySelector(
       'nav[aria-label="Primary section navigation"]'
@@ -164,8 +166,8 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     expect(join.getAttribute('href')).toBe('/register');
     expect(nav.textContent).not.toMatch(/early access/i);
 
-    expect(getAllByText(/CLAUDE's N Joshua's/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/#TeamClaudeForLife/i).length).toBeGreaterThan(0);
+    expect(container.textContent).not.toMatch(/CLAUDE.?s N Joshua/i);
+    expect(container.textContent).not.toMatch(/TeamClaudeForLife/i);
     expect(getAllByText(/API Live/).length).toBeGreaterThan(0);
   });
 
@@ -177,6 +179,17 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     expect(segment.textContent?.replace(/\s+/g, ' ').trim()).toMatch(
       /^07\s?START$/
     );
+  });
+
+  it('hides the founder code box on Sign In by default when beta access is off', () => {
+    const { queryByLabelText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect(queryByLabelText('Founder code (optional)')).toBeNull();
+    expect(queryByRole('button', { name: 'Use Code' })).toBeNull();
   });
 
   it('Sign In has one optional "Founder code (optional)" field wired to /auth/beta-access', async () => {
@@ -199,7 +212,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { container, getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>
@@ -250,7 +263,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>
@@ -262,5 +275,82 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     });
     fireEvent.click(getByRole('button', { name: 'Use Code' }));
     expect(await findByText('profile setup')).toBeTruthy();
+  });
+
+  it('describes Bot-Shield as a timed question + $1 payment without camera, selfie, gesture, liveness, priority discovery, or fake checked timestamps', async () => {
+    const landing = renderLanding();
+    const landingText = visibleText(landing.container);
+
+    expect(landingText).toContain('01 · HUMAN CHECK');
+    expect(landingText).toContain('Timed Question & $1 Check');
+    expect(landingText).toContain('STEP 01 · TIMED QUESTION');
+    expect(landingText).toContain('Short Human Check');
+    expect(landingText).toContain('API Live');
+    expect(landingText).toContain('All Systems Operational');
+
+    expect(landingText).not.toMatch(/\b(liveness|selfie|gesture|biometric)\b/i);
+    expect(landingText).not.toMatch(/camera liveness|live camera/i);
+    expect(landingText).not.toMatch(
+      /confirm a live adult is creating the profile/i
+    );
+    expect(landingText).not.toMatch(/every active account is verified/i);
+    expect(landingText).not.toMatch(/priority discovery|priority matching/i);
+    expect(landingText).not.toMatch(/checked\s+\d{2}:\d{2}/i);
+    landing.unmount();
+
+    const gate = render(
+      <MemoryRouter initialEntries={['/app']}>
+        <UnverifiedGate />
+      </MemoryRouter>
+    );
+    const gateText = visibleText(gate.container);
+    expect(gateText).toContain(
+      'Discovery, messaging, and boards need the $1 human check.'
+    );
+    expect(gateText).not.toMatch(/\bvideo\b/i);
+    expect(gateText).not.toMatch(/everyone here is verified/i);
+    gate.unmount();
+
+    const loginView = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+    const loginText = visibleText(loginView.container);
+    expect(loginText).toContain('Member Sign In · 18+ Venue');
+    expect(loginText).not.toMatch(/Verified Member/i);
+    loginView.unmount();
+
+    const support = render(
+      <MemoryRouter initialEntries={['/support']}>
+        <PublicSupportPage />
+      </MemoryRouter>
+    );
+    const supportText = visibleText(support.container);
+    expect(supportText).toContain('Support Online');
+    expect(supportText).toContain('$1 Bot-Shield & Human Check');
+    expect(supportText).not.toMatch(/\bliveness\b/i);
+    expect(supportText).not.toMatch(/checked\s+\d{2}:\d{2}/i);
+    support.unmount();
+
+    vi.mocked(api.get).mockResolvedValueOnce({
+      verified: false,
+      trust_score: 20,
+      tier: 'unverified',
+      bot_shield_paid: false,
+      subscription_active: false,
+      checks_completed: 0,
+    });
+    const verify = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+    await verify.findByText('Answer a short timed question.');
+    const verifyText = visibleText(verify.container);
+    expect(verifyText).not.toMatch(
+      /\b(liveness|camera|selfie|gesture|biometric|video)\b/i
+    );
+    verify.unmount();
   });
 });

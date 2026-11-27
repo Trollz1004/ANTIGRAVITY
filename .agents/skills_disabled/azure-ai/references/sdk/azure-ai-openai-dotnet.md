@@ -15,7 +15,7 @@ dotnet add package Azure.AI.OpenAI
 using Azure.AI.OpenAI;
 using OpenAI.Chat;
 var azureClient = new AzureOpenAIClient(new Uri(endpoint), credential);
-ChatClient chatClient = azureClient.GetChatClient("gpt-4o-mini");
+ChatClient chatClient = azureClient.GetChatClient("gpt-6-astra");
 ```
 
 ## Non-Obvious Patterns

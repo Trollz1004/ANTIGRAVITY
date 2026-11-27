@@ -1,32 +1,62 @@
 """Prometheus metrics endpoint for the ANTIGRAVITY platform."""
 
+import hmac
 import logging
-from datetime import datetime, timezone
+import re
+from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, Header, HTTPException, status
-from sqlalchemy import func, select
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, status
+from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import is_founder_or_admin, require_founder_or_admin
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, RevenueAllocation, User, VerificationEvent
 from app.monitoring import get_metrics_response
+from app.rate_limit_redis import enforce_route_rate_limit
 
 logger = logging.getLogger("youandinotai.metrics")
 
 router = APIRouter()
 
+# Same short-name pattern the creator links use on the front end
+# (frontend/src/lib/partnerAttribution.ts SHORT_NAME_PATTERN).
+SHORT_NAME_PATTERN = re.compile(r"[a-z0-9-]{3,30}")
+
+# Only these numbers ever leave the public creator endpoint.
+_PUBLIC_STATS_FIELDS = (
+    "signups_count",
+    "verified_count",
+    "payments_count",
+    "gross_cents",
+    "owed_cents",
+)
+
+# webhooks.py:554-572 calls reserve_revenue_allocation() only when Square
+# reports payment.status == "COMPLETED", and revenue_allocation.py:190 writes
+# status="reserved" on every collected row. Nothing in the backend writes
+# "completed", "paid", or "settled" to RevenueAllocation.status.
+COLLECTED_PAYMENT_ALLOCATION_STATUS = "reserved"
+
+_is_founder_or_admin = is_founder_or_admin
+_require_founder_or_admin = require_founder_or_admin
+
 
 def _expected_metrics_key() -> str:
     settings = get_settings()
-    return settings.metrics_api_key or settings.jwt_secret
+    return (settings.metrics_api_key or "").strip()
 
 
 def _require_metrics_key(
     x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key"),
 ) -> None:
     expected = _expected_metrics_key()
-    if not x_metrics_key or x_metrics_key != expected:
+    if (
+        not expected
+        or not x_metrics_key
+        or not hmac.compare_digest(x_metrics_key, expected)
+    ):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid metrics key",
@@ -91,7 +121,7 @@ async def _impact_payload(db: AsyncSession) -> dict:
     }
 
 
-@router.get("/metrics")
+@router.get("/metrics", dependencies=[Depends(_require_metrics_key)])
 async def prometheus_metrics():
     """Expose Prometheus metrics for scraping.
 
@@ -178,4 +208,277 @@ async def security_audit_metrics():
             "individual_records_exposed": 0,
             "metrics_key_required": 1,
         },
+    }
+
+
+@router.get("/metrics/affiliates", dependencies=[Depends(_require_founder_or_admin)])
+async def affiliate_metrics(
+    code: str | None = Query(
+        default=None,
+        max_length=64,
+        description="Optional referral code filter; returns zeros when the code has no activity.",
+    ),
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only per-referral-code counts for sign-ups, $1 checks, collected customer payments, and 50% owed cents."""
+    normalized_filter = (code or "").strip().lower() or None
+
+    normalized_code_expr = func.lower(func.trim(User.referral_code))
+
+    user_stmt = (
+        select(
+            normalized_code_expr.label("referral_code"),
+            func.count(User.id).label("signups_count"),
+            func.coalesce(
+                func.sum(case((User.bot_shield_verified.is_(True), 1), else_=0)),
+                0,
+            ).label("verified_count"),
+        )
+        .where(
+            User.referral_code.is_not(None),
+            func.length(func.trim(User.referral_code)) > 0,
+        )
+        .group_by(normalized_code_expr)
+    )
+    if normalized_filter:
+        user_stmt = user_stmt.where(normalized_code_expr == normalized_filter)
+
+    payment_stmt = (
+        select(
+            normalized_code_expr.label("referral_code"),
+            func.count(RevenueAllocation.id).label("payments_count"),
+            func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0).label(
+                "gross_cents"
+            ),
+        )
+        .join(User, RevenueAllocation.user_id == User.id)
+        .where(
+            User.referral_code.is_not(None),
+            func.length(func.trim(User.referral_code)) > 0,
+            RevenueAllocation.gross_amount_cents > 0,
+            RevenueAllocation.payer_type == "customer",
+            func.lower(RevenueAllocation.status) == COLLECTED_PAYMENT_ALLOCATION_STATUS,
+        )
+        .group_by(normalized_code_expr)
+    )
+    if normalized_filter:
+        payment_stmt = payment_stmt.where(normalized_code_expr == normalized_filter)
+
+    user_rows = (await db.execute(user_stmt)).mappings().all()
+    payment_rows = (await db.execute(payment_stmt)).mappings().all()
+
+    payments_by_code = {
+        str(row["referral_code"]): {
+            "payments_count": int(row["payments_count"] or 0),
+            "gross_cents": int(row["gross_cents"] or 0),
+        }
+        for row in payment_rows
+    }
+
+    items = []
+    for row in sorted(user_rows, key=lambda r: str(r["referral_code"]).lower()):
+        ref_code = str(row["referral_code"])
+        signups_count = int(row["signups_count"] or 0)
+        verified_count = int(row["verified_count"] or 0)
+        pay_info = payments_by_code.get(
+            ref_code, {"payments_count": 0, "gross_cents": 0}
+        )
+        payments_count = pay_info["payments_count"]
+        gross_cents = pay_info["gross_cents"]
+        owed_cents = gross_cents // 2
+        items.append(
+            {
+                "referral_code": ref_code,
+                "signups_count": signups_count,
+                "verified_count": verified_count,
+                "payments_count": payments_count,
+                "gross_cents": gross_cents,
+                "owed_cents": owed_cents,
+            }
+        )
+
+    if normalized_filter and not items:
+        items.append(
+            {
+                "referral_code": normalized_filter,
+                "signups_count": 0,
+                "verified_count": 0,
+                "payments_count": 0,
+                "gross_cents": 0,
+                "owed_cents": 0,
+            }
+        )
+
+    totals = {
+        "codes_count": len(items),
+        "signups_count": sum(item["signups_count"] for item in items),
+        "verified_count": sum(item["verified_count"] for item in items),
+        "payments_count": sum(item["payments_count"] for item in items),
+        "gross_cents": sum(item["gross_cents"] for item in items),
+        "owed_cents": sum(item["owed_cents"] for item in items),
+    }
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "items": items,
+        "totals": totals,
+    }
+
+
+@router.get("/affiliates/public-stats")
+async def affiliate_public_stats(
+    request: Request,
+    code: str = Query(
+        default="",
+        description="Creator short name, 3 to 30 characters of a-z, 0-9 and hyphen.",
+    ),
+    db: AsyncSession = Depends(get_db),
+):
+    """Creator self-serve numbers for one referral code. No login.
+
+    Counts and cents only: never a name, email or account id. An unknown code
+    answers with the same shape (all zeros) as a code with no activity yet.
+    Read-only; the numbers come from the same query the founder report uses.
+    """
+    settings = get_settings()
+    # Limit first so junk guesses count against the caller too.
+    await enforce_route_rate_limit(
+        request,
+        bucket="affiliates:public-stats",
+        limit=settings.public_stats_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    slug = code.lower()
+    if not code.isascii() or not SHORT_NAME_PATTERN.fullmatch(slug):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Creator code must be 3 to 30 characters of a-z, 0-9 and hyphen.",
+        )
+
+    # Calling the handler directly skips the founder-only dependency declared
+    # on its route decorator; only the whitelisted fields below are returned.
+    report = await affiliate_metrics(code=slug, db=db)
+    item = report["items"][0]
+    return {
+        "referral_code": slug,
+        **{field: int(item[field]) for field in _PUBLIC_STATS_FIELDS},
+    }
+
+
+@router.get(
+    "/metrics/signup-sources", dependencies=[Depends(_require_founder_or_admin)]
+)
+async def signup_source_metrics(
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only per-signup-source counts for accounts, Bot-Shield passes, and collected customer payers (last 30 days and all time)."""
+    cutoff_30d = datetime.now(timezone.utc) - timedelta(days=30)
+
+    normalized_source_expr = case(
+        (
+            User.signup_source.is_(None)
+            | (func.length(func.trim(User.signup_source)) == 0),
+            "not recorded",
+        ),
+        else_=func.lower(func.trim(User.signup_source)),
+    )
+
+    user_stmt = select(
+        normalized_source_expr.label("signup_source"),
+        func.count(User.id).label("accounts_all_time"),
+        func.coalesce(
+            func.sum(case((User.created_at >= cutoff_30d, 1), else_=0)),
+            0,
+        ).label("accounts_last_30_days"),
+        func.coalesce(
+            func.sum(case((User.bot_shield_verified.is_(True), 1), else_=0)),
+            0,
+        ).label("verified_all_time"),
+        func.coalesce(
+            func.sum(
+                case(
+                    (
+                        User.bot_shield_verified.is_(True)
+                        & (User.created_at >= cutoff_30d),
+                        1,
+                    ),
+                    else_=0,
+                )
+            ),
+            0,
+        ).label("verified_last_30_days"),
+    ).group_by(normalized_source_expr)
+
+    payment_stmt = (
+        select(
+            normalized_source_expr.label("signup_source"),
+            func.count(func.distinct(User.id)).label("paid_all_time"),
+            func.count(
+                func.distinct(
+                    case((User.created_at >= cutoff_30d, User.id), else_=None)
+                )
+            ).label("paid_last_30_days"),
+        )
+        .select_from(RevenueAllocation)
+        .join(User, RevenueAllocation.user_id == User.id)
+        .where(
+            RevenueAllocation.gross_amount_cents > 0,
+            RevenueAllocation.payer_type == "customer",
+            func.lower(RevenueAllocation.status) == COLLECTED_PAYMENT_ALLOCATION_STATUS,
+        )
+        .group_by(normalized_source_expr)
+    )
+
+    user_rows = (await db.execute(user_stmt)).mappings().all()
+    payment_rows = (await db.execute(payment_stmt)).mappings().all()
+
+    payments_by_source = {
+        str(row["signup_source"]): {
+            "paid_last_30_days": int(row["paid_last_30_days"] or 0),
+            "paid_all_time": int(row["paid_all_time"] or 0),
+        }
+        for row in payment_rows
+    }
+
+    items = []
+    for row in user_rows:
+        source_key = str(row["signup_source"])
+        pay_info = payments_by_source.get(
+            source_key, {"paid_last_30_days": 0, "paid_all_time": 0}
+        )
+        items.append(
+            {
+                "signup_source": source_key,
+                "accounts_last_30_days": int(row["accounts_last_30_days"] or 0),
+                "verified_last_30_days": int(row["verified_last_30_days"] or 0),
+                "paid_last_30_days": pay_info["paid_last_30_days"],
+                "accounts_all_time": int(row["accounts_all_time"] or 0),
+                "verified_all_time": int(row["verified_all_time"] or 0),
+                "paid_all_time": pay_info["paid_all_time"],
+            }
+        )
+
+    items.sort(
+        key=lambda item: (
+            -item["accounts_last_30_days"],
+            -item["accounts_all_time"],
+            item["signup_source"],
+        )
+    )
+
+    totals = {
+        "sources_count": len(items),
+        "accounts_last_30_days": sum(item["accounts_last_30_days"] for item in items),
+        "verified_last_30_days": sum(item["verified_last_30_days"] for item in items),
+        "paid_last_30_days": sum(item["paid_last_30_days"] for item in items),
+        "accounts_all_time": sum(item["accounts_all_time"] for item in items),
+        "verified_all_time": sum(item["verified_all_time"] for item in items),
+        "paid_all_time": sum(item["paid_all_time"] for item in items),
+    }
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "items": items,
+        "totals": totals,
     }

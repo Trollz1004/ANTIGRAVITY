@@ -226,6 +226,10 @@ jobs:
         working-directory: domains/youandinotai.com/frontend
         run: npm install
 
+      - name: Run TypeScript type check
+        working-directory: domains/youandinotai.com/frontend
+        run: npx tsc --noEmit
+
       - name: Run ESLint
         working-directory: domains/youandinotai.com/frontend
         run: npx eslint src --ext .ts,.tsx
