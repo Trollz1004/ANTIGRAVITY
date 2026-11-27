@@ -67,8 +67,8 @@ const LEGAL_DOCS: Record<
         p: 'Your data is used solely to deliver YouAndINotAI product features, verify human accounts, process account-bound checkout sessions, and protect member safety.',
       },
       {
-        h: '3. Self-Service Export & 30-Day Account Deletion',
-        p: 'Authenticated members can request a full data export, update location sharing, or start the 30-day account deletion clock directly inside the Privacy Center (/app/privacy) or by emailing contact@youandinotai.com.',
+        h: '3. Data Copy Requests & 30-Day Account Deletion',
+        p: 'Authenticated members can request a copy of their account data, update location sharing, or start the 30-day account deletion clock directly inside the Privacy Center (/app/privacy) or by emailing contact@youandinotai.com. The founder sends the copy to the member on request.',
       },
     ],
   },
@@ -157,7 +157,7 @@ export function PublicSupportPage() {
     );
     if (desc) {
       desc.content =
-        'Direct, traceable member support for $1 Bot-Shield verification, account-bound billing receipts, account recovery, and privacy exports on YouAndINotAI.';
+        'Direct, traceable member support for $1 Bot-Shield verification, account-bound billing receipts, account recovery, and account data copy requests on YouAndINotAI.';
     }
   }, []);
 
@@ -219,8 +219,8 @@ export function PublicSupportPage() {
           </h1>
           <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#F4F1EA] sm:text-[20px]">
             Whether you need help with your $1 Bot-Shield badge, a membership
-            receipt, an account recovery check, or a privacy export, every
-            support lane is direct and traceable.
+            receipt, an account recovery check, or a copy of your account data,
+            every support lane is direct and traceable.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -277,12 +277,12 @@ export function PublicSupportPage() {
               03 · Privacy &amp; Data Control
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-              Export &amp; 30-Day Deletion
+              Data Copy &amp; 30-Day Deletion
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
-              Request a full archive of your stored profile data, update
-              location sharing, or start the 30-day account deletion clock
-              inside{' '}
+              Request a copy of your account data (the founder sends it on
+              request), update location sharing, or start the 30-day account
+              deletion clock inside{' '}
               <Link
                 to="/app/privacy"
                 className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
@@ -966,11 +966,12 @@ export function LandingPage() {
                       <span>Data Ownership</span>
                     </div>
                     <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
-                      Export &amp; 30-Day Deletion
+                      Data Copy &amp; 30-Day Deletion
                     </h3>
                     <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
-                      Download your account archive, manage location sharing, or
-                      schedule full 30-day account deletion anytime.
+                      Request a copy of your account data (the founder sends it
+                      on request), manage location sharing, or schedule full
+                      30-day account deletion anytime.
                     </p>
                   </div>
                   <div className="mt-4 flex flex-col gap-2">
@@ -1361,6 +1362,14 @@ export function LandingPage() {
                     className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Privacy Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/creators"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Creators: earn 50%
                   </Link>
                 </li>
                 <li>

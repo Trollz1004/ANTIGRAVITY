@@ -33,7 +33,7 @@ DEFAULT_BOARDS = [
     ("general", "General", "Chat about anything"),
     ("dating-tips", "Dating Tips", "Share your best dating advice"),
     ("success-stories", "Success Stories", "Celebrate your matches"),
-    ("events", "Events & Meetups", "Find local events"),
+    ("events", "Events & Meetups", "Create and RSVP to member events"),
     ("volunteering", "Volunteering", "Find local volunteer opportunities"),
 ]
 

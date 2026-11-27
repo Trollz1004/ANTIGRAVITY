@@ -11,6 +11,7 @@ from app.auth import require_founder_or_admin
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
+from app.email_service import _smtp_is_configured
 from app.env_health import get_backend_env_light
 from app.error_responses import internal_error
 from app.models import User
@@ -60,6 +61,20 @@ def _square_signature_configured() -> bool:
     if not bool(getattr(settings, "square_webhook_verify_signature", False)):
         return False
     return bool(_payment_signature_key()) and bool(_payment_notification_url())
+
+
+def _mail_status() -> str:
+    current = settings
+    if not hasattr(current, "smtp_host"):
+        current = get_settings()
+    elif not getattr(current, "smtp_host", "") and not getattr(
+        current, "email_from_address", ""
+    ):
+        try:
+            current = get_settings()
+        except Exception:
+            pass
+    return "on" if _smtp_is_configured(current) else "off"
 
 
 def _iter_payment_objects(payload: object) -> Iterable[dict]:
@@ -192,6 +207,7 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_status=wallet_rails_status,
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
+        mail=_mail_status(),
         missingEnvCount=len(env_light["missingEnv"]),
         nodeLight=env_light["nodeLight"],
     )

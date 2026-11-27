@@ -3,13 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StrictMode, lazy, Suspense } from 'react';
+import { StrictMode, lazy, Suspense, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AlertTriangle, Home, RotateCw } from 'lucide-react';
 import LandingPage, { PublicSupportPage } from './App';
 import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
+import { ForgotPassword } from './app/pages/ForgotPassword';
+import { ResetPassword } from './app/pages/ResetPassword';
+import { Creators } from './app/pages/Creators';
 import { AuthGuard } from './app/AuthGuard';
 import { AppShell } from './app/AppShell';
 import { Matches } from './app/pages/Matches';
@@ -101,6 +104,66 @@ function PageErrorFallback({
   );
 }
 
+function NotFoundPage() {
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = 'Page Not Found (404) | YouAndINotAI';
+
+    let robotsMeta = document.head.querySelector(
+      'meta[name="robots"]'
+    ) as HTMLMetaElement | null;
+    const created = !robotsMeta;
+    const previousContent = robotsMeta?.getAttribute('content') ?? null;
+
+    if (!robotsMeta) {
+      robotsMeta = document.createElement('meta');
+      robotsMeta.setAttribute('name', 'robots');
+      document.head.appendChild(robotsMeta);
+    }
+    robotsMeta.setAttribute('content', 'noindex');
+
+    return () => {
+      document.title = previousTitle;
+      if (created) {
+        robotsMeta?.remove();
+      } else if (robotsMeta && previousContent !== null) {
+        robotsMeta.setAttribute('content', previousContent);
+      }
+    };
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-[#0A0B0D] px-4 py-12 text-[#F4F1EA]">
+      <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-2xl items-center justify-center">
+        <div className="glass-strong w-full rounded-xl p-8 text-center md:p-10">
+          <div className="app-kicker mb-3">404 · Page Not Found</div>
+          <h1 className="app-title mx-auto max-w-xl">
+            This page does not exist.
+          </h1>
+          <p className="app-subtitle mx-auto mt-4 max-w-xl">
+            The link you followed may be broken or the page may have moved.
+            Return to the home page or create an account to continue.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/"
+              className="app-button-accent px-6 py-3 text-sm no-underline"
+            >
+              <Home size={16} /> Back to Home
+            </Link>
+            <Link
+              to="/register"
+              className="app-button-outline px-6 py-3 text-sm no-underline"
+            >
+              Create Account
+            </Link>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 // Influencer attribution runs at boot so a ?ref= on ANY landing page is
 // captured before the visitor navigates. Without this, arriving on "/" or
 // "/pricing" with a ref and then routing to /register client-side would
@@ -126,6 +189,9 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/support" element={<PublicSupportPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/creators" element={<Creators />} />
 
             {/* Authenticated app routes */}
             <Route element={<AuthGuard />}>
@@ -526,6 +592,7 @@ createRoot(document.getElementById('root')!).render(
                 />
               </Route>
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </ErrorBoundary>
         <CookieConsentBanner />

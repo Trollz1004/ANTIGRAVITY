@@ -62,6 +62,30 @@ class AuthRefreshRequest(BaseModel):
     refresh_token: str
 
 
+class AuthForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class AuthForgotPasswordResponse(BaseModel):
+    received: bool = True
+    message: str = (
+        "If an account exists for that email address, we sent a password reset link. "
+        "It expires in 30 minutes."
+    )
+
+
+class AuthResetPasswordRequest(BaseModel):
+    token: str = Field(min_length=32, max_length=256)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
+class AuthResetPasswordResponse(BaseModel):
+    reset: bool = True
+    message: str = (
+        "Your password has been updated. Please sign in with your new password."
+    )
+
+
 class GoogleLoginRequest(BaseModel):
     id_token: str
     date_of_birth: date | None = None
@@ -255,6 +279,7 @@ class HealthResponse(BaseModel):
     wallet_rails_status: str
     payment_proof_labels: list[str] = Field(default_factory=list)
     user_count: int
+    mail: Literal["on", "off"] = "off"
     # Public route: count and light only. Setting names go to the startup log.
     missingEnvCount: int = 0
     nodeLight: str = "green"

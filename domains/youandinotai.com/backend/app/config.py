@@ -135,6 +135,7 @@ class Settings(BaseSettings):
     beta_access_codes: str = ""
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
+    password_reset_expire_minutes: int = 30
 
     # -------------------------------------------------------------------------
     # CDN / static asset delivery
@@ -163,6 +164,8 @@ class Settings(BaseSettings):
     auth_rate_limit_per_minute: int = 10
     verify_rate_limit_per_minute: int = 5
     waitlist_rate_limit_per_minute: int = 5
+    password_reset_rate_limit_per_minute: int = 5
+    public_stats_rate_limit_per_minute: int = 20
     rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50

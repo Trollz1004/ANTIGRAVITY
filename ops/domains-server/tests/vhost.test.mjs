@@ -249,8 +249,43 @@ async function main() {
     const sa = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/service-areas");
     const requiredSnippets = [
       "Sorrento",
+      "32776",
+      "Mount Dora",
+      "32757",
+      "Eustis",
+      "32726",
+      "Tavares",
+      "32778",
+      "Leesburg",
+      "34748",
+      "Clermont",
+      "34711",
       "Lake County",
+      "Orlando",
+      "32801",
+      "Apopka",
+      "32703",
+      "Winter Park",
+      "32789",
+      "Maitland",
+      "32751",
+      "Ocoee",
+      "34761",
+      "Winter Garden",
+      "34787",
       "Orange County",
+      "Sanford",
+      "32771",
+      "Altamonte Springs",
+      "32701",
+      "Longwood",
+      "32750",
+      "Lake Mary",
+      "32746",
+      "Casselberry",
+      "32707",
+      "Oviedo",
+      "32765",
       "Seminole County",
       "(321) 396-2008",
       '"@type": "FAQPage"',
@@ -258,21 +293,6 @@ async function main() {
     ];
     const forbiddenServiceAreaSnippets = [
       "NOT IN INPUTS",
-      "Mount Dora",
-      "Eustis",
-      "Tavares",
-      "Leesburg",
-      "Clermont",
-      "Apopka",
-      "Orlando",
-      "Winter Park",
-      "Winter Garden",
-      "Ocoee",
-      "Sanford",
-      "Lake Mary",
-      "Longwood",
-      "Altamonte Springs",
-      "Oviedo",
       "at your home or business",
       "central drop-off",
       "run on a battery",
@@ -503,7 +523,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "09:00-09:30",
         fullName: "Saved One",
         phone: "(321) 555-0191",
@@ -518,7 +538,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "10:00-10:30",
         fullName: "Saved Two",
         phone: "(321) 555-0192",
@@ -533,7 +553,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "11:00-11:30",
         fullName: "Third Blocked",
         phone: "(321) 555-0193",
@@ -577,12 +597,12 @@ async function main() {
 
     // 5. Cancelled bookings free their slot in /api/booking-config
     const cancelledSlot = {
-      bookingId: `OR-${flToday.replace(/-/g, "")}-CANC0001`,
+      bookingId: `OR-${flDay(1).replace(/-/g, "")}-CANC0001`,
       createdAt: new Date().toISOString(),
       serviceType: "dropoff",
       fullName: "Cancelled Customer",
       phone: "321-555-0199",
-      date: flToday,
+      date: flDay(1),
       slotCode: "15:00-15:30",
       slotLabel: "3:00 PM - 3:30 PM",
       deviceCount: "1-5",
@@ -594,10 +614,10 @@ async function main() {
     const cfgRes = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/api/booking-config");
     const cfgJson = JSON.parse(cfgRes.body);
     const hasCancelled = (cfgJson.bookedSlots || []).some(
-      (s) => s.date === flToday && s.slotCode === "15:00-15:30" && s.serviceType === "dropoff"
+      (s) => s.date === flDay(1) && s.slotCode === "15:00-15:30" && s.serviceType === "dropoff"
     );
     const hasScheduled = (cfgJson.bookedSlots || []).some(
-      (s) => s.date === flToday && s.slotCode === "09:00-09:30" && s.serviceType === "dropoff"
+      (s) => s.date === flDay(1) && s.slotCode === "09:00-09:30" && s.serviceType === "dropoff"
     );
     if (hasCancelled || !hasScheduled) {
       console.error(

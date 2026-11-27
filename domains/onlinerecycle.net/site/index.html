@@ -268,10 +268,26 @@
                   </svg>
                   <span>Central FL Pickup</span>
                 </button>
+                <button
+                  type="button"
+                  class="service-tab"
+                  id="tab-mailin"
+                  data-service="mailin"
+                  role="tab"
+                  aria-selected="false"
+                  hidden
+                  style="display: none"
+                >
+                  <span>US Mail-In</span>
+                </button>
               </div>
             </div>
 
             <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+              <p id="gcal-embed-note" style="color: var(--text); font-size: 1.05rem; margin-bottom: 12px">
+                This calendar shows open windows only. To book, fill in the form below. You get your reference number,
+                a calendar file and a text confirmation link as soon as you submit.
+              </p>
               <iframe
                 id="gcal-schedule-iframe"
                 title="OnlineRecycle Appointment Schedule"
@@ -314,7 +330,7 @@
                   </button>
                 </div>
               </div>
-              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates" tabindex="-1"></div>
 
               <div class="calendar-grid-label">
                 <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
@@ -329,7 +345,7 @@
               <div class="booking-form-grid">
                 <div class="form-field">
                   <label for="bf-name">Full Name *</label>
-                  <input type="text" id="bf-name" name="fullName" autocomplete="name" placeholder="Jane Doe" required />
+                  <input type="text" id="bf-name" name="fullName" autocomplete="name" maxlength="120" placeholder="Jane Doe" required />
                 </div>
 
                 <div class="form-field">
@@ -339,6 +355,7 @@
                     id="bf-phone"
                     name="phone"
                     autocomplete="tel"
+                    maxlength="40"
                     placeholder="(321) 555-0199"
                     required
                   />
@@ -346,7 +363,7 @@
 
                 <div class="form-field">
                   <label for="bf-email">Email Address (optional)</label>
-                  <input type="email" id="bf-email" name="email" autocomplete="email" placeholder="you@example.com" />
+                  <input type="email" id="bf-email" name="email" autocomplete="email" maxlength="200" placeholder="you@example.com" />
                 </div>
 
                 <div class="form-field">
@@ -356,6 +373,7 @@
                     id="bf-org"
                     name="organization"
                     autocomplete="organization"
+                    maxlength="200"
                     placeholder="Household or company name"
                   />
                 </div>
@@ -367,6 +385,7 @@
                     id="bf-address"
                     name="address"
                     autocomplete="street-address"
+                    maxlength="200"
                     placeholder="123 Main St"
                   />
                 </div>
@@ -378,6 +397,7 @@
                     id="bf-city"
                     name="city"
                     autocomplete="address-level2"
+                    maxlength="100"
                     placeholder="Sorrento / Mount Dora / Orlando, FL"
                   />
                 </div>
@@ -413,6 +433,7 @@
                     id="bf-devices"
                     name="deviceList"
                     rows="3"
+                    maxlength="2000"
                     placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
                     required
                   ></textarea>
@@ -454,7 +475,9 @@
 
             <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
               <h3 id="confirm-title">Appointment Scheduled!</h3>
-              <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px"></p>
+              <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px">
+                Call or text (321) 396-2008 to confirm or update your appointment.
+              </p>
               <div style="display: flex; flex-wrap: wrap; gap: 12px">
                 <a id="confirm-sms-btn" href="#" class="btn btn-primary">
                   <svg
@@ -509,7 +532,155 @@
                   </svg>
                   <span>Download .ICS Calendar File</span>
                 </a>
+                <button type="button" id="schedule-another-btn" class="btn btn-secondary">
+                  Schedule another window
+                </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="spin-card-stage stage-scheduler-slot align-center"
+          id="mailin-section"
+          hidden
+          style="display: none; min-height: auto; padding: 24px 0; margin-bottom: 4vh"
+        >
+          <div class="booking-section" id="card-mailin" style="width: 100%; max-width: 780px">
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">02.2 / US MAIL-IN INTAKE</span>
+              <span class="stop-telemetry">STOP 02 / 06 · MAIL-IN</span>
+            </div>
+
+            <div class="booking-header">
+              <div>
+                <h2 style="margin-bottom: 8px">Mail-In Electronics Recycling</h2>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Mail-in is for phones, tablets, laptops and small electronics from anywhere in the United States. You
+                  pay the postage. We do not pay for mailed devices.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  How: fill in the short form, get a reference and the mailing address, write the reference inside the
+                  box.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Packing, from USPS Publication 52 section 349: a used device with a lithium battery goes by ground
+                  only, never air. Use a rigid box, cushion each device so it cannot move, switch it off. Two devices
+                  per box at most. Write 'Restricted Electronic Device' and 'Surface Transportation Only' on the
+                  address side.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  Do not mail a device with a swollen, leaking or punctured battery. USPS does not allow it. Use
+                  drop-off or pickup for those.
+                </p>
+                <p style="margin-bottom: 10px; font-size: 0.96rem">
+                  What happens to it: storage wiped or destroyed with reasonable effort; working gear reused, the rest
+                  recycled. Nothing is mailed back.
+                </p>
+                <p style="margin-bottom: 0; font-size: 0.96rem">
+                  <a
+                    href="https://www.usps.com/ship/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="color: var(--accent); font-weight: 700"
+                  >
+                    USPS postage and scheduling a package pickup
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <form id="mailin-form" novalidate>
+              <div class="booking-form-grid">
+                <div class="form-field">
+                  <label for="mi-name">Name *</label>
+                  <input
+                    type="text"
+                    id="mi-name"
+                    name="fullName"
+                    maxlength="120"
+                    autocomplete="name"
+                    placeholder="Jane Doe"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-email">Email *</label>
+                  <input
+                    type="email"
+                    id="mi-email"
+                    name="email"
+                    maxlength="200"
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-state">State *</label>
+                  <input
+                    type="text"
+                    id="mi-state"
+                    name="state"
+                    maxlength="60"
+                    autocomplete="address-level1"
+                    placeholder="FL"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="mi-count">Device Count (1 or 2 per box) *</label>
+                  <input
+                    type="number"
+                    id="mi-count"
+                    name="deviceCount"
+                    min="1"
+                    max="2"
+                    value="1"
+                    required
+                  />
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="mi-kind">What is being sent (device kind) *</label>
+                  <input
+                    type="text"
+                    id="mi-kind"
+                    name="deviceKind"
+                    maxlength="500"
+                    placeholder="Phones, tablets, laptops, or small electronics"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div
+                id="mailin-error"
+                role="alert"
+                style="display: none; margin-top: 14px; color: #ffd21e; font-weight: 700; font-size: 0.92rem"
+              ></div>
+
+              <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                <button type="submit" class="btn btn-primary" id="mi-submit-btn">
+                  <span id="mi-submit-btn-label">Get Reference &amp; Mailing Address</span>
+                </button>
+              </div>
+            </form>
+
+            <div class="booking-confirm-box" id="mailin-confirm-box" role="status" aria-live="polite">
+              <h3 id="mailin-confirm-title">Mail-In Reference Issued</h3>
+              <p id="mailin-confirm-ref" style="color: var(--text); font-size: 0.96rem; margin-bottom: 8px"></p>
+              <p
+                id="mailin-confirm-address"
+                style="color: var(--accent); font-weight: 700; font-size: 1rem; margin-bottom: 8px"
+              ></p>
+              <p id="mailin-confirm-note" style="color: var(--text); font-size: 0.94rem; margin-bottom: 0">
+                Write this reference inside the box. Write 'Restricted Electronic Device' and 'Surface Transportation
+                Only' on the address side.
+              </p>
             </div>
           </div>
         </div>
@@ -976,7 +1147,7 @@
               OnlineRecycle.net
             </div>
               <p style="margin-top: 12px; margin-bottom: 0">
-              Trash Or Treasure Online Recycler LLC · Sorrento, Florida ·
+              Trash Or Treasure Online Recycler LLC · Sorrento, Florida (Serving Lake, Orange &amp; Seminole Counties) ·
               <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 800">
                 (321) 396-2008
               </a>
@@ -1109,6 +1280,7 @@
       {
         "@context": "https://schema.org",
         "@type": "RecyclingCenter",
+        "@id": "https://onlinerecycle.net/#recycling-center",
         "name": "OnlineRecycle.net (Trash Or Treasure Online Recycler LLC)",
         "description": "Free electronics drop-off in Sorrento, FL and scheduled route pickup across Lake, Orange, and Seminole Counties.",
         "url": "https://onlinerecycle.net/",
@@ -1143,7 +1315,7 @@
               "itemOffered": {
                 "@type": "Service",
                 "name": "Free Electronics Drop-Off",
-                "description": "Drop off computers, laptops, servers, phones, game consoles, DVDs, Blu-rays, and home and car stereo equipment for responsible recycling."
+                "description": "Drop off computers, laptops, servers, phones, game consoles, DVDs/Blu-rays, and home and car stereo equipment with SSD/HDD data destruction and responsible recycling."
               }
             },
             {
@@ -1445,11 +1617,13 @@
             const stage = card.parentElement || card;
             const rect = stage.getBoundingClientRect();
             const isScheduler = card.id === 'card-scheduler';
+            const confirmBoxEl = isScheduler ? document.getElementById('booking-confirm-box') : null;
+            const hasVisibleConfirm = Boolean(confirmBoxEl && confirmBoxEl.style.display && confirmBoxEl.style.display !== 'none');
 
-            if (isScheduler && window.scrollY <= 36) {
+            if (isScheduler && !hasVisibleConfirm && window.scrollY <= 36) {
               card.style.transform = 'translate3d(0px, 140px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }
@@ -1475,7 +1649,7 @@
               }
             }
 
-            if (card.contains(document.activeElement) && document.activeElement !== document.body) {
+            if (hasVisibleConfirm || (card.contains(document.activeElement) && document.activeElement !== document.body)) {
               flightT = 0;
             }
 
@@ -1492,7 +1666,7 @@
             if (absT >= 0.98) {
               card.style.transform = 'translate3d(0px, 80px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }
@@ -1983,6 +2157,171 @@
       })();
     </script>
 
+    <!-- Mail-In Option & Request Logic -->
+    <script>
+      (function () {
+        const sectionEl = document.getElementById('mailin-section');
+        const tabBtn = document.getElementById('tab-mailin');
+        const formEl = document.getElementById('mailin-form');
+        const errEl = document.getElementById('mailin-error');
+        const confirmBoxEl = document.getElementById('mailin-confirm-box');
+        const confirmRefEl = document.getElementById('mailin-confirm-ref');
+        const confirmAddrEl = document.getElementById('mailin-confirm-address');
+        const submitBtn = document.getElementById('mi-submit-btn');
+        const submitBtnLabel = document.getElementById('mi-submit-btn-label');
+
+        function setMailInVisible(visible) {
+          const show = Boolean(visible);
+          if (sectionEl) {
+            sectionEl.hidden = !show;
+            sectionEl.style.display = show ? 'flex' : 'none';
+          }
+          if (tabBtn) {
+            tabBtn.hidden = !show;
+            tabBtn.style.display = show ? 'inline-flex' : 'none';
+          }
+        }
+
+        setMailInVisible(false);
+
+        if (tabBtn && sectionEl) {
+          tabBtn.addEventListener('click', function () {
+            if (typeof sectionEl.scrollIntoView === 'function') {
+              sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+
+        if (typeof fetch === 'function') {
+          fetch('/api/mailin-config')
+            .then(function (r) {
+              if (!r || r.ok === false || typeof r.json !== 'function') return null;
+              return r.json();
+            })
+            .then(function (cfg) {
+              const enabled = Boolean(cfg && cfg.ok && (cfg.available || cfg.enabled || cfg.mailInAvailable));
+              setMailInVisible(enabled);
+            })
+            .catch(function () {
+              setMailInVisible(false);
+            });
+        }
+
+        if (formEl) {
+          formEl.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            if (errEl) errEl.style.display = 'none';
+
+            const nameEl = document.getElementById('mi-name');
+            const emailEl = document.getElementById('mi-email');
+            const stateEl = document.getElementById('mi-state');
+            const kindEl = document.getElementById('mi-kind');
+            const countEl = document.getElementById('mi-count');
+
+            const fullName = nameEl ? String(nameEl.value || '').trim() : '';
+            const email = emailEl ? String(emailEl.value || '').trim() : '';
+            const state = stateEl ? String(stateEl.value || '').trim() : '';
+            const deviceKind = kindEl ? String(kindEl.value || '').trim() : '';
+            const rawCount = countEl ? String(countEl.value || '').trim() : '';
+            const deviceCount = rawCount === '' ? NaN : Number(rawCount);
+
+            if (Number.isFinite(deviceCount) && deviceCount > 2) {
+              if (errEl) {
+                errEl.textContent = 'Two devices per box at most. Please send at most 2 devices per box.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!Number.isInteger(deviceCount) || deviceCount < 1) {
+              if (errEl) {
+                errEl.textContent = 'Please enter a device count of 1 or 2.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!fullName || !email || !state || !deviceKind) {
+              if (errEl) {
+                errEl.textContent = 'Please fill in your name, email, state, device kind, and device count (1 or 2).';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              if (errEl) {
+                errEl.textContent = 'Please enter a valid email address.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtnLabel) submitBtnLabel.textContent = 'Sending...';
+
+            fetch('/api/mailin', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                fullName: fullName,
+                email: email,
+                state: state,
+                deviceKind: deviceKind,
+                deviceCount: deviceCount
+              })
+            })
+              .then(function (r) {
+                const readRaw =
+                  typeof r.text === 'function'
+                    ? r.text()
+                    : r.json().then(function (v) {
+                        return JSON.stringify(v);
+                      });
+                return readRaw.then(function (raw) {
+                  let res;
+                  try {
+                    res = JSON.parse(raw);
+                  } catch (e) {
+                    res = { ok: false, error: 'Could not submit mail-in request. Please try again.' };
+                  }
+                  return res;
+                });
+              })
+              .then(function (res) {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnLabel) submitBtnLabel.textContent = 'Get Reference & Mailing Address';
+                if (!res || !res.ok) {
+                  if (errEl) {
+                    errEl.textContent = (res && res.error) || 'Could not submit mail-in request. Please try again.';
+                    errEl.style.display = 'block';
+                  }
+                  return;
+                }
+                const refId = res.referenceId || res.bookingId || (res.booking && res.booking.bookingId) || '';
+                if (confirmRefEl) {
+                  confirmRefEl.textContent = 'Reference: ' + refId + ' (' + deviceCount + ' — ' + deviceKind + ')';
+                }
+                if (confirmAddrEl) {
+                  confirmAddrEl.textContent = 'Mail to: ' + (res.mailingAddress || '');
+                }
+                if (confirmBoxEl) {
+                  confirmBoxEl.style.display = 'block';
+                  if (typeof confirmBoxEl.scrollIntoView === 'function') {
+                    confirmBoxEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                  }
+                }
+              })
+              .catch(function () {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnLabel) submitBtnLabel.textContent = 'Get Reference & Mailing Address';
+                if (errEl) {
+                  errEl.textContent = 'Network error — please try again.';
+                  errEl.style.display = 'block';
+                }
+              });
+          });
+        }
+      })();
+    </script>
+
     <!-- Booking Calendar & Direct Slot Logic -->
     <script>
       (function () {
@@ -2026,6 +2365,7 @@
         const cityField = document.getElementById('pickup-city-field');
         const selectedDateDisplay = document.getElementById('selected-date-display');
         const selectedSlotDisplay = document.getElementById('selected-slot-display');
+        const submitBtn = document.getElementById('bf-submit-btn');
         const embedContainer = document.getElementById('gcal-embed-container');
         const embedIframe = document.getElementById('gcal-schedule-iframe');
 
@@ -2074,16 +2414,18 @@
         function isSlotElapsed(dateIso, slotCode, nowInput) {
           if (!dateIso || !slotCode) return false;
           const ny = getNewYorkNowParts(nowInput);
-          if (dateIso < ny.iso) return true;
-          if (dateIso > ny.iso) return false;
+          const todayIso = (upcomingDays && upcomingDays[0] && upcomingDays[0].iso) || ny.iso;
+          if (dateIso < todayIso) return true;
+          if (dateIso > todayIso) return false;
           const m = String(slotCode).match(/^(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})$/);
           if (!m) return false;
           const startMinutes = Number(m[1]) * 60 + Number(m[2]);
           return startMinutes <= ny.minutesOfDay;
         }
 
-        const upcomingDays = buildNextDays(14);
+        let upcomingDays = buildNextDays(14);
         let datePageOffset = 0;
+        let userPickedDate = false;
         const datePageToggle = document.getElementById('date-page-toggle');
         const datePageToggleLabel = document.getElementById('date-page-toggle-label');
         selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
@@ -2098,6 +2440,103 @@
           }
         }
 
+        const DRAFT_STORAGE_KEY = 'onlinerecycle_booking_draft';
+        const DRAFT_FIELD_IDS = [
+          'bf-name',
+          'bf-phone',
+          'bf-email',
+          'bf-org',
+          'bf-address',
+          'bf-city',
+          'bf-count',
+          'bf-wipe',
+          'bf-devices'
+        ];
+        let restoringDraft = true;
+
+        function isSlotTaken(code) {
+          return bookedSlots.some(function (b) {
+            return b.date === selectedDate && b.slotCode === code && b.serviceType === serviceType;
+          });
+        }
+
+        function extractPickupZip(cityText, addressText, explicitZip) {
+          const sources = [explicitZip || '', cityText || '', addressText || ''];
+          for (let i = 0; i < sources.length; i++) {
+            const matches = String(sources[i]).match(/\b(\d{5})(?:-\d{4})?\b/g);
+            if (matches && matches.length > 0) {
+              return matches[matches.length - 1].slice(0, 5);
+            }
+          }
+          return '';
+        }
+
+        function saveDraft() {
+          if (restoringDraft) return;
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            const draft = {
+              serviceType: serviceType,
+              date: selectedDate,
+              slotCode: selectedSlotCode,
+              slotLabel: selectedSlotLabel
+            };
+            DRAFT_FIELD_IDS.forEach(function (id) {
+              const el = document.getElementById(id);
+              if (el) draft[id] = el.value;
+            });
+            sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+          } catch (e) {}
+        }
+
+        function clearDraft() {
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+          } catch (e) {}
+        }
+
+        function restoreDraft() {
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            const raw = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+            if (!raw) return;
+            const draft = JSON.parse(raw);
+            if (!draft || typeof draft !== 'object') return;
+            DRAFT_FIELD_IDS.forEach(function (id) {
+              if (typeof draft[id] === 'string') {
+                const el = document.getElementById(id);
+                if (el) el.value = draft[id];
+              }
+            });
+            if (draft.serviceType === 'pickup' || draft.serviceType === 'dropoff') {
+              setServiceType(draft.serviceType);
+            }
+            if (typeof draft.date === 'string' && draft.date) {
+              const dayIdx = upcomingDays.findIndex(function (d) {
+                return d.iso === draft.date;
+              });
+              if (dayIdx !== -1) {
+                userPickedDate = true;
+                selectedDate = draft.date;
+                datePageOffset = dayIdx >= 7 ? 7 : 0;
+                renderDates();
+              }
+            }
+            if (typeof draft.slotCode === 'string' && draft.slotCode) {
+              const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+              const foundSlot = slots.find(function (s) {
+                return s.code === draft.slotCode;
+              });
+              if (foundSlot) {
+                selectedSlotCode = foundSlot.code;
+                selectedSlotLabel = foundSlot.label;
+              }
+            }
+            renderSlots();
+          } catch (e) {}
+        }
+
         function renderDates() {
           dateStrip.innerHTML = '';
           const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
@@ -2107,11 +2546,13 @@
             btn.className = 'date-pill' + (d.iso === selectedDate ? ' selected' : '');
             btn.innerHTML = '<span class="dow">' + d.dow + '</span><span class="dom">' + d.dom + '</span>';
             btn.addEventListener('click', function () {
+              userPickedDate = true;
               selectedDate = d.iso;
               dateInput.value = selectedDate;
               selectedDateDisplay.textContent = d.dow + ', ' + d.dom;
               renderDates();
               renderSlots();
+              saveDraft();
             });
             dateStrip.appendChild(btn);
           });
@@ -2133,6 +2574,7 @@
 
         if (datePageToggle) {
           datePageToggle.addEventListener('click', function () {
+            userPickedDate = true;
             datePageOffset = datePageOffset === 0 ? 7 : 0;
             const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
             if (
@@ -2145,6 +2587,7 @@
             }
             renderDates();
             renderSlots();
+            saveDraft();
           });
         }
 
@@ -2164,11 +2607,36 @@
             }) ||
             isSlotUnavailable(selectedSlotCode)
           ) {
-            const preferred = slots[1] && !isSlotUnavailable(slots[1].code) ? slots[1] : slots.find(function (s) { return !isSlotUnavailable(s.code); }) || null;
+            const preferred =
+              slots[1] && !isSlotUnavailable(slots[1].code)
+                ? slots[1]
+                : slots.find(function (s) {
+                    return !isSlotUnavailable(s.code);
+                  }) || null;
             selectedSlotCode = preferred ? preferred.code : '';
             selectedSlotLabel = preferred ? preferred.label : '';
           }
           slotStrip.innerHTML = '';
+          const openSlots = slots.filter(function (s) {
+            return !isSlotUnavailable(s.code);
+          });
+          if (openSlots.length === 0) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+            slotCodeInput.value = '';
+            slotLabelInput.value = '';
+            selectedSlotDisplay.textContent = 'No windows left on this day — choose another date';
+            submitBtn.disabled = true;
+            return;
+          }
+          if (
+            !openSlots.some(function (s) {
+              return s.code === selectedSlotCode;
+            })
+          ) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+          }
           slots.forEach(function (s) {
             const isTaken = isSlotTaken(s.code);
             const isElapsed = isSlotElapsed(selectedDate, s.code);
@@ -2186,12 +2654,16 @@
               slotLabelInput.value = selectedSlotLabel;
               selectedSlotDisplay.textContent = selectedSlotLabel;
               renderSlots();
+              saveDraft();
             });
             slotStrip.appendChild(btn);
           });
           slotCodeInput.value = selectedSlotCode;
           slotLabelInput.value = selectedSlotLabel;
-          selectedSlotDisplay.textContent = selectedSlotLabel;
+          selectedSlotDisplay.textContent = selectedSlotCode
+            ? selectedSlotLabel
+            : 'No windows left on this day — choose another date';
+          submitBtn.disabled = !selectedSlotCode;
         }
 
         function setServiceType(nextType) {
@@ -2213,6 +2685,7 @@
           if (cityInput) cityInput.required = serviceType === 'pickup';
           updateGcalEmbed();
           renderSlots();
+          saveDraft();
         }
 
         function serviceTypeFromLocation() {
@@ -2238,6 +2711,18 @@
           setServiceType('pickup');
         });
 
+        function serviceFromHref(href) {
+          const m = /[?&]service=(pickup|dropoff)/.exec(String(href || ''));
+          return m ? m[1] : '';
+        }
+
+        if (typeof document.addEventListener === 'function') document.addEventListener('click', function (ev) {
+          const link = ev.target && ev.target.closest ? ev.target.closest('a') : null;
+          const href = link ? link.getAttribute('href') : '';
+          const t = serviceFromHref(href);
+          if (t) setServiceType(t);
+        });
+
         document.querySelectorAll('[data-select-service]').forEach(function (el) {
           el.addEventListener('click', function () {
             const t = el.getAttribute('data-select-service');
@@ -2245,29 +2730,72 @@
           });
         });
 
-        fetch('/api/booking-config')
-          .then(function (r) {
-            return r.json();
-          })
-          .then(function (cfg) {
-            if (cfg && cfg.ok) {
-              bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
-              if (cfg.googleScheduleEmbed) {
-                gcalEmbeds = cfg.googleScheduleEmbed;
-                updateGcalEmbed();
+        function showSlotLoadWarning() {
+          const slotErr = document.getElementById('booking-error');
+          slotErr.textContent = 'Slot times could not be loaded. You can still book, or try again. ';
+          const retryBtn = document.createElement('button');
+          retryBtn.type = 'button';
+          retryBtn.textContent = 'Retry loading slots';
+          retryBtn.addEventListener('click', function () {
+            slotErr.style.display = 'none';
+            loadBookingConfig();
+          });
+          slotErr.appendChild(retryBtn);
+          slotErr.style.display = 'block';
+        }
+
+        function loadBookingConfig() {
+          return fetch('/api/booking-config')
+            .then(function (r) {
+              if (r.ok === false) throw new Error('booking-config ' + r.status);
+              return r.json();
+            })
+            .then(function (cfg) {
+              if (cfg && cfg.ok) {
+                if (Array.isArray(cfg.upcomingDays) && cfg.upcomingDays.length > 0) {
+                  upcomingDays = cfg.upcomingDays;
+                  if (
+                    !userPickedDate ||
+                    !upcomingDays.some(function (d) {
+                      return d && d.iso === selectedDate;
+                    })
+                  ) {
+                    selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
+                  }
+                  renderDates();
+                }
+                bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
+                if (cfg.googleScheduleEmbed) {
+                  gcalEmbeds = cfg.googleScheduleEmbed;
+                  updateGcalEmbed();
+                }
+                renderSlots();
               }
-              renderSlots();
-            }
-          })
-          .catch(function () {});
+              return cfg;
+            })
+            .catch(showSlotLoadWarning);
+        }
+
+        loadBookingConfig();
 
         renderDates();
         const initialService = serviceTypeFromLocation();
         setServiceType(initialService || 'dropoff');
-        window.addEventListener('hashchange', function () {
-          const nextService = serviceTypeFromLocation();
-          if (nextService) setServiceType(nextService);
+        restoreDraft();
+        restoringDraft = false;
+
+        DRAFT_FIELD_IDS.forEach(function (id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.addEventListener('input', saveDraft);
+          el.addEventListener('change', saveDraft);
         });
+        if (typeof window.addEventListener === 'function') {
+          window.addEventListener('hashchange', function () {
+            const nextService = serviceTypeFromLocation();
+            if (nextService) setServiceType(nextService);
+          });
+        }
 
         const form = document.getElementById('booking-form');
         const errBox = document.getElementById('booking-error');
@@ -2277,13 +2805,39 @@
         const confirmGcalBtn = document.getElementById('confirm-gcal-btn');
         const confirmIcsBtn = document.getElementById('confirm-ics-btn');
         const confirmSmsBtn = document.getElementById('confirm-sms-btn');
-        const submitBtn = document.getElementById('bf-submit-btn');
         const submitBtnLabel = document.getElementById('bf-submit-btn-label');
+        const scheduleAnotherBtn = document.getElementById('schedule-another-btn');
+
+        // Schedule another window: clear this confirmation, move to the next
+        // open slot, and put focus back on the date strip.
+        if (scheduleAnotherBtn) {
+          scheduleAnotherBtn.addEventListener('click', function () {
+            const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+            const currentIndex = slots.findIndex(function (s) {
+              return s.code === selectedSlotCode;
+            });
+            for (let step = 1; step <= slots.length; step++) {
+              const candidate = slots[(currentIndex + step) % slots.length];
+              const taken = isSlotTaken(candidate.code) || isSlotElapsed(selectedDate, candidate.code);
+              if (!taken && candidate.code !== selectedSlotCode) {
+                selectedSlotCode = candidate.code;
+                selectedSlotLabel = candidate.label;
+                break;
+              }
+            }
+            document.getElementById('booking-confirm-box').style.display = 'none';
+            renderSlots();
+            document.getElementById('date-strip').focus();
+          });
+        }
 
         form.addEventListener('submit', function (ev) {
           ev.preventDefault();
           errBox.style.display = 'none';
+          saveDraft();
 
+          const addressVal = document.getElementById('bf-address').value.trim();
+          const cityVal = document.getElementById('bf-city').value.trim();
           const payload = {
             serviceType: serviceInput.value,
             date: dateInput.value,
@@ -2293,8 +2847,9 @@
             phone: document.getElementById('bf-phone').value.trim(),
             email: document.getElementById('bf-email').value.trim(),
             organization: document.getElementById('bf-org').value.trim(),
-            address: document.getElementById('bf-address').value.trim(),
-            city: document.getElementById('bf-city').value.trim(),
+            address: addressVal,
+            city: cityVal,
+            zip: serviceInput.value === 'pickup' ? extractPickupZip(cityVal, addressVal) : '',
             deviceCount: document.getElementById('bf-count').value,
             notes: document.getElementById('bf-wipe').value,
             deviceList: document.getElementById('bf-devices').value.trim()
@@ -2321,7 +2876,12 @@
             return;
           }
           if (payload.serviceType === 'pickup' && (!payload.address || !payload.city)) {
-            errBox.textContent = 'Please include the pickup street address and city so we can schedule your route.';
+            errBox.textContent = 'Please include the pickup street address, city, and 5-digit ZIP code so we can schedule your route.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (payload.serviceType === 'pickup' && !payload.zip) {
+            errBox.textContent = 'Please include a 5-digit Central Florida ZIP code in the City & ZIP field so we can schedule your pickup.';
             errBox.style.display = 'block';
             return;
           }
@@ -2335,9 +2895,26 @@
             body: JSON.stringify(payload)
           })
             .then(function (r) {
-              return r.json();
+              const status = r && typeof r.status === 'number' ? r.status : 0;
+              const readRaw = typeof r.text === 'function' ? r.text() : r.json().then(function (v) { return JSON.stringify(v); });
+              return readRaw.then(function (raw) {
+                let res;
+                try {
+                  res = JSON.parse(raw);
+                } catch (e) {
+                  res = {
+                    ok: false,
+                    error: r.ok
+                      ? ''
+                      : 'Server error — please call or text (321) 396-2008 to confirm your slot.'
+                  };
+                }
+                return { status: status, res: res };
+              });
             })
-            .then(function (res) {
+            .then(function (outcome) {
+              const status = outcome.status;
+              const res = outcome.res;
               submitBtn.disabled = false;
               if (submitBtnLabel) {
                 submitBtnLabel.textContent = 'Confirm Appointment';
@@ -2346,8 +2923,12 @@
                 errBox.textContent =
                   (res && res.error) || 'Could not complete booking. Please call or text (321) 396-2008.';
                 errBox.style.display = 'block';
+                if (status === 409 || (res && /just booked/i.test(String(res.error || '')))) {
+                  loadBookingConfig();
+                }
                 return;
               }
+              clearDraft();
               const b = res.booking;
               bookedSlots.push({ date: b.date, slotCode: b.slotCode, serviceType: b.serviceType });
               renderSlots();
@@ -2361,7 +2942,7 @@
                 b.slotLabel +
                 ') · ' +
                 b.deviceCount +
-                '. Tap "Text us to confirm" so we know to expect you. You can also add it to your calendar below.';
+                '. Tap "Text us to confirm" or call/text (321) 396-2008 so we know to expect you. You can also add it to your calendar below.';
               confirmGcalBtn.href = res.googleCalendarUrl;
               confirmIcsBtn.href = res.icsUrl;
               confirmSmsBtn.href = res.smsUrl;

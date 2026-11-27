@@ -246,6 +246,7 @@
               </p>
               <div class="cta-row">
                 <a href="/#book" class="btn btn-primary">Schedule Drop-Off or Pickup</a>
+                <a href="/?service=pickup#book" class="btn btn-secondary">Request Free Route Pickup</a>
                 <a href="tel:+13213962008" class="btn btn-secondary">Call / Text (321) 396-2008</a>
                 <a href="/" class="btn btn-secondary">Back to Home</a>
               </div>
@@ -262,7 +263,7 @@
               OnlineRecycle.net
             </div>
               <p style="margin-top: 12px; margin-bottom: 0">
-              Trash Or Treasure Online Recycler LLC · Sorrento, Florida ·
+              Trash Or Treasure Online Recycler LLC · Sorrento, Florida (Serving Lake, Orange &amp; Seminole Counties) ·
               <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 800">
                 (321) 396-2008
               </a>
@@ -390,6 +391,35 @@
         </div>
       </div>
     </nav>
+
+    <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+      <div class="cb-inner">
+        <div class="cb-text">
+          <p class="cb-copy">We use cookies to run this site. <a href="/privacy.html">Privacy Policy</a></p>
+          <div class="cb-checks" id="cb-checks" hidden>
+            <label>
+              <input type="checkbox" id="cb-necessary" checked disabled />
+              <span><strong>Necessary</strong> (always on)</span>
+            </label>
+            <label>
+              <input type="checkbox" id="cb-analytics" />
+              <span><strong>Analytics</strong></span>
+            </label>
+            <label>
+              <input type="checkbox" id="cb-functional" />
+              <span><strong>Functional</strong></span>
+            </label>
+          </div>
+        </div>
+        <div class="cb-actions">
+          <button class="cb-btn cb-accept" id="cb-accept-btn">OK</button>
+          <button class="cb-btn cb-decline" id="cb-options-btn" aria-expanded="false" aria-controls="cb-checks">
+            Options
+          </button>
+          <button class="cb-btn cb-decline" id="cb-decline-btn" hidden>Necessary Only</button>
+        </div>
+      </div>
+    </div>
 
     <script>
       (function () {
@@ -582,7 +612,7 @@
             if (absT >= 0.98) {
               card.style.transform = 'translate3d(0px, 80px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }

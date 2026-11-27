@@ -23,16 +23,16 @@ const PAGES = ['about.html', 'terms.html', 'privacy.html'];
 // The restyle must not change the legal text or the About wording.
 const ORIGINAL = {
   'about.html': {
-    text: '1026f60f6af4ec7368971473612191e77aab0c0eb35a6489e8db0893d30360c4',
-    hrefs: '46ecd1790c2fa850e087fe666a43df5cddac77482fd8bbb652de3c5d83fa835c',
+    text: 'f442318d74b31273cc5231797d1d082e4a219968e50054ec80fa6d84b6edafd5',
+    hrefs: 'a45a65eb40382ef970766d591a047877b92a2231b054c18291b87785de4c0553',
   },
   'terms.html': {
     text: 'ffc3de1f9b8edcaf719b46de31e83c3600cc230dcc124b98d8ebc1d2705c087f',
-    hrefs: '6f0ba2854da38a24e7187307fc8370e8b783f793747dfe8a3161dea02b74ca84',
+    hrefs: '7fad2ce7104360ec31361adf5e8cbffa6b28641f0c04f58a8a062a7763ebd834',
   },
   'privacy.html': {
     text: '0e45752b8c3a2a12688a19335861abdb888ba958ea164a925fc17a2e40d62dc8',
-    hrefs: '091ad052031c5a27640e7a2bb62cd946156e6847e63fe7738c995f490af5cd21',
+    hrefs: 'a25e2624c147850c2f69720168fbab22fc1745cd521fcda5749d9887dad683d4',
   },
 };
 

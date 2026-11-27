@@ -1,7 +1,8 @@
 import crypto from "node:crypto";
+import fs from "node:fs/promises";
 import type { Express, Request } from "express";
 import { persistEbayRefreshTokenReference } from "./db";
-import { storagePut } from "./storage";
+import { resolveStoragePath, storagePut } from "./storage";
 
 function readCookie(req: Request, name: string) {
   const raw = req.headers.cookie ?? "";
@@ -12,11 +13,23 @@ function readCookie(req: Request, name: string) {
     ?.slice(name.length + 1);
 }
 
+/**
+ * Derives the AES key for stored eBay tokens from JWT_SECRET. Refuses to run
+ * when the secret is unset, empty or only spaces: an empty secret would give
+ * every install the same well-known key. The message never holds the value.
+ */
+function deriveTokenKey(): Buffer {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || !secret.trim()) {
+    throw new Error(
+      "JWT_SECRET is not set; refusing to encrypt or decrypt eBay tokens."
+    );
+  }
+  return crypto.createHash("sha256").update(secret).digest();
+}
+
 export function encryptToken(token: string) {
-  const key = crypto
-    .createHash("sha256")
-    .update(process.env.JWT_SECRET ?? "")
-    .digest();
+  const key = deriveTokenKey();
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
   const encrypted = Buffer.concat([
@@ -55,10 +68,7 @@ export function decryptToken(encryptedPayload: string | Buffer): string {
   if (iv.length !== 12 || tag.length !== 16) {
     throw new Error("Invalid encrypted token parameters.");
   }
-  const key = crypto
-    .createHash("sha256")
-    .update(process.env.JWT_SECRET ?? "")
-    .digest();
+  const key = deriveTokenKey();
   const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
   decipher.setAuthTag(tag);
   const decrypted = Buffer.concat([
@@ -155,4 +165,155 @@ export function registerEbayOAuthRoutes(app: Express) {
         .send("The secure eBay authorization step could not be completed.");
     }
   });
+}
+
+const EBAY_TOKEN_URL = "https://api.ebay.com/identity/v1/oauth2/token";
+const REFRESH_TOKEN_KEY = "credentials/ebay-refresh-token.enc";
+
+export type EbayTokenErrorCode =
+  | "missing_credential_file"
+  | "missing_app_keys"
+  | "decrypt_failed"
+  | "refresh_token_expired"
+  | "exchange_failed";
+
+/**
+ * Failure while minting an eBay user access token. Messages are fixed text.
+ * They never carry a token, a key, a secret, or any part of eBay's reply body.
+ */
+export class EbayTokenError extends Error {
+  readonly code: EbayTokenErrorCode;
+
+  constructor(code: EbayTokenErrorCode, message: string) {
+    super(message);
+    this.name = "EbayTokenError";
+    this.code = code;
+  }
+}
+
+export type EbayUserAccessToken = {
+  accessToken: string;
+  expiresIn: number;
+  expiresAt: number;
+};
+
+export type GetEbayUserAccessTokenOptions = {
+  /** Injected so tests never reach eBay. Defaults to the global fetch. */
+  fetchImpl?: typeof fetch;
+  /** Clock in milliseconds. Defaults to Date.now. */
+  now?: () => number;
+};
+
+async function readStoredRefreshToken(): Promise<string> {
+  let payload: Buffer;
+  try {
+    const { filePath } = resolveStoragePath(REFRESH_TOKEN_KEY);
+    payload = await fs.readFile(filePath);
+  } catch {
+    throw new EbayTokenError(
+      "missing_credential_file",
+      "The stored eBay refresh token file is missing. Run eBay consent at /api/ebay/oauth/start."
+    );
+  }
+  try {
+    const refreshToken = decryptToken(payload);
+    if (!refreshToken) throw new Error("empty");
+    return refreshToken;
+  } catch {
+    throw new EbayTokenError(
+      "decrypt_failed",
+      "The stored eBay refresh token could not be decrypted. Check the server secret or run eBay consent again at /api/ebay/oauth/start."
+    );
+  }
+}
+
+/**
+ * Decrypts the stored eBay refresh token and exchanges it at eBay's token
+ * endpoint for a short-lived user access token. Logs nothing.
+ */
+export async function getEbayUserAccessToken(
+  options: GetEbayUserAccessTokenOptions = {}
+): Promise<EbayUserAccessToken> {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const now = options.now ?? Date.now;
+
+  const clientId = process.env.EBAY_CLIENT_ID;
+  const clientSecret = process.env.EBAY_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new EbayTokenError(
+      "missing_app_keys",
+      "The eBay app keys are not configured on the server."
+    );
+  }
+
+  const refreshToken = await readStoredRefreshToken();
+
+  let response: Response;
+  try {
+    response = await fetchImpl(EBAY_TOKEN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+      }),
+    });
+  } catch {
+    throw new EbayTokenError(
+      "exchange_failed",
+      "The eBay token request could not be sent."
+    );
+  }
+
+  if (!response.ok) {
+    let errorCode: unknown;
+    try {
+      errorCode = ((await response.json()) as { error?: unknown }).error;
+    } catch {
+      errorCode = undefined;
+    }
+    if (
+      (response.status === 400 || response.status === 401) &&
+      errorCode === "invalid_grant"
+    ) {
+      throw new EbayTokenError(
+        "refresh_token_expired",
+        "eBay no longer accepts the stored refresh token. Run eBay consent again at /api/ebay/oauth/start."
+      );
+    }
+    throw new EbayTokenError(
+      "exchange_failed",
+      `eBay did not accept the token request (status ${response.status}).`
+    );
+  }
+
+  let result: { access_token?: unknown; expires_in?: unknown };
+  try {
+    result = (await response.json()) as typeof result;
+  } catch {
+    throw new EbayTokenError(
+      "exchange_failed",
+      "eBay returned a token reply that could not be read."
+    );
+  }
+  if (
+    typeof result.access_token !== "string" ||
+    !result.access_token ||
+    typeof result.expires_in !== "number" ||
+    !Number.isFinite(result.expires_in)
+  ) {
+    throw new EbayTokenError(
+      "exchange_failed",
+      "eBay returned a token reply without an access token and expiry."
+    );
+  }
+
+  return {
+    accessToken: result.access_token,
+    expiresIn: result.expires_in,
+    expiresAt: now() + result.expires_in * 1000,
+  };
 }

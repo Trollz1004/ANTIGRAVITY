@@ -14,6 +14,7 @@ import {
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { useAuth } from '../../lib/auth';
+import { isMailEnabled } from '../../lib/mailHealth';
 import { getSafeNextPath } from '../../lib/navigation';
 import {
   validateRequired,
@@ -27,19 +28,29 @@ interface LoginErrors {
   password?: string;
 }
 
+function getEmailFromNavigationState(state: unknown): string {
+  if (!state || typeof state !== 'object') return '';
+  const record = state as Record<string, unknown>;
+  return typeof record.email === 'string' ? record.email.trim() : '';
+}
+
 export interface LoginProps {
   betaAccessEnabled?: boolean;
   googleClientId?: string;
 }
 
 export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
+  const location = useLocation();
   const isBetaAccessEnabled =
     betaAccessEnabled ??
     ['true', '1'].includes(
       String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
     );
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() =>
+    getEmailFromNavigationState(location.state)
+  );
   const [password, setPassword] = useState('');
+  const [mailEnabled, setMailEnabled] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [betaCode, setBetaCode] = useState('');
@@ -49,9 +60,8 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
   const [betaLoading, setBetaLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const { login, betaAccess } = useAuth();
+  const { user, login, betaAccess } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
   const resolvedGoogleClientId = (
@@ -59,6 +69,11 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     import.meta.env.VITE_GOOGLE_CLIENT_ID ??
     ''
   ).trim();
+
+  useEffect(() => {
+    if (!user) return;
+    navigate(user.has_profile ? nextPath : '/app/profile');
+  }, [user, navigate, nextPath]);
 
   useEffect(() => {
     document.title = 'Member Sign In | YouAndINotAI';
@@ -71,9 +86,25 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     );
     if (desc) {
       desc.content =
-        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, chat, video, and local boards.';
+        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, messaging, topic boards, and the USA group chat.';
     }
+    let cancelled = false;
+    void isMailEnabled().then(enabled => {
+      if (!cancelled) {
+        setMailEnabled(enabled);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    const prefilledEmail = getEmailFromNavigationState(location.state);
+    if (prefilledEmail) {
+      setEmail(prefilledEmail);
+    }
+  }, [location.state]);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
@@ -298,6 +329,17 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
                   autoComplete="current-password"
                   icon={<Lock size={18} className="text-[#9DA3AA]" />}
                 />
+
+                {mailEnabled && (
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      className="inline-flex min-h-[44px] items-center text-xs font-semibold text-[#FFD21E] transition-colors hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <button

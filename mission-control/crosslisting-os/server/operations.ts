@@ -144,20 +144,201 @@ export function canApplyInventoryMovement(input: {
   return input.onHand >= input.quantity && input.reserved >= input.quantity;
 }
 
+export type EbayConditionEnum =
+  | "NEW"
+  | "LIKE_NEW"
+  | "NEW_OTHER"
+  | "NEW_WITH_DEFECTS"
+  | "MANUFACTURER_REFURBISHED"
+  | "CERTIFIED_REFURBISHED"
+  | "EXCELLENT_REFURBISHED"
+  | "VERY_GOOD_REFURBISHED"
+  | "GOOD_REFURBISHED"
+  | "SELLER_REFURBISHED"
+  | "USED_EXCELLENT"
+  | "USED_VERY_GOOD"
+  | "USED_GOOD"
+  | "USED_ACCEPTABLE"
+  | "FOR_PARTS_OR_NOT_WORKING";
+
+const EBAY_CONDITION_LOOKUP: Record<string, EbayConditionEnum> = {
+  new: "NEW",
+  "brand new": "NEW",
+  "like new": "LIKE_NEW",
+  like_new: "LIKE_NEW",
+  "used - like new": "LIKE_NEW",
+  "new other": "NEW_OTHER",
+  new_other: "NEW_OTHER",
+  "new with defects": "NEW_WITH_DEFECTS",
+  new_with_defects: "NEW_WITH_DEFECTS",
+  "manufacturer refurbished": "MANUFACTURER_REFURBISHED",
+  manufacturer_refurbished: "MANUFACTURER_REFURBISHED",
+  "certified refurbished": "CERTIFIED_REFURBISHED",
+  certified_refurbished: "CERTIFIED_REFURBISHED",
+  "excellent refurbished": "EXCELLENT_REFURBISHED",
+  excellent_refurbished: "EXCELLENT_REFURBISHED",
+  "very good refurbished": "VERY_GOOD_REFURBISHED",
+  very_good_refurbished: "VERY_GOOD_REFURBISHED",
+  "good refurbished": "GOOD_REFURBISHED",
+  good_refurbished: "GOOD_REFURBISHED",
+  "seller refurbished": "SELLER_REFURBISHED",
+  seller_refurbished: "SELLER_REFURBISHED",
+  refurbished: "SELLER_REFURBISHED",
+  excellent: "USED_EXCELLENT",
+  "used - excellent": "USED_EXCELLENT",
+  used_excellent: "USED_EXCELLENT",
+  used: "USED_EXCELLENT",
+  "very good": "USED_VERY_GOOD",
+  "used - very good": "USED_VERY_GOOD",
+  very_good: "USED_VERY_GOOD",
+  used_very_good: "USED_VERY_GOOD",
+  good: "USED_GOOD",
+  "used - good": "USED_GOOD",
+  used_good: "USED_GOOD",
+  acceptable: "USED_ACCEPTABLE",
+  "used - acceptable": "USED_ACCEPTABLE",
+  used_acceptable: "USED_ACCEPTABLE",
+  "for parts": "FOR_PARTS_OR_NOT_WORKING",
+  "for parts or not working": "FOR_PARTS_OR_NOT_WORKING",
+  for_parts_or_not_working: "FOR_PARTS_OR_NOT_WORKING",
+};
+
+export function mapCatalogConditionToEbayCondition(
+  condition: string
+): EbayConditionEnum {
+  const normalized = condition.trim().toLowerCase().replace(/\s+/g, " ");
+  return EBAY_CONDITION_LOOKUP[normalized] ?? "USED_GOOD";
+}
+
+export type PolicyMappingEntry = {
+  policyType:
+    | "fulfillment"
+    | "return"
+    | "payment"
+    | "location"
+    | "category"
+    | "listing_rule"
+    | string;
+  policyKey?: string;
+  policyValue: string;
+  active?: boolean;
+};
+
+export type ResolvedEbayPolicyMappings = {
+  fulfillmentPolicyId: string | null;
+  paymentPolicyId: string | null;
+  returnPolicyId: string | null;
+  merchantLocationKey: string | null;
+  categoryId: string | null;
+};
+
+function resolveEbayPolicyMappings(
+  policyInput?:
+    | readonly PolicyMappingEntry[]
+    | Partial<ResolvedEbayPolicyMappings>
+    | Record<string, string | null | undefined>
+    | null,
+  fallbackLocationKey?: string | null
+): ResolvedEbayPolicyMappings {
+  const resolved: ResolvedEbayPolicyMappings = {
+    fulfillmentPolicyId: null,
+    paymentPolicyId: null,
+    returnPolicyId: null,
+    merchantLocationKey: fallbackLocationKey ?? null,
+    categoryId: null,
+  };
+
+  if (Array.isArray(policyInput)) {
+    for (const entry of policyInput) {
+      if (!entry || entry.active === false || !entry.policyValue) continue;
+      if (entry.policyType === "fulfillment") {
+        resolved.fulfillmentPolicyId = entry.policyValue;
+      } else if (entry.policyType === "payment") {
+        resolved.paymentPolicyId = entry.policyValue;
+      } else if (entry.policyType === "return") {
+        resolved.returnPolicyId = entry.policyValue;
+      } else if (entry.policyType === "location") {
+        resolved.merchantLocationKey = entry.policyValue;
+      } else if (entry.policyType === "category") {
+        resolved.categoryId = entry.policyValue;
+      }
+    }
+    return resolved;
+  }
+
+  if (policyInput && typeof policyInput === "object") {
+    const record = policyInput as Record<string, string | null | undefined>;
+    resolved.fulfillmentPolicyId =
+      record.fulfillmentPolicyId ?? record.fulfillment ?? null;
+    resolved.paymentPolicyId = record.paymentPolicyId ?? record.payment ?? null;
+    resolved.returnPolicyId = record.returnPolicyId ?? record.return ?? null;
+    resolved.merchantLocationKey =
+      record.merchantLocationKey ??
+      record.location ??
+      fallbackLocationKey ??
+      null;
+    resolved.categoryId = record.categoryId ?? record.category ?? null;
+  }
+
+  return resolved;
+}
+
+function buildEbayAspects(input: {
+  brandOrStudio: string | null;
+  format: string | null;
+  attributes?: Record<string, unknown> | null;
+}): Record<string, string[]> {
+  const aspects: Record<string, string[]> = {};
+  if (input.brandOrStudio?.trim()) {
+    aspects.Brand = [input.brandOrStudio.trim()];
+  }
+  if (input.format?.trim()) {
+    aspects.Format = [input.format.trim()];
+  }
+  if (input.attributes && typeof input.attributes === "object") {
+    for (const [key, rawValue] of Object.entries(input.attributes)) {
+      if (rawValue === null || rawValue === undefined) continue;
+      if (Array.isArray(rawValue)) {
+        const values = rawValue
+          .map(item => String(item).trim())
+          .filter(Boolean);
+        if (values.length > 0) aspects[key] = values;
+      } else {
+        const value = String(rawValue).trim();
+        if (value) aspects[key] = [value];
+      }
+    }
+  }
+  return aspects;
+}
+
 export function buildChannelPayload(input: {
   sku: string;
   upc: string | null;
   title: string;
   description: string | null;
   condition: string;
+  conditionNotes?: string | null;
   format: string | null;
   brandOrStudio: string | null;
+  attributes?: Record<string, unknown> | null;
+  locationKey?: string | null;
+  policyMappings?:
+    | readonly PolicyMappingEntry[]
+    | Partial<ResolvedEbayPolicyMappings>
+    | Record<string, string | null | undefined>
+    | null;
+  policy_mappings?:
+    | readonly PolicyMappingEntry[]
+    | Partial<ResolvedEbayPolicyMappings>
+    | Record<string, string | null | undefined>
+    | null;
   price: number;
   quantity: number;
   imageUrls: string[];
   channelCode: ChannelCode;
 }) {
-  return {
+  const basePayload = {
     channel: input.channelCode,
     sku: input.sku,
     upc: input.upc,
@@ -169,6 +350,71 @@ export function buildChannelPayload(input: {
     price: input.price,
     quantity: input.quantity,
     imageUrls: input.imageUrls,
+  };
+
+  if (input.channelCode !== "ebay") {
+    return basePayload;
+  }
+
+  const ebayCondition = mapCatalogConditionToEbayCondition(input.condition);
+  const availableQuantity = Math.max(0, input.quantity);
+  const policyMappings = resolveEbayPolicyMappings(
+    input.policyMappings ?? input.policy_mappings,
+    input.locationKey
+  );
+  const aspects = buildEbayAspects({
+    brandOrStudio: input.brandOrStudio,
+    format: input.format,
+    attributes: input.attributes,
+  });
+
+  const ebayInventoryItem = {
+    sku: input.sku,
+    condition: ebayCondition,
+    ...(input.conditionNotes
+      ? { conditionDescription: input.conditionNotes }
+      : {}),
+    availability: {
+      shipToLocationAvailability: {
+        quantity: availableQuantity,
+      },
+    },
+    product: {
+      title: input.title,
+      description: input.description ?? "",
+      imageUrls: input.imageUrls,
+      ...(input.brandOrStudio ? { brand: input.brandOrStudio } : {}),
+      ...(input.upc ? { upc: [input.upc] } : {}),
+      aspects,
+    },
+  };
+
+  const ebayOffer = {
+    sku: input.sku,
+    marketplaceId: "EBAY_US" as const,
+    format: "FIXED_PRICE" as const,
+    availableQuantity,
+    categoryId: policyMappings.categoryId,
+    merchantLocationKey: policyMappings.merchantLocationKey,
+    listingDescription: input.description ?? "",
+    pricingSummary: {
+      price: {
+        value: input.price.toFixed(2),
+        currency: "USD" as const,
+      },
+    },
+    listingPolicies: {
+      fulfillmentPolicyId: policyMappings.fulfillmentPolicyId,
+      paymentPolicyId: policyMappings.paymentPolicyId,
+      returnPolicyId: policyMappings.returnPolicyId,
+    },
+  };
+
+  return {
+    ...basePayload,
+    policy_mappings: policyMappings,
+    ebayInventoryItem,
+    ebayOffer,
   };
 }
 

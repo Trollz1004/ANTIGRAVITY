@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
+  Calendar,
   Compass,
   Heart,
   LogOut,
@@ -30,6 +31,7 @@ const DESKTOP_NAV = [
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
   { to: '/app/verify', icon: ShieldCheck, label: 'Verify' },
   { to: '/app/boards', icon: Users, label: 'Boards' },
+  { to: '/app/events', icon: Calendar, label: 'Events' },
   { to: '/app/usa', icon: MessageCircle, label: 'USA chat' },
   { to: '/app/create', icon: Wand2, label: 'Create' },
   { to: '/app/video-lobby', icon: Video, label: 'Video' },
@@ -69,7 +71,7 @@ export function AppShell() {
             </div>
           </div>
           <p className="mt-3 text-sm text-[#C9CBCE]">
-            Verified adults 18+. Real video. Account-bound trust.
+            Verified adults 18+. Direct messaging. Account-bound trust.
           </p>
         </div>
 
@@ -125,7 +127,7 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA]">
+                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA] max-[430px]:sr-only">
                   YouAndINotAI
                 </div>
               </div>
@@ -133,6 +135,9 @@ export function AppShell() {
             <div className="flex items-center gap-2">
               <NavLink to="/app/verify" className="km-chip">
                 {user?.bot_shield_verified ? 'Verified' : 'Verify'}
+              </NavLink>
+              <NavLink to="/app/events" className="km-chip">
+                Events
               </NavLink>
               <NavLink to="/app/preorder" className="km-chip">
                 Elite
