@@ -1,6 +1,7 @@
 """JWT authentication utilities."""
 
 import hashlib
+import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -15,7 +16,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
+from app.error_responses import ErrorCode, bad_request
 from app.models import User
+from app.models_password_reset import PasswordResetToken
 from app.models_refresh_token import RefreshToken
 from app.subscriptions import sync_subscription_state
 
@@ -38,12 +41,29 @@ def verify_password(plain: str, hashed: str) -> bool:
         return False
 
 
-def create_access_token(user_id: str, expires_minutes: int | None = None) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(
+PASSWORD_RESET_TOKEN_BYTES = 32
+_password_reset_at_ts: dict[uuid.UUID, float] = {}
+
+
+def create_access_token(
+    user_id: str,
+    expires_minutes: int | None = None,
+    *,
+    password_hash: str | None = None,
+) -> str:
+    now = datetime.now(timezone.utc)
+    expire = now + timedelta(
         minutes=expires_minutes or settings.access_token_expire_minutes
     )
+    claims: dict[str, object] = {
+        "sub": user_id,
+        "exp": expire,
+        "iat_ts": now.timestamp(),
+    }
+    if password_hash:
+        claims["pwd"] = hashlib.sha256(password_hash.encode()).hexdigest()[:16]
     return jwt.encode(
-        {"sub": user_id, "exp": expire},
+        claims,
         settings.jwt_secret,
         algorithm=ALGORITHM,
     )
@@ -97,6 +117,29 @@ async def get_current_user(
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     ensure_active_user(user)
+    token_pwd = payload.get("pwd")
+    user_pwd_hash = getattr(user, "password_hash", None)
+    if (
+        isinstance(token_pwd, str)
+        and isinstance(user_pwd_hash, str)
+        and user_pwd_hash
+        and token_pwd != hashlib.sha256(user_pwd_hash.encode()).hexdigest()[:16]
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session expired after password reset",
+        )
+    reset_cutoff = _password_reset_at_ts.get(parsed_user_id)
+    if reset_cutoff is not None:
+        token_iat_ts = payload.get("iat_ts")
+        if (
+            not isinstance(token_iat_ts, (int, float))
+            or float(token_iat_ts) <= reset_cutoff
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session expired after password reset",
+            )
     prior_state = user.subscription_active
     sync_subscription_state(user)
     if user.subscription_active != prior_state:
@@ -131,6 +174,25 @@ async def require_verified_profile(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=VERIFICATION_REQUIRED_DETAIL,
+        )
+    return user
+
+
+def is_founder_or_admin(user: User) -> bool:
+    if getattr(user, "is_admin", False) is True:
+        return True
+    current_settings = get_settings()
+    email = (getattr(user, "email", None) or "").strip().lower()
+    return bool(email) and email in current_settings.support_operator_email_list
+
+
+async def require_founder_or_admin(
+    user: User = Depends(get_current_user),
+) -> User:
+    if not is_founder_or_admin(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Founder or admin access required",
         )
     return user
 
@@ -298,3 +360,79 @@ async def purge_expired_tokens(db: AsyncSession, max_age_days: int = 30) -> int:
         count += 1
     await db.commit()
     return count
+
+
+async def issue_password_reset_token(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    ip_address: str | None = None,
+) -> str:
+    """Issue a single-use 30-minute password reset token and invalidate prior unused ones."""
+    now = datetime.now(timezone.utc)
+    current_settings = get_settings()
+
+    existing_result = await db.execute(
+        select(PasswordResetToken).where(
+            PasswordResetToken.user_id == user_id,
+            PasswordResetToken.used_at.is_(None),
+        )
+    )
+    for prior_token in existing_result.scalars().all():
+        prior_token.used_at = now
+
+    raw_token = secrets.token_urlsafe(PASSWORD_RESET_TOKEN_BYTES)
+    reset_row = PasswordResetToken(
+        id=uuid.uuid4(),
+        user_id=user_id,
+        token_hash=_hash_token(raw_token),
+        expires_at=now
+        + timedelta(minutes=current_settings.password_reset_expire_minutes),
+        ip_address=ip_address,
+    )
+    db.add(reset_row)
+    await db.commit()
+    return raw_token
+
+
+async def consume_password_reset_token(
+    db: AsyncSession,
+    raw_token: str,
+    new_password: str,
+) -> User:
+    """Validate and burn a password reset token, update password, and end all sessions."""
+    cleaned_token = raw_token.strip()
+    token_hash = _hash_token(cleaned_token)
+    reset_row = await db.scalar(
+        select(PasswordResetToken).where(PasswordResetToken.token_hash == token_hash)
+    )
+    now = datetime.now(timezone.utc)
+
+    if reset_row is None or reset_row.used_at is not None:
+        raise bad_request(
+            message="This password reset link is invalid or has expired.",
+            details={"code": ErrorCode.TOKEN_INVALID},
+        )
+
+    expires_at = reset_row.expires_at
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at <= now:
+        raise bad_request(
+            message="This password reset link is invalid or has expired.",
+            details={"code": ErrorCode.TOKEN_INVALID},
+        )
+
+    user = await db.scalar(select(User).where(User.id == reset_row.user_id))
+    if not user:
+        raise bad_request(
+            message="This password reset link is invalid or has expired.",
+            details={"code": ErrorCode.TOKEN_INVALID},
+        )
+    ensure_active_user(user)
+
+    reset_row.used_at = now
+    user.password_hash = hash_password(new_password)
+    user.updated_at = now
+    _password_reset_at_ts[user.id] = now.timestamp()
+    await revoke_all_user_tokens(db, user.id)
+    return user

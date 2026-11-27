@@ -16,7 +16,8 @@ Print-by-default safety installer for the T5500 hourly OpenClaw autopull task:
 param(
     [switch]$Apply,
     [string]$RepoPath = '',
-    [string]$TaskName = 'ANTIGRAVITY OpenClaw Autopull'
+    [string]$TaskName = 'ANTIGRAVITY OpenClaw Autopull',
+    [string]$KeepaliveTaskName = 'ANTIGRAVITY T5500 Keepalive'
 )
 
 Set-StrictMode -Version Latest
@@ -59,16 +60,33 @@ Write-Output '# Schedule: Hourly (every 1 hour)'
 Write-Output "# RepoPath: $DisplayRepoPath"
 Write-Output "# Script: $DisplayAutopullScript"
 Write-Output '# WindowStyle: Hidden | ScheduledTaskSettingsSet Hidden = $true'
+Write-Output "# Principal: Same account as '$KeepaliveTaskName' with -RunLevel Highest (elevated, can stop/restart session 0 services)"
 Write-Output ''
 
 if (-not $Apply) {
+    Write-Output "`$keepaliveTask = Get-ScheduledTask -TaskName '$KeepaliveTaskName' -ErrorAction SilentlyContinue"
+    Write-Output '$principalUserId = if ($keepaliveTask -and $keepaliveTask.Principal -and $keepaliveTask.Principal.UserId) { $keepaliveTask.Principal.UserId } else { [Security.Principal.WindowsIdentity]::GetCurrent().Name }'
+    Write-Output '$principalLogonType = if ($keepaliveTask -and $keepaliveTask.Principal -and $keepaliveTask.Principal.LogonType) { $keepaliveTask.Principal.LogonType } else { ''S4U'' }'
+    Write-Output '$principal = New-ScheduledTaskPrincipal -UserId $principalUserId -LogonType $principalLogonType -RunLevel Highest'
     Write-Output "`$action = New-ScheduledTaskAction -Execute '$PsExe' -Argument '$DisplayTaskArgs' -WorkingDirectory '$DisplayRepoPath'"
     Write-Output '$triggerHourly = New-ScheduledTaskTrigger -Once -At (Get-Date).Date.AddHours(1) -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Days 3650)'
     Write-Output '$settings = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 15)'
-    Write-Output "Register-ScheduledTask -TaskName '$TaskName' -Action `$action -Trigger `$triggerHourly -Settings `$settings -Description 'Hourly T5500 OpenClaw fast-forward autopull, service health verifier, and pause way-back' -Force"
+    Write-Output "Register-ScheduledTask -TaskName '$TaskName' -Action `$action -Trigger `$triggerHourly -Principal `$principal -Settings `$settings -Description 'Hourly T5500 OpenClaw fast-forward autopull, service health verifier, and pause way-back' -Force"
     exit 0
 }
 
+$keepaliveTask = Get-ScheduledTask -TaskName $KeepaliveTaskName -ErrorAction SilentlyContinue
+$principalUserId = if ($keepaliveTask -and $keepaliveTask.Principal -and $keepaliveTask.Principal.UserId) {
+    [string]$keepaliveTask.Principal.UserId
+} else {
+    [Security.Principal.WindowsIdentity]::GetCurrent().Name
+}
+$principalLogonType = if ($keepaliveTask -and $keepaliveTask.Principal -and $keepaliveTask.Principal.LogonType) {
+    $keepaliveTask.Principal.LogonType
+} else {
+    'S4U'
+}
+$principal = New-ScheduledTaskPrincipal -UserId $principalUserId -LogonType $principalLogonType -RunLevel Highest
 $action = New-ScheduledTaskAction -Execute $PsExe -Argument $TaskArgs -WorkingDirectory $RepoPath
 $triggerHourly = New-ScheduledTaskTrigger `
     -Once `
@@ -87,8 +105,9 @@ Register-ScheduledTask `
     -TaskName $TaskName `
     -Action $action `
     -Trigger $triggerHourly `
+    -Principal $principal `
     -Settings $settings `
     -Description 'Hourly T5500 OpenClaw fast-forward autopull, service health verifier, and pause way-back' `
     -Force | Out-Null
 
-Write-Output "APPLIED: Registered hourly scheduled task '$TaskName' (Hidden = $($settings.Hidden))."
+Write-Output "APPLIED: Registered hourly scheduled task '$TaskName' (Hidden = $($settings.Hidden), RunLevel = Highest)."

@@ -105,6 +105,7 @@ class Settings(BaseSettings):
     # ClawX 6-AI Council Integration
     # -------------------------------------------------------------------------
     clawx_enabled: bool = False
+    graphql_enabled: bool = False
     clawx_base_url: str = "https://api.clawx.example.com"
     clawx_agent_keys: str = "{}"  # JSON dict of agent_name: api_key
 
@@ -130,9 +131,11 @@ class Settings(BaseSettings):
         description="REQUIRED. JWT signing secret. Must be set via JWT_SECRET env var. No fallback.",
     )
     metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
+    beta_access_enabled: bool = False
     beta_access_codes: str = ""
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
+    password_reset_expire_minutes: int = 30
 
     # -------------------------------------------------------------------------
     # CDN / static asset delivery
@@ -161,6 +164,8 @@ class Settings(BaseSettings):
     auth_rate_limit_per_minute: int = 10
     verify_rate_limit_per_minute: int = 5
     waitlist_rate_limit_per_minute: int = 5
+    password_reset_rate_limit_per_minute: int = 5
+    public_stats_rate_limit_per_minute: int = 20
     rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50

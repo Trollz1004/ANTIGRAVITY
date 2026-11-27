@@ -181,6 +181,17 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     );
   });
 
+  it('hides the founder code box on Sign In by default when beta access is off', () => {
+    const { queryByLabelText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect(queryByLabelText('Founder code (optional)')).toBeNull();
+    expect(queryByRole('button', { name: 'Use Code' })).toBeNull();
+  });
+
   it('Sign In has one optional "Founder code (optional)" field wired to /auth/beta-access', async () => {
     vi.mocked(api.post).mockResolvedValueOnce({
       access_token: 'tok-founder',
@@ -201,7 +212,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { container, getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>
@@ -252,7 +263,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>
@@ -293,7 +304,10 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
       </MemoryRouter>
     );
     const gateText = visibleText(gate.container);
-    expect(gateText).toContain('Messaging and video need the $1 human check.');
+    expect(gateText).toContain(
+      'Discovery, messaging, and boards need the $1 human check.'
+    );
+    expect(gateText).not.toMatch(/\bvideo\b/i);
     expect(gateText).not.toMatch(/everyone here is verified/i);
     gate.unmount();
 
@@ -335,7 +349,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     await verify.findByText('Answer a short timed question.');
     const verifyText = visibleText(verify.container);
     expect(verifyText).not.toMatch(
-      /\b(liveness|camera|selfie|gesture|biometric)\b/i
+      /\b(liveness|camera|selfie|gesture|biometric|video)\b/i
     );
     verify.unmount();
   });

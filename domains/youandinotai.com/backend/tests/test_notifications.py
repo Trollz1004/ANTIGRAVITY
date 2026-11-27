@@ -36,6 +36,7 @@ def _seed_user(db_session_factory, **overrides) -> User:
             await session.commit()
 
     asyncio.run(_run())
+    user.is_admin = overrides.get("is_admin", True)
     return user
 
 

@@ -540,9 +540,11 @@ describe('Verify after $1 payment', () => {
 
     expect(
       getByText(
-        'Your badge unlocks discovery, messaging, and video on your account.'
+        'Your badge unlocks discovery, messaging, topic boards, and the USA group chat on your account.'
       )
     ).toBeDefined();
+    expect(queryByText(/video/i)).toBeNull();
+    expect(queryByText(/prompt/i)).toBeNull();
     expect(queryByText(/Prove you're human/i)).toBeNull();
     expect(queryByText(/How the flow works/i)).toBeNull();
     expect(queryByText(/Answer a short timed question\./i)).toBeNull();
@@ -938,5 +940,280 @@ describe('Verify after $1 payment', () => {
     });
 
     expect(scrollToSpy).toHaveBeenCalled();
+  });
+
+  it('at 412 wide keeps "Give me my $1 back" in first view above the bottom menu with compact mobile spacing', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      value: 412,
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      value: 915,
+      configurable: true,
+      writable: true,
+    });
+
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified: true,
+          trust_score: 60,
+          tier: 'gold',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return {
+          available: true,
+          expires_at: '2026-11-23T12:00:00Z',
+          until: '2026-11-23T12:00:00Z',
+        };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    const { container, getByRole, getByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    const askButton = await waitFor(() =>
+      getByRole('button', { name: 'Give me my $1 back' })
+    );
+    const badgeHeading = getByText('Badge active.');
+    const badgeCard = badgeHeading.closest('div.glass-strong');
+    const refundCard = askButton.closest('div.glass-strong');
+    const pageRoot = container.querySelector('.app-page');
+
+    expect(pageRoot?.className).toContain('pt-4');
+    expect(badgeCard?.className).toContain('p-5');
+    expect(refundCard?.className).toContain('p-5');
+    expect(askButton.className).toContain('mt-3');
+  });
+
+  it('shows a paid member whose question result is too old one plain line asking for one new timed question with no new charge, never says prompt, and activates the badge on passing without a second checkout', async () => {
+    vi.useFakeTimers();
+
+    let verified = false;
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified,
+          trust_score: verified ? 60 : 20,
+          tier: verified ? 'gold' : 'unverified',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: verified ? 3 : 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return { available: false };
+      }
+      if (path === '/auth/me') {
+        return {
+          user_id: 'user-verify-1',
+          email: 'paid@youandinotai.com',
+          display_name: 'Paid Member',
+          bot_shield_verified: verified,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: true,
+          adult_verified: true,
+        };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/challenge') {
+        return {
+          challenge_id: 'chal-late-paid-1',
+          challenge_type: 'liveness_math',
+          question: 'What is 15 + 4?',
+          issued_at: '2026-11-21T12:00:00Z',
+          expires_at: '2026-11-21T12:05:00Z',
+        };
+      }
+      if (path === '/verify/submit') {
+        verified = true;
+        return {
+          passed: true,
+          trust_score: 60,
+          message:
+            'Liveness verified! Your $1 Bot-Shield verification is complete.',
+          checkout_url: null,
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const {
+      container,
+      getByRole,
+      getByPlaceholderText,
+      getByText,
+      queryByText,
+    } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(
+      getByText(
+        'Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.'
+      )
+    ).toBeDefined();
+    expect(
+      queryByText(
+        /When you answer the timed question, the page will hand you into the \$1 Square checkout\./i
+      )
+    ).toBeNull();
+    expect(container.textContent?.toLowerCase()).not.toContain('prompt');
+
+    await act(async () => {
+      getByRole('button', { name: /Start Verification/i }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('What is 15 + 4?')).toBeDefined();
+
+    const input = getByPlaceholderText('Your answer') as HTMLInputElement;
+    const reactPropsKey = Object.keys(input).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (reactPropsKey) {
+      await act(async () => {
+        (input as any)[reactPropsKey].onChange({ target: { value: '19' } });
+      });
+    }
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+
+    await act(async () => {
+      getByRole('button', { name: 'Submit' }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('Badge active.')).toBeDefined();
+    expect(queryByText(/Pay \$1 Bot-Shield/i)).toBeNull();
+    expect(container.textContent?.toLowerCase()).not.toContain('prompt');
+  });
+
+  it('renders a "Try again" button that calls startChallenge() when result.passed is true, result.checkout_url is null, and awaitingPayment is false', async () => {
+    vi.useFakeTimers();
+
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified: false,
+          trust_score: 60,
+          tier: 'unverified',
+          bot_shield_paid: false,
+          subscription_active: false,
+          checks_completed: 1,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return { available: false };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    let challengeCalls = 0;
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/challenge') {
+        challengeCalls += 1;
+        return {
+          challenge_id: `chal-null-checkout-${challengeCalls}`,
+          challenge_type: 'liveness_math',
+          question:
+            challengeCalls === 1 ? 'What is 12 + 3?' : 'What is 18 + 2?',
+          issued_at: '2026-11-22T12:00:00Z',
+          expires_at: '2026-11-22T12:05:00Z',
+        };
+      }
+      if (path === '/verify/submit') {
+        return {
+          passed: true,
+          trust_score: 60,
+          message:
+            'Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly.',
+          checkout_url: null,
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const { getByRole, getByPlaceholderText, getByText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    const startButton = getByRole('button', { name: /Start Verification/i });
+    expect(startButton.className).toContain('mt-3');
+    expect(startButton.className).toContain('py-3.5');
+
+    await act(async () => {
+      startButton.click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('What is 12 + 3?')).toBeDefined();
+
+    const input = getByPlaceholderText('Your answer') as HTMLInputElement;
+    const reactPropsKey = Object.keys(input).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (reactPropsKey) {
+      await act(async () => {
+        (input as any)[reactPropsKey].onChange({ target: { value: '15' } });
+      });
+    }
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+
+    await act(async () => {
+      getByRole('button', { name: 'Submit' }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('Challenge passed')).toBeDefined();
+    expect(
+      getByText(
+        'Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly.'
+      )
+    ).toBeDefined();
+    expect(
+      queryByRole('button', { name: 'I paid, check my badge' })
+    ).toBeNull();
+
+    const tryAgainButton = getByRole('button', { name: 'Try again' });
+    expect(tryAgainButton).toBeDefined();
+
+    await act(async () => {
+      tryAgainButton.click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(challengeCalls).toBe(2);
+    expect(getByText('What is 18 + 2?')).toBeDefined();
   });
 });

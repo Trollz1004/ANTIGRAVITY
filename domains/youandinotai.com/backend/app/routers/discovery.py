@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.auth import require_verified_profile
 from app.database import get_db
@@ -59,6 +60,7 @@ async def get_discover_feed(
     # Get verified profiles excluding self
     stmt = (
         select(Profile)
+        .options(selectinload(Profile.user))
         .join(User, Profile.user_id == User.id)
         .where(
             Profile.user_id != user.id,
@@ -96,13 +98,18 @@ async def get_discover_feed(
 @router.get("/preview", response_model=list[DiscoveryProfile])
 async def get_discover_preview(
     limit: int = Query(default=5, le=10),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
-    """Public preview of profiles (no auth required). Shows limited profiles to incentivize signup."""
+    """Preview of verified profiles (requires a signed-in verified member)."""
     stmt = (
         select(Profile)
+        .options(selectinload(Profile.user))
         .join(User, Profile.user_id == User.id)
-        .where(User.bot_shield_verified.is_(True))
+        .where(
+            Profile.user_id != user.id,
+            User.bot_shield_verified.is_(True),
+        )
         .order_by(func.random())
         .limit(limit)
     )

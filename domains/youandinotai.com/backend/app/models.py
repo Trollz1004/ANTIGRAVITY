@@ -281,6 +281,7 @@ class RevenueAllocation(Base):
     square_payment_id: Mapped[str] = mapped_column(
         String(255), nullable=False, index=True
     )
+    square_refund_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     payment_tier: Mapped[str] = mapped_column(
         String(50), default="unknown", nullable=False
     )
@@ -675,6 +676,7 @@ class MarketingContent(Base):
 
 
 # RefreshToken model for OPU-47 JWT refresh token rotation
+from app.models_password_reset import PasswordResetToken  # noqa: F401, E402
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 
 # Import webhook retry models for table creation and scheduler access

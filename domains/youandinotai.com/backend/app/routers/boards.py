@@ -4,13 +4,14 @@ import uuid
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import case, select
+from sqlalchemy import case, event, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user, require_verified_profile
 from app.config import get_settings
 from app.database import get_db
 from app.models import Board, Comment, Post, SupportTicket, User
+from app.moderation import blocked_by_user_subquery, blocked_user_subquery
 from app.schemas import (
     CommentCreateRequest,
     CommentResponse,
@@ -32,13 +33,44 @@ DEFAULT_BOARDS = [
     ("general", "General", "Chat about anything"),
     ("dating-tips", "Dating Tips", "Share your best dating advice"),
     ("success-stories", "Success Stories", "Celebrate your matches"),
-    ("events", "Events & Meetups", "Find local events"),
+    ("events", "Events & Meetups", "Create and RSVP to member events"),
     ("volunteering", "Volunteering", "Find local volunteer opportunities"),
 ]
 
 
-async def _ensure_boards(db: AsyncSession) -> None:
+DEFAULT_BOARD_SLUGS = frozenset(slug for slug, _, _ in DEFAULT_BOARDS)
+_SEEDED_BOARD_BINDS: set[object] = set()
+
+
+def clear_boards_seed_cache(*_args: object, **_kwargs: object) -> None:
+    """Clear memoized default board seeding state."""
+    _SEEDED_BOARD_BINDS.clear()
+
+
+event.listen(Board.metadata, "after_drop", clear_boards_seed_cache)
+event.listen(Board.metadata, "after_create", clear_boards_seed_cache)
+
+
+def _boards_cache_key(db: AsyncSession) -> object:
+    if isinstance(db, AsyncSession):
+        try:
+            bind = db.get_bind()
+        except Exception:
+            bind = getattr(db, "bind", None)
+    else:
+        bind = getattr(db, "bind", None)
+    if bind is None:
+        return id(db)
+    engine = getattr(bind, "engine", bind)
+    return (id(engine), str(getattr(engine, "url", "")))
+
+
+async def _ensure_boards(db: AsyncSession, *, force: bool = False) -> None:
     """Create default boards if they don't exist."""
+    cache_key = _boards_cache_key(db)
+    if not force and cache_key in _SEEDED_BOARD_BINDS:
+        return
+
     existing_slugs = set((await db.scalars(select(Board.slug))).all())
     added = False
     for slug, name, desc in DEFAULT_BOARDS:
@@ -47,6 +79,7 @@ async def _ensure_boards(db: AsyncSession) -> None:
             added = True
     if added:
         await db.commit()
+    _SEEDED_BOARD_BINDS.add(cache_key)
 
 
 @router.get("")
@@ -63,6 +96,16 @@ async def list_boards(
             )
         )
     ).all()
+    if not DEFAULT_BOARD_SLUGS.issubset({b.slug for b in boards}):
+        await _ensure_boards(db, force=True)
+        boards = (
+            await db.scalars(
+                select(Board).order_by(
+                    case((Board.slug == "usa", 0), else_=1),
+                    Board.name,
+                )
+            )
+        ).all()
     return [
         {"slug": b.slug, "name": b.name, "description": b.description} for b in boards
     ]
@@ -71,7 +114,7 @@ async def list_boards(
 @router.get("/{slug}/posts", response_model=list[PostResponse])
 async def list_posts(
     slug: str,
-    _user: User = Depends(require_verified_profile),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = Query(default=30, ge=1, le=100),
     offset: int = 0,
@@ -79,21 +122,32 @@ async def list_posts(
 ) -> list[PostResponse]:
     await _ensure_boards(db)
     board = await db.scalar(select(Board).where(Board.slug == slug))
+    if not board and slug in DEFAULT_BOARD_SLUGS:
+        await _ensure_boards(db, force=True)
+        board = await db.scalar(select(Board).where(Board.slug == slug))
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
 
-    # Join and filter on the author's verification BEFORE offset/limit --
-    # filtering in Python after the SQL page was cut would silently drop
-    # verified posts that fell past the page boundary once legacy
-    # unverified posts were excluded, and neither board client in the
-    # frontend advances `offset`, so those posts would become permanently
-    # invisible instead of just reordered.
+    blocked_by_me = blocked_by_user_subquery(user.id)
+    blocked_me = blocked_user_subquery(user.id)
+
+    # Join and filter on the author's verification and block status BEFORE
+    # offset/limit -- filtering in Python after the SQL page was cut would
+    # silently drop verified posts that fell past the page boundary once
+    # legacy unverified or blocked posts were excluded, and neither board
+    # client in the frontend advances `offset`, so those posts would become
+    # permanently invisible instead of just reordered.
     created_order = Post.created_at.asc() if order == "asc" else Post.created_at.desc()
     rows = (
         await db.execute(
             select(Post, User)
             .join(User, User.id == Post.author_id)
-            .where(Post.board_id == board.id, User.bot_shield_verified.is_(True))
+            .where(
+                Post.board_id == board.id,
+                User.bot_shield_verified.is_(True),
+                Post.author_id.notin_(blocked_by_me),
+                Post.author_id.notin_(blocked_me),
+            )
             .order_by(created_order)
             .offset(offset)
             .limit(limit)
@@ -124,6 +178,9 @@ async def create_post(
 ) -> PostResponse:
     await _ensure_boards(db)
     board = await db.scalar(select(Board).where(Board.slug == slug))
+    if not board and slug in DEFAULT_BOARD_SLUGS:
+        await _ensure_boards(db, force=True)
+        board = await db.scalar(select(Board).where(Board.slug == slug))
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
 
@@ -154,13 +211,19 @@ async def create_post(
 async def list_comments(
     slug: str,
     post_id: uuid.UUID,
-    _user: User = Depends(require_verified_profile),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[CommentResponse]:
+    blocked_by_me = blocked_by_user_subquery(user.id)
+    blocked_me = blocked_user_subquery(user.id)
     comments = (
         await db.scalars(
             select(Comment)
-            .where(Comment.post_id == post_id)
+            .where(
+                Comment.post_id == post_id,
+                Comment.author_id.notin_(blocked_by_me),
+                Comment.author_id.notin_(blocked_me),
+            )
             .order_by(Comment.created_at.asc())
         )
     ).all()

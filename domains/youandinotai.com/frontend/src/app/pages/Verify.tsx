@@ -15,6 +15,8 @@ import { TrustScoreRing, VerifiedBadge } from '../components/VerifiedBadge';
 
 const PAYMENT_WAITING_MESSAGE =
   'We are waiting for Square to confirm your payment.';
+const PAID_NEEDS_NEW_QUESTION_MESSAGE =
+  'Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.';
 const PAYMENT_POLL_INTERVAL_MS = 3000;
 const PAYMENT_POLL_DURATION_MS = 60000;
 const PAYMENT_POLL_MAX_RETRIES = Math.floor(
@@ -234,6 +236,15 @@ export function Verify() {
         return 'waiting';
       }
 
+      if (status?.bot_shield_paid && !status?.verified) {
+        stopPaymentPolling();
+        setAwaitingPayment(false);
+        setResult(null);
+        setSyncMessage(null);
+        clearPaymentReturnParams();
+        return 'error';
+      }
+
       if (err instanceof Error) {
         setSyncMessage(err.message);
       } else {
@@ -367,7 +378,10 @@ export function Verify() {
       setCanSubmitChallenge(false);
       setResult(data);
       setChallenge(null);
-      await refreshVerificationStatus();
+      const updated = await refreshVerificationStatus();
+      if (updated.verified) {
+        await refreshSignedInUser();
+      }
     } catch (err: any) {
       if (!mountedRef.current) return;
       clearChallengeTimers();
@@ -501,22 +515,22 @@ export function Verify() {
   const refundLastDay = formatRefundLastDay(refundUntil);
 
   return (
-    <div className="app-page pb-36 md:pb-14">
+    <div className="app-page pt-4 pb-36 md:pt-6 md:pb-14">
       <div className="app-page-inner max-w-5xl">
-        <div className="mb-8 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
+        <div className="mb-4 grid gap-3 md:mb-8 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-4">
           <div>
-            <div className="app-kicker mb-3">Bot-Shield</div>
+            <div className="app-kicker mb-2 md:mb-3">Bot-Shield</div>
             <h1 className="app-title">
               {status?.verified ? "You're verified." : "Prove you're human."}
             </h1>
-            <p className="app-subtitle mt-4 max-w-2xl">
+            <p className="app-subtitle mt-2 max-w-2xl md:mt-4">
               {status?.verified
-                ? 'Your badge unlocks discovery, messaging, and video on your account.'
-                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock messaging and video.'}
+                ? 'Your badge unlocks discovery, messaging, topic boards, and the USA group chat on your account.'
+                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock discovery, messaging, topic boards, and the USA group chat.'}
             </p>
           </div>
-          <div className="glass rounded-xl p-5">
-            <div className="app-panel-title mb-3">Current status</div>
+          <div className="glass rounded-xl p-4 md:p-5">
+            <div className="app-panel-title mb-2 md:mb-3">Current status</div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-[#C9CBCE]">
@@ -531,16 +545,16 @@ export function Verify() {
           </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <section className="space-y-6 xl:order-2">
+        <div className="grid gap-4 md:gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+          <section className="space-y-4 md:space-y-6 xl:order-2">
             {status?.verified && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E]">
+              <div className="glass-strong rounded-xl p-5 md:p-8">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E] md:mb-4 md:h-14 md:w-14">
                   <CheckCircle size={28} />
                 </div>
-                <div className="app-kicker mb-3">Verified</div>
+                <div className="app-kicker mb-2 md:mb-3">Verified</div>
                 <h2 className="app-title">Badge active.</h2>
-                <p className="app-subtitle mt-4">
+                <p className="app-subtitle mt-2 md:mt-4">
                   Your{' '}
                   {status.tier === 'platinum'
                     ? 'Founding Member'
@@ -553,7 +567,7 @@ export function Verify() {
             {(refundAvailable || refundMessage) && (
               <div
                 ref={refundBoxRef}
-                className="glass-strong scroll-mt-24 scroll-mb-28 rounded-xl p-6 md:p-8"
+                className="glass-strong scroll-mt-24 scroll-mb-28 rounded-xl p-5 md:p-8"
               >
                 {refundAvailable && (
                   <>
@@ -570,7 +584,7 @@ export function Verify() {
                       <button
                         type="button"
                         onClick={() => setConfirmingRefund(true)}
-                        className="app-button-outline mt-4 px-6 py-4"
+                        className="app-button-outline mt-3 px-6 py-3.5 md:mt-4 md:py-4"
                       >
                         Give me my $1 back
                       </button>
@@ -693,6 +707,19 @@ export function Verify() {
                     </div>
                   )}
 
+                {result.passed &&
+                  !status?.verified &&
+                  !result.checkout_url &&
+                  !awaitingPayment && (
+                    <button
+                      type="button"
+                      onClick={() => void startChallenge()}
+                      className="app-button-dark mt-6 px-6 py-4"
+                    >
+                      Try again
+                    </button>
+                  )}
+
                 {!result.passed && (
                   <button
                     onClick={() => void startChallenge()}
@@ -761,17 +788,17 @@ export function Verify() {
               !result &&
               !challengeError &&
               !awaitingPayment && (
-                <div className="glass-strong rounded-xl p-6 md:p-8">
-                  <div className="app-kicker mb-3">Start</div>
+                <div className="glass-strong rounded-xl p-5 md:p-8">
+                  <div className="app-kicker mb-2 md:mb-3">Start</div>
                   <h2 className="app-title">Ready for badge activation?</h2>
-                  <p className="app-subtitle mt-4">
-                    Start the short human check now. When you answer the timed
-                    question, the page will hand you into the $1 Square
-                    checkout.
+                  <p className="app-subtitle mt-2 md:mt-4">
+                    {status?.bot_shield_paid
+                      ? PAID_NEEDS_NEW_QUESTION_MESSAGE
+                      : 'Start the short human check now. When you answer the timed question, the page will hand you into the $1 Square checkout.'}
                   </p>
                   <button
                     onClick={() => void startChallenge()}
-                    className="app-button-accent mt-6 px-6 py-4"
+                    className="app-button-accent mt-3 px-6 py-3.5 md:mt-6 md:py-4"
                   >
                     Start Verification <ArrowRight size={18} />
                   </button>

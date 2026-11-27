@@ -951,6 +951,7 @@ def _make_signed_refund_webhook_request(
     *,
     event_id: str,
     payment_id: str,
+    refund_id: str | None = None,
     event_type: str = "refund.updated",
     refund_status: str = "COMPLETED",
     amount_cents: int = 100,
@@ -962,7 +963,7 @@ def _make_signed_refund_webhook_request(
         "data": {
             "object": {
                 "refund": {
-                    "id": f"rfnd_{uuid.uuid4().hex[:16]}",
+                    "id": refund_id or f"rfnd_{uuid.uuid4().hex[:16]}",
                     "status": refund_status,
                     "payment_id": payment_id,
                     "amount_money": {"amount": amount_cents, "currency": "USD"},
@@ -1096,6 +1097,7 @@ def test_bot_shield_refund_webhook_revokes_badge_and_payment_event(
     raw_body, signature = _make_signed_refund_webhook_request(
         event_id="evt_refund_bot_shield_1",
         payment_id="pay_bot_shield_refund_1",
+        refund_id="rfnd_webhook_bot_shield_1",
     )
     response = client.post(
         "/api/v1/webhooks/square-payment",
@@ -1114,12 +1116,21 @@ def test_bot_shield_refund_webhook_revokes_badge_and_payment_event(
                 select(Profile).where(Profile.user_id == user_id)
             )
             payment_event = await session.get(VerificationEvent, payment_event_id)
+            allocation = await session.scalar(
+                select(RevenueAllocation).where(
+                    RevenueAllocation.square_payment_id == "pay_bot_shield_refund_1"
+                )
+            )
             paid = await has_completed_payment(session, user_id)
-            return user, profile, payment_event, paid
+            return user, profile, payment_event, allocation, paid
 
-    user, profile, payment_event, paid = asyncio.run(_fetch_state())
+    user, profile, payment_event, allocation, paid = asyncio.run(_fetch_state())
     assert payment_event is not None
     assert payment_event.status == "refunded"
+    assert payment_event.square_refund_id == "rfnd_webhook_bot_shield_1"
+    assert allocation is not None
+    assert allocation.status == "refunded"
+    assert getattr(allocation, "square_refund_id", None) == "rfnd_webhook_bot_shield_1"
     assert user is not None
     assert user.bot_shield_verified is False
     assert profile is not None
@@ -1554,11 +1565,16 @@ def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
     client,
     db_session_factory,
     caplog,
+    monkeypatch,
 ):
     import asyncio
     import logging
 
     from app.auth import create_access_token
+    from app.config import get_settings
+
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "card-fp-noleak@example.com")
+    get_settings.cache_clear()
 
     user_id, liveness_event_id = _seed_pending_bot_shield_member(
         db_session_factory,
@@ -1593,35 +1609,38 @@ def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
         "http://testserver/api/v1/webhooks/square-payment",
     )
 
-    with (
-        caplog.at_level(logging.INFO),
-        caplog.at_level(logging.DEBUG, logger="app"),
-        caplog.at_level(logging.DEBUG, logger="youandinotai"),
-    ):
-        webhook_resp = client.post(
-            "/api/v1/webhooks/square-payment",
-            headers={
-                "x-square-hmacsha256-signature": signature,
-                "Content-Type": "application/json",
-            },
-            content=raw_body,
-        )
-        assert webhook_resp.status_code == 200, webhook_resp.text
+    try:
+        with (
+            caplog.at_level(logging.INFO),
+            caplog.at_level(logging.DEBUG, logger="app"),
+            caplog.at_level(logging.DEBUG, logger="youandinotai"),
+        ):
+            webhook_resp = client.post(
+                "/api/v1/webhooks/square-payment",
+                headers={
+                    "x-square-hmacsha256-signature": signature,
+                    "Content-Type": "application/json",
+                },
+                content=raw_body,
+            )
+            assert webhook_resp.status_code == 200, webhook_resp.text
 
-        token = create_access_token(str(user_id))
-        auth_headers = {"Authorization": f"Bearer {token}"}
+            token = create_access_token(str(user_id))
+            auth_headers = {"Authorization": f"Bearer {token}"}
 
-        api_responses = [
-            webhook_resp,
-            client.get("/api/v1/verify/status", headers=auth_headers),
-            client.post("/api/v1/verify/confirm", headers=auth_headers),
-            client.get("/api/v1/auth/me", headers=auth_headers),
-            client.get("/api/v1/profiles/me", headers=auth_headers),
-            client.get("/api/v1/privacy/my-data", headers=auth_headers),
-            client.get("/api/v1/health"),
-            client.get("/api/v1/health/webhooks"),
-            client.get("/api/v1/health/allocations"),
-        ]
+            api_responses = [
+                webhook_resp,
+                client.get("/api/v1/verify/status", headers=auth_headers),
+                client.post("/api/v1/verify/confirm", headers=auth_headers),
+                client.get("/api/v1/auth/me", headers=auth_headers),
+                client.get("/api/v1/profiles/me", headers=auth_headers),
+                client.get("/api/v1/privacy/my-data", headers=auth_headers),
+                client.get("/api/v1/health"),
+                client.get("/api/v1/health/webhooks", headers=auth_headers),
+                client.get("/api/v1/health/allocations", headers=auth_headers),
+            ]
+    finally:
+        get_settings.cache_clear()
 
     async def _fetch_payment_event():
         async with db_session_factory() as session:

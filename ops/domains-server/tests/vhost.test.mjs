@@ -60,7 +60,7 @@ function getPath(host, port, urlPath) {
   });
 }
 
-function postJson(host, port, hostHeader, urlPath, payload) {
+function postJson(host, port, hostHeader, urlPath, payload, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(payload);
     const req = http.request(
@@ -73,17 +73,75 @@ function postJson(host, port, hostHeader, urlPath, payload) {
           Host: hostHeader,
           "Content-Type": "application/json",
           "Content-Length": Buffer.byteLength(data),
+          ...extraHeaders,
         },
       },
       (res) => {
         let body = "";
         res.on("data", (chunk) => (body += chunk));
-        res.on("end", () => resolve({ status: res.statusCode, body }));
+        res.on("end", () => resolve({ status: res.statusCode, body, headers: res.headers }));
       }
     );
     req.on("error", reject);
     req.write(data);
     req.end();
+  });
+}
+
+function postOversizedBody(host, port, hostHeader, urlPath, byteCount = 40000) {
+  return new Promise((resolve) => {
+    let status = 0;
+    let body = "";
+    let socketClosed = false;
+    let settled = false;
+    const finish = (extra = {}) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve({ status, body, socketClosed, ...extra });
+    };
+    const req = http.request(
+      {
+        host,
+        port,
+        path: urlPath,
+        method: "POST",
+        headers: {
+          Host: hostHeader,
+          "Content-Type": "application/json",
+          "Content-Length": byteCount * 2,
+          Connection: "keep-alive",
+          "cf-connecting-ip": "198.51.100.200",
+        },
+      },
+      (res) => {
+        status = res.statusCode || 0;
+        res.on("data", (chunk) => (body += chunk));
+        res.socket?.on("close", () => {
+          socketClosed = true;
+          finish();
+        });
+        res.on("end", () => {
+          setTimeout(() => {
+            socketClosed = socketClosed || Boolean(res.socket?.destroyed);
+            req.destroy();
+            finish();
+          }, 80);
+        });
+      }
+    );
+    req.on("socket", (sock) => {
+      sock.on("close", () => {
+        socketClosed = true;
+        if (status) finish();
+      });
+    });
+    req.on("error", () => finish());
+    const timer = setTimeout(() => {
+      req.destroy();
+      finish({ timedOut: true });
+    }, 1000);
+    req.write(`{"notes":"${"a".repeat(byteCount)}`);
   });
 }
 
@@ -191,8 +249,43 @@ async function main() {
     const sa = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/service-areas");
     const requiredSnippets = [
       "Sorrento",
+      "32776",
+      "Mount Dora",
+      "32757",
+      "Eustis",
+      "32726",
+      "Tavares",
+      "32778",
+      "Leesburg",
+      "34748",
+      "Clermont",
+      "34711",
       "Lake County",
+      "Orlando",
+      "32801",
+      "Apopka",
+      "32703",
+      "Winter Park",
+      "32789",
+      "Maitland",
+      "32751",
+      "Ocoee",
+      "34761",
+      "Winter Garden",
+      "34787",
       "Orange County",
+      "Sanford",
+      "32771",
+      "Altamonte Springs",
+      "32701",
+      "Longwood",
+      "32750",
+      "Lake Mary",
+      "32746",
+      "Casselberry",
+      "32707",
+      "Oviedo",
+      "32765",
       "Seminole County",
       "(321) 396-2008",
       '"@type": "FAQPage"',
@@ -200,21 +293,6 @@ async function main() {
     ];
     const forbiddenServiceAreaSnippets = [
       "NOT IN INPUTS",
-      "Mount Dora",
-      "Eustis",
-      "Tavares",
-      "Leesburg",
-      "Clermont",
-      "Apopka",
-      "Orlando",
-      "Winter Park",
-      "Winter Garden",
-      "Ocoee",
-      "Sanford",
-      "Lake Mary",
-      "Longwood",
-      "Altamonte Springs",
-      "Oviedo",
       "at your home or business",
       "central drop-off",
       "run on a battery",
@@ -307,6 +385,247 @@ async function main() {
       failures++;
     } else {
       console.log("PASS: booking record stores notified=false and /health reports unnotifiedBookings=1");
+    }
+
+    // 1. Booking dates accepted only from today to 14 days ahead (Florida time)
+    const flToday = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
+    const flDay = (offsetDays) =>
+      new Date(new Date(`${flToday}T00:00:00Z`).getTime() + offsetDays * 86400000).toISOString().slice(0, 10);
+    const yesterdayRes = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(-1),
+        slotCode: "08:00-08:30",
+        fullName: "Date Check",
+        phone: "321-555-0144",
+        deviceList: "1 laptop",
+      },
+      { "cf-connecting-ip": "198.51.100.11" }
+    );
+    const day15Res = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(15),
+        slotCode: "08:00-08:30",
+        fullName: "Date Check",
+        phone: "321-555-0144",
+        deviceList: "1 laptop",
+      },
+      { "cf-connecting-ip": "198.51.100.11" }
+    );
+    const day14Res = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(14),
+        slotCode: "08:00-08:30",
+        fullName: "Date Check",
+        phone: "321-555-0144",
+        deviceList: "1 laptop",
+      },
+      { "cf-connecting-ip": "198.51.100.11" }
+    );
+    if (yesterdayRes.status !== 400 || day15Res.status !== 400 || day14Res.status !== 200) {
+      console.error(
+        `FAIL: booking date range (today..+14d FL) -> yesterday=${yesterdayRes.status} day15=${day15Res.status} day14=${day14Res.status}`
+      );
+      failures++;
+    } else {
+      console.log("PASS: booking dates accepted only from today to 14 days ahead (Florida time)");
+    }
+
+    // 2. Phone number needs at least 10 digits
+    const shortPhoneRes = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flToday,
+        slotCode: "08:00-08:30",
+        fullName: "Short Phone",
+        phone: "555-0199",
+        deviceList: "1 desktop",
+      },
+      { "cf-connecting-ip": "198.51.100.22" }
+    );
+    if (shortPhoneRes.status !== 400) {
+      console.error(`FAIL: short phone (<10 digits) -> expected 400, got ${shortPhoneRes.status}`);
+      failures++;
+    } else {
+      console.log("PASS: phone number with fewer than 10 digits is rejected with 400");
+    }
+
+    // 3. At most 2 saved bookings per IP per 24h; refused bookings do not spend allowance; hit table is capped
+    const rateIp = { "cf-connecting-ip": "198.51.100.33" };
+    // Refused bookings (400 bad phone, 400 out-of-range date, 409 already-booked slot) must not spend allowance
+    await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flToday,
+        slotCode: "09:00-09:30",
+        fullName: "Refused One",
+        phone: "12345",
+        deviceList: "1 monitor",
+      },
+      rateIp
+    );
+    await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(20),
+        slotCode: "09:00-09:30",
+        fullName: "Refused Two",
+        phone: "321-555-0199",
+        deviceList: "1 monitor",
+      },
+      rateIp
+    );
+    const conflictRes = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(14),
+        slotCode: "08:00-08:30",
+        fullName: "Refused Conflict",
+        phone: "321-555-0199",
+        deviceList: "1 monitor",
+      },
+      rateIp
+    );
+    const saved1 = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(1),
+        slotCode: "09:00-09:30",
+        fullName: "Saved One",
+        phone: "(321) 555-0191",
+        deviceList: "1 router",
+      },
+      rateIp
+    );
+    const saved2 = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(1),
+        slotCode: "10:00-10:30",
+        fullName: "Saved Two",
+        phone: "(321) 555-0192",
+        deviceList: "1 switch",
+      },
+      rateIp
+    );
+    const thirdRes = await postJson(
+      "127.0.0.1",
+      TEST_PORT,
+      "onlinerecycle.net",
+      "/api/book",
+      {
+        serviceType: "dropoff",
+        date: flDay(1),
+        slotCode: "11:00-11:30",
+        fullName: "Third Blocked",
+        phone: "(321) 555-0193",
+        deviceList: "1 server",
+      },
+      rateIp
+    );
+    const srvMod = await import("../server.mjs");
+    let hitCapOk = false;
+    if (typeof srvMod.bookingAllowed === "function" && srvMod.bookHits instanceof Map) {
+      srvMod.bookHits.clear();
+      for (let i = 0; i < 5050; i++) {
+        srvMod.bookingAllowed(`203.0.113.${i}`);
+      }
+      hitCapOk = srvMod.bookHits.size <= 5000;
+      srvMod.bookHits.clear();
+    }
+    if (
+      conflictRes.status !== 409 ||
+      saved1.status !== 200 ||
+      saved2.status !== 200 ||
+      thirdRes.status !== 429 ||
+      !hitCapOk
+    ) {
+      console.error(
+        `FAIL: rate limit & hit cap -> conflict=${conflictRes.status} saved1=${saved1.status} saved2=${saved2.status} third=${thirdRes.status} hitCapOk=${hitCapOk}`
+      );
+      failures++;
+    } else {
+      console.log("PASS: at most 2 saved bookings per IP per 24h, refused bookings do not spend allowance, and hit table is capped at 5000");
+    }
+
+    // 4. Body larger than limit gets 413 and socket is closed
+    const oversized = await postOversizedBody("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/api/book", 40000);
+    if (oversized.status !== 413 || !oversized.socketClosed || oversized.timedOut) {
+      console.error(`FAIL: oversized body -> expected 413 and closed socket, got ${JSON.stringify(oversized)}`);
+      failures++;
+    } else {
+      console.log("PASS: oversized body gets 413 and socket is closed");
+    }
+
+    // 5. Cancelled bookings free their slot in /api/booking-config
+    const cancelledSlot = {
+      bookingId: `OR-${flDay(1).replace(/-/g, "")}-CANC0001`,
+      createdAt: new Date().toISOString(),
+      serviceType: "dropoff",
+      fullName: "Cancelled Customer",
+      phone: "321-555-0199",
+      date: flDay(1),
+      slotCode: "15:00-15:30",
+      slotLabel: "3:00 PM - 3:30 PM",
+      deviceCount: "1-5",
+      deviceList: "1 printer",
+      status: "CANCELLED",
+      notified: true,
+    };
+    fs.appendFileSync(path.join(tmpBookingsDir, "bookings.jsonl"), `${JSON.stringify(cancelledSlot)}\n`, "utf8");
+    const cfgRes = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/api/booking-config");
+    const cfgJson = JSON.parse(cfgRes.body);
+    const hasCancelled = (cfgJson.bookedSlots || []).some(
+      (s) => s.date === flDay(1) && s.slotCode === "15:00-15:30" && s.serviceType === "dropoff"
+    );
+    const hasScheduled = (cfgJson.bookedSlots || []).some(
+      (s) => s.date === flDay(1) && s.slotCode === "09:00-09:30" && s.serviceType === "dropoff"
+    );
+    if (hasCancelled || !hasScheduled) {
+      console.error(
+        `FAIL: /api/booking-config cancelled slot filter -> hasCancelled=${hasCancelled} hasScheduled=${hasScheduled}`
+      );
+      failures++;
+    } else {
+      console.log("PASS: cancelled bookings free their slot in /api/booking-config");
     }
 
     // Verify /health reports 'booking notices: on' when token and chat are configured

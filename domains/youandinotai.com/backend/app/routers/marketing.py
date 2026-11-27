@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_founder_or_admin
 from app.database import get_db
 from app.models import MarketingContent, User
 
@@ -179,7 +179,7 @@ async def _get_or_404(content_id: uuid.UUID, db: AsyncSession) -> MarketingConte
 )
 async def create_content_item(
     content: MarketingPost,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -247,7 +247,7 @@ async def get_content_item(
 async def update_content_item(
     content_id: uuid.UUID,
     content_update: MarketingPost,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -292,7 +292,7 @@ class MarketingPostUpdate(BaseModel):
 async def patch_content_item(
     content_id: uuid.UUID,
     patch_data: MarketingPostUpdate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -337,7 +337,7 @@ async def patch_content_item(
 @router.post("/content/{content_id}/publish", response_model=ContentItem)
 async def publish_content_item(
     content_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ):
     """Mark a persisted content item as published."""
@@ -351,7 +351,7 @@ async def publish_content_item(
 @router.delete("/content/{content_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_content_item(
     content_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ):
     """Delete a persisted marketing content item (404 when it does not exist)."""

@@ -189,6 +189,7 @@
             <p>OnlineRecycle.net offers free electronics drop-off in Sorrento with reserved Sorrento drop-off windows: nine daily 30-minute intake windows between 8:00 AM and 5:30 PM, Monday through Sunday. Call or text <a href="tel:+13213962008" style="color: var(--accent); font-weight: 700">(321) 396-2008</a> for curbside or loading-dock coordination.</p>
             <div class="card-flip-bar">
               <a class="btn btn-primary" href="/#book">Schedule Sorrento Drop-Off</a>
+              <a class="btn btn-secondary" href="/areas/sorrento/">Sorrento Area Page</a>
               <a class="btn btn-secondary" href="tel:+13213962008">Call (321) 396-2008</a>
             </div>
           </article>
@@ -212,20 +213,20 @@
             <div class="category-chip-grid">
               <div class="category-chip">
                 <div class="metric-label">LAKE COUNTY</div>
-                <h3>Lake County</h3>
-                <p>Free drop-off in Sorrento and scheduled free 2-hour route pickup across Lake County.</p>
+                <h3><a href="/areas/lake-county/">Lake County</a></h3>
+                <p>Free drop-off in Sorrento and scheduled free 2-hour route pickup across Lake County, including Sorrento (32776), Mount Dora (32757), Eustis (32726), Tavares (32778), Leesburg (34748), and Clermont (34711).</p>
               </div>
 
               <div class="category-chip">
                 <div class="metric-label">ORANGE COUNTY</div>
-                <h3>Orange County</h3>
-                <p>Scheduled free 2-hour route pickup across Orange County.</p>
+                <h3><a href="/areas/orange-county/">Orange County</a></h3>
+                <p>Scheduled free 2-hour route pickup across Orange County, including Orlando (32801), Apopka (32703), Winter Park (32789), Maitland (32751), Ocoee (34761), and Winter Garden (34787).</p>
               </div>
 
               <div class="category-chip">
                 <div class="metric-label">SEMINOLE COUNTY</div>
-                <h3>Seminole County</h3>
-                <p>Scheduled free 2-hour route pickup across Seminole County.</p>
+                <h3><a href="/areas/seminole-county/">Seminole County</a></h3>
+                <p>Scheduled free 2-hour route pickup across Seminole County, including Sanford (32771), Altamonte Springs (32701), Longwood (32750), Lake Mary (32746), Casselberry (32707), and Oviedo (32765).</p>
               </div>
             </div>
 
@@ -330,6 +331,7 @@
             <p>Schedule your 30-minute Sorrento drop-off slot or 2-hour Central Florida pickup window on our calendar at OnlineRecycle.net, or call or text <a href="tel:+13213962008" style="color: var(--accent); font-weight: 700">(321) 396-2008</a>.</p>
             <div class="cta-wrap">
               <a class="btn btn-primary" href="/#book">Schedule on Calendar</a>
+              <a class="btn btn-secondary" href="/?service=pickup#book">Request Free Route Pickup</a>
               <a class="btn btn-secondary" href="tel:+13213962008">Call (321) 396-2008</a>
               <a class="btn btn-secondary" href="sms:+13213962008">Text (321) 396-2008</a>
             </div>
@@ -347,7 +349,7 @@
               OnlineRecycle.net
             </div>
             <p style="margin-top: 12px; margin-bottom: 0">
-              Trash Or Treasure Online Recycler LLC · Sorrento, Florida ·
+              Trash Or Treasure Online Recycler LLC · Sorrento, Florida (Serving Lake, Orange &amp; Seminole Counties) ·
               <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 800">
                 (321) 396-2008
               </a>
@@ -482,6 +484,7 @@
         "@graph": [
           {
             "@type": "RecyclingCenter",
+            "@id": "https://onlinerecycle.net/#recycling-center",
             "name": "OnlineRecycle.net (Trash Or Treasure Online Recycler LLC)",
             "description": "Free electronics drop-off in Sorrento and scheduled pickup across Lake, Orange, and Seminole Counties. Computers, consoles, stereos, and media accepted.",
             "url": "https://onlinerecycle.net/",
@@ -492,6 +495,11 @@
               "addressRegion": "FL",
               "postalCode": "32776",
               "addressCountry": "US"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 28.7953,
+              "longitude": -81.5645
             },
             "areaServed": [
               "Sorrento, FL",
@@ -767,7 +775,7 @@
             if (absT >= 0.98) {
               card.style.transform = 'translate3d(0px, 80px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }

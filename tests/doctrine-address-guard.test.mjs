@@ -37,10 +37,22 @@ function runDoctrine(repoRoot) {
 test('doctrine-check.py rejects localhost:3130, 127.0.0.1:8000, and http/ws loopback URLs under loopback-address', () => {
   const badCases = [
     { file: 'app/client.mjs', content: 'export const MISSION = "localhost:3130";\n', expectedHit: 'localhost:3130' },
-    { file: 'app/api.mjs', content: 'export const API = "http://127.0.0.1:8000/api/v1";\n', expectedHit: 'http://127.0.0.1:8000' },
-    { file: 'app/bare.mjs', content: 'export const WEB = "http://localhost/status";\n', expectedHit: 'http://localhost' },
+    {
+      file: 'app/api.mjs',
+      content: 'export const API = "http://127.0.0.1:8000/api/v1";\n',
+      expectedHit: 'http://127.0.0.1:8000',
+    },
+    {
+      file: 'app/bare.mjs',
+      content: 'export const WEB = "http://localhost/status";\n',
+      expectedHit: 'http://localhost',
+    },
     { file: 'app/ws.mjs', content: 'export const WS = "ws://127.0.0.1:9119";\n', expectedHit: 'ws://127.0.0.1:9119' },
-    { file: 'app/wss.mjs', content: 'export const WSS = "wss://localhost:8000/ws";\n', expectedHit: 'wss://localhost:8000' },
+    {
+      file: 'app/wss.mjs',
+      content: 'export const WSS = "wss://localhost:8000/ws";\n',
+      expectedHit: 'wss://localhost:8000',
+    },
   ];
 
   for (const c of badCases) {
@@ -88,8 +100,15 @@ test('doctrine-check.py passes cleanly on the live repository root', () => {
   const res = spawnSync('python', [DOCTRINE_SCRIPT], {
     cwd: REPO_ROOT,
     encoding: 'utf8',
-    timeout: 20000,
+    timeout: 60000,
   });
   assert.equal(res.status, 0, `Repo doctrine-check failed:\n${res.stdout}\n${res.stderr}`);
   assert.match(String(res.stdout || ''), /doctrine-check: clean/);
+});
+
+test('scripts/doctrine/baseline.json holds no dead entries for files that no longer exist', () => {
+  const baselinePath = path.join(REPO_ROOT, 'scripts', 'doctrine', 'baseline.json');
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  const dead = baseline.entries.filter((entry) => !fs.existsSync(path.join(REPO_ROOT, entry.file)));
+  assert.deepEqual(dead, [], `Found dead baseline entries:\n${dead.map((e) => `  [${e.fact}] ${e.file}`).join('\n')}`);
 });

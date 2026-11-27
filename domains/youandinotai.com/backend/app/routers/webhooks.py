@@ -455,32 +455,12 @@ async def square_payment_webhook(
                 request_url=str(request.url).split("?", 1)[0],
             )
         except HTTPException as exc:
-            try:
-                payload_json = json.loads(payload.decode("utf-8"))
-            except Exception:
-                payload_json = {
-                    "raw_payload": payload.decode("utf-8", errors="replace")
-                }
-            event_id = f"sigfail-{hashlib.sha256(payload).hexdigest()[:15]}"
-
-            try:
-                await create_webhook_event(
-                    db,
-                    event_id=event_id,
-                    event_type="verification_failed",
-                    payload={
-                        "error": str(exc.detail),
-                        "url": str(request.url),
-                        "headers": dict(request.headers),
-                        "payload": payload_json,
-                    },
-                    processed=True,
-                    event_source="square",
-                )
-                await db.commit()
-            except IntegrityError:
-                await db.rollback()
-            raise exc
+            logger.warning(
+                "Square payment webhook signature check failed (skipping sigfail-* DB write): detail=%s payload_bytes=%d",
+                exc.detail,
+                len(payload),
+            )
+            raise
 
     try:
         payload_json = json.loads(payload.decode("utf-8"))
@@ -587,14 +567,22 @@ async def _process_square_payment_event(
             or refunded_amount_cents > 0
         ):
             payment_id = str(payment_obj.get("id") or "").strip()
+            refund_ids = payment_obj.get("refund_ids")
+            payment_refund_id = (
+                str(refund_ids[0]).strip()
+                if isinstance(refund_ids, list) and refund_ids
+                else str(payment_obj.get("refund_id") or "").strip()
+            ) or None
             if payment_id:
                 await mark_revenue_allocation_refunded(
                     db,
                     square_payment_id=payment_id,
+                    square_refund_id=payment_refund_id,
                 )
                 await revoke_user_verification_for_refund(
                     db,
                     square_payment_id=payment_id,
+                    square_refund_id=payment_refund_id,
                 )
             logger.info(
                 "Square payment marked refunded: payment_id=%s status=%s refunded_cents=%s event_id=%s",
@@ -750,16 +738,19 @@ async def _process_square_payment_event(
         refund_obj = obj.get("refund") if isinstance(obj, dict) else None
         if not isinstance(refund_obj, dict):
             refund_obj = obj if isinstance(obj, dict) else {}
+        refund_id = str(refund_obj.get("id") or "").strip() or None
         refund_payment_id = str(refund_obj.get("payment_id") or "").strip()
         refund_status = str(refund_obj.get("status") or "").upper()
         if refund_status == "COMPLETED" and refund_payment_id:
             await mark_revenue_allocation_refunded(
                 db,
                 square_payment_id=refund_payment_id,
+                square_refund_id=refund_id,
             )
             await revoke_user_verification_for_refund(
                 db,
                 square_payment_id=refund_payment_id,
+                square_refund_id=refund_id,
             )
             logger.info(
                 "Square refund completed: payment_id=%s event_type=%s event_id=%s",
