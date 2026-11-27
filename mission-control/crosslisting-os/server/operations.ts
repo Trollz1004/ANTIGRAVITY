@@ -1,3 +1,9 @@
+import fs from "node:fs";
+import { resolveStoragePath } from "./storage";
+
+export const EBAY_REFRESH_TOKEN_STORAGE_KEY =
+  "credentials/ebay-refresh-token.enc";
+
 export const channelBlueprint = [
   {
     code: "ebay",
@@ -82,10 +88,28 @@ export function validateListingPreflight(input: ListingPreflightInput) {
   return { ready: errors.length === 0, errors };
 }
 
+function hasStoredEbayRefreshTokenFile(): boolean {
+  try {
+    const { filePath } = resolveStoragePath(EBAY_REFRESH_TOKEN_STORAGE_KEY);
+    const stat = fs.statSync(filePath);
+    return stat.isFile() && stat.size > 0;
+  } catch {
+    return false;
+  }
+}
+
+function isSecretConfigured(key: string): boolean {
+  if (Boolean(process.env[key]?.trim())) {
+    return true;
+  }
+  if (key === "EBAY_REFRESH_TOKEN") {
+    return hasStoredEbayRefreshTokenFile();
+  }
+  return false;
+}
+
 export function getSafeCredentialState(requiredSecrets: readonly string[]) {
-  const configuredCount = requiredSecrets.filter(key =>
-    Boolean(process.env[key]?.trim())
-  ).length;
+  const configuredCount = requiredSecrets.filter(isSecretConfigured).length;
   return {
     configured: configuredCount === requiredSecrets.length,
     configuredCount,
