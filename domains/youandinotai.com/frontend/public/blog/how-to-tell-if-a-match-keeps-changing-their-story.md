@@ -42,4 +42,4 @@ You can take direct steps when you spot conflicting claims in messages.
 
 ## Account features on YouAndINotAI
 
-Product features include messaging, topic boards, and member events. Each profile gets a Verified Human badge after a one dollar check. Members can use discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. Join on the [member sign-up page](https://youandinotai.com/register).
+Product features include messaging, topic boards, and member events. Members receive a Verified Human badge after a one dollar check. Members can use discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. Join on the [member sign-up page](https://youandinotai.com/register).
