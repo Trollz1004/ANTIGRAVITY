@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-tell-if-a-match-is-sending-ai-w
 
 # How to tell if a match is sending AI-written messages
 
-Chatting on a dating app should involve real people sharing real thoughts. Some profiles use automated tools and language models to generate chat replies. On February 13, 2024, the [Federal Trade Commission](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) published an article about romance scams. The Federal Trade Commission stated that romance fraud caused .14 billion in reported losses in 2023 across 64,003 reports, with a median loss of ,000 per person. The Federal Trade Commission advises people never to send money, cryptocurrency, gift cards, or wire transfers to anyone they have not met in person. Learning how to tell if a match is sending AI-written messages helps you spot automated interactions early.
+Chatting on a dating app should involve real people sharing real thoughts. Some profiles use automated tools and language models to generate chat replies. On February 13, 2024, the [Federal Trade Commission](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) published an article about romance scams. The Federal Trade Commission stated that romance fraud caused $1.14 billion in reported losses in 2023 across 64,003 reports, with a median loss of $2,000 per person. The Federal Trade Commission advises people never to send money, crypto, gift cards, or bank or wire transfers to anyone they have not met in person. Learning how to tell if a match is sending AI-written messages helps you spot automated interactions early.
 
 ## Signs that messages come from an automated tool
 
@@ -42,4 +42,4 @@ You can take action to protect your time when a conversation feels artificial.
 
 ## Account features on YouAndINotAI
 
-YouAndINotAI provides messaging, topic boards, and member events. Members receive a Verified Human badge after a one dollar check. Available features include discovery, block and report, and 30-day deletion. Founder prices are .99 a month, .99 for 3 months, and .99 for 12 months. You can join on the [member sign-up page](https://youandinotai.com/register).
+YouAndINotAI provides messaging, topic boards, and member events. Members receive a Verified Human badge after a one dollar check. Available features include discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. You can join on the [member sign-up page](https://youandinotai.com/register).
