@@ -2,7 +2,7 @@ param(
     [string]$RepoRoot = "C:\antigravity",
     [string]$TaskName = "ANTIGRAVITY-T5500-DateApp-OpsWatchdog",
     [int]$IntervalMinutes = 30,
-    [string]$VaultRuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
+    [string]$VaultRuntimeEnvFile = "$env:USERPROFILE\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
     [string]$MachineRuntimeEnvFile = "C:\ProgramData\Antigravity\secrets\cloudflare-wrangler.env"
 )
 
@@ -78,7 +78,7 @@ Register-ScheduledTask `
     -Trigger @($startupTrigger, $repeatTrigger) `
     -Principal $principal `
     -Settings $settings `
-    -Description "ANTIGRAVITY T5500 watchdog for date app Pages, local ports, Paperclip, and Cloudflare tunnel." `
+    -Description "ANTIGRAVITY T5500 watchdog for date app Pages, local ports, Mission OS (:3130), and Cloudflare tunnel." `
     -Force | Out-Null
 
 Write-Host "Registered $TaskName every $IntervalMinutes minutes and at startup."

@@ -22,7 +22,7 @@ Here's what that actually means and why it's worth caring about now rather than 
 
 Founder pricing is live on the platform right now, across a few different commitment levels:
 
-- **Bot-Shield Verification — $1.** A one-time human checkpoint. This is the entry point: the liveness challenge plus account-bound Square payment that gets a profile its verified badge. It's not the membership itself, it's the gate that shows you're a real person before you go further.
+- **Bot-Shield Verification — $1.** A one-time human check. This is the entry point: a short timed question plus a $1 account-bound Square payment required before a member can message or start video. It's not the membership itself, it's the gate that unlocks your Verified Human badge.
 - **Founding Member — $14.99/month.** A locked founder rate on a recurring, account-bound subscription. Cancel anytime — access continues through the end of the billing period you already paid for, and there are no refunds for partial months.
 - **3-Month Founder — $39.99.** One upfront payment for short-term founder access, instead of a recurring charge.
 - **12-Month Founder — $99.99.** The full-year option, billed once, for anyone who already knows they want to be on the platform for a while.

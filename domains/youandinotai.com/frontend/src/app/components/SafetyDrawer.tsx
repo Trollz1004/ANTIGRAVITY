@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Flag,
-  Shield,
-  X,
-  VolumeX,
-  EyeOff,
-  MessageCircleOff,
-} from 'lucide-react';
+import { Flag, Shield, X } from 'lucide-react';
 
 import { api, ApiError } from '../../lib/api';
 import { ReportForm } from './ReportForm';
@@ -40,13 +33,12 @@ export function SafetyDrawer({
   source,
   onClose,
   onBlocked,
-  onActionComplete,
 }: SafetyDrawerProps) {
   const [reason, setReason] = useState(REPORT_REASONS[0].value);
   const [details, setDetails] = useState('');
-  const [loadingAction, setLoadingAction] = useState<
-    'report' | 'block' | 'mute' | 'restrict' | 'freeze' | null
-  >(null);
+  const [loadingAction, setLoadingAction] = useState<'report' | 'block' | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [showBlockConfirmation, setShowBlockConfirmation] = useState(false);
@@ -65,75 +57,6 @@ export function SafetyDrawer({
   }, [open]);
 
   if (!open) return null;
-
-  async function handleMute() {
-    const confirmed = window.confirm(
-      `Mute ${targetName}? Their messages will be hidden for 24 hours.`
-    );
-    if (!confirmed) return;
-
-    setLoadingAction('mute');
-    setError(null);
-    setSuccess(null);
-    try {
-      await api.post(`/safety/users/${targetUserId}/mute`, {
-        reason: `Muted from ${source} safety tools`,
-        duration: '24h',
-      });
-      setSuccess(`${targetName} was muted for 24 hours.`);
-      onActionComplete?.('mute');
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Mute action failed.');
-    } finally {
-      setLoadingAction(null);
-    }
-  }
-
-  async function handleRestrict() {
-    const confirmed = window.confirm(
-      `Restrict ${targetName}? This will limit their profile access to basic information only.`
-    );
-    if (!confirmed) return;
-
-    setLoadingAction('restrict');
-    setError(null);
-    setSuccess(null);
-    try {
-      await api.post(`/safety/users/${targetUserId}/restrict`, {
-        reason: `Restricted from ${source} safety tools`,
-      });
-      setSuccess(`${targetName}'s profile visibility was restricted.`);
-      onActionComplete?.('restrict');
-    } catch (err) {
-      setError(
-        err instanceof ApiError ? err.message : 'Restrict action failed.'
-      );
-    } finally {
-      setLoadingAction(null);
-    }
-  }
-
-  async function handleFreeze() {
-    const confirmed = window.confirm(
-      `Freeze conversation with ${targetName}? This will pause messaging but keep previous messages visible.`
-    );
-    if (!confirmed) return;
-
-    setLoadingAction('freeze');
-    setError(null);
-    setSuccess(null);
-    try {
-      await api.post(`/safety/users/${targetUserId}/freeze`, {
-        reason: `Conversation frozen from ${source} safety tools`,
-      });
-      setSuccess(`Conversation with ${targetName} was frozen.`);
-      onActionComplete?.('freeze');
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Freeze action failed.');
-    } finally {
-      setLoadingAction(null);
-    }
-  }
 
   async function handleReport(data: any) {
     setLoadingAction('report');
@@ -316,51 +239,6 @@ export function SafetyDrawer({
                         </div>
                       </div>
                       <div className="text-xs font-bold">BLOCK</div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleMute}
-                      disabled={loadingAction !== null}
-                      className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
-                    >
-                      <div>
-                        <div className="font-bold">Mute User</div>
-                        <div className="text-sm text-gray-600">
-                          Hide messages temporarily (24h)
-                        </div>
-                      </div>
-                      <div className="text-xs font-bold">MUTE</div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleRestrict}
-                      disabled={loadingAction !== null}
-                      className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
-                    >
-                      <div>
-                        <div className="font-bold">Restrict Visibility</div>
-                        <div className="text-sm text-gray-600">
-                          Limit profile access
-                        </div>
-                      </div>
-                      <div className="text-xs font-bold">RESTRICT</div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleFreeze}
-                      disabled={loadingAction !== null}
-                      className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
-                    >
-                      <div>
-                        <div className="font-bold">Freeze Conversation</div>
-                        <div className="text-sm text-gray-600">
-                          Pause messaging
-                        </div>
-                      </div>
-                      <div className="text-xs font-bold">FREEZE</div>
                     </button>
                   </div>
                 </section>

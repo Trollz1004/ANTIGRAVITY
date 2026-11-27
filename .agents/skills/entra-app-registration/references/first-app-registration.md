@@ -60,11 +60,11 @@ The redirect URI is where authentication responses are sent.
 
 **URI examples:**
 
-- Web app: `https://localhost:5001/signin-oidc`
-- SPA: `http://localhost:3000`
-- Console/Desktop: `http://localhost`
+- Web app: `https://192.168.0.40:5001/signin-oidc`
+- SPA: `https://192.168.0.40:3000`
+- Console/Desktop: `myapp://auth`
 
-**For your first app:** Select **"Public client/native"** and enter `http://localhost`
+**For your first app:** Select **"Public client/native"** and enter `myapp://auth`
 
 ### Click "Register"
 

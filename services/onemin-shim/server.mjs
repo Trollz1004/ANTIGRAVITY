@@ -9,14 +9,57 @@
 // (set in OmniRoute's encrypted connection config) is forwarded upstream as
 // both `API-KEY` and `Authorization` headers. Never log or persist the key.
 //
-// Run: node server.mjs   (ONEMIN_SHIM_PORT=20130, binds 127.0.0.1 only)
+// Run: node server.mjs   (ONEMIN_SHIM_PORT=20130, binds 0.0.0.0 by default)
 
+import crypto from 'node:crypto';
 import http from 'node:http';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { getNodeIp } from '../../ops/fleet/fleet-map.mjs';
+import { logStartupEnvCheck } from '../../ops/agents/env-required.mjs';
+import { buildPublicHealthLight } from '../../ops/agents/node-light.mjs';
 
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+
+const T5500_IP = getNodeIp('t5500');
 const PORT = Number(process.env.ONEMIN_SHIM_PORT || 20130);
-const HOST = process.env.ONEMIN_SHIM_HOST || '127.0.0.1';
 const UPSTREAM = process.env.ONEMIN_UPSTREAM || 'https://api.1min.ai';
 const TIMEOUT_MS = Number(process.env.ONEMIN_TIMEOUT_MS || 120000);
+
+function isLoopbackBindHost(host) {
+  const h = String(host || '').trim().toLowerCase();
+  return h === '127.0.0.1' || h === 'localhost' || h === '::1';
+}
+
+export function isLoopbackRemote(addr) {
+  const r = String(addr || '').trim();
+  return r === '127.0.0.1' || r === '::1' || r === '::ffff:127.0.0.1';
+}
+
+export function readShimToken(env = process.env) {
+  if (!env) return '';
+  return String(env.ONEMIN_SHIM_TOKEN || env.FLEET_SHARED_TOKEN || '').trim();
+}
+
+export function resolveShimBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
+  const token = readShimToken(env);
+  const explicit = String(env?.ONEMIN_SHIM_HOST || '').trim();
+  if (explicit) {
+    if (!token && !isLoopbackBindHost(explicit)) {
+      throw new Error(
+        `[onemin-shim] Refusing to bind ${explicit} on port ${port} without ONEMIN_SHIM_TOKEN or FLEET_SHARED_TOKEN configured.`
+      );
+    }
+    return explicit;
+  }
+  if (!token) {
+    warn?.(
+      `[onemin-shim] WARNING: ONEMIN_SHIM_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+    );
+    return '127.0.0.1';
+  }
+  return '0.0.0.0';
+}
 
 // Informative only — the `model` field is forwarded to 1min.ai verbatim, so any
 // id the account supports works even if it is not listed here.
@@ -34,7 +77,9 @@ function openaiError(res, status, message, type = 'invalid_request_error') {
 
 function bearerFrom(req) {
   const auth = req.headers['authorization'] || '';
-  if (auth.toLowerCase().startsWith('bearer ')) return auth.slice(7).trim();
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  if (bearer) return bearer;
   const xkey = req.headers['x-api-key'];
   return typeof xkey === 'string' && xkey.trim() ? xkey.trim() : null;
 }
@@ -179,10 +224,44 @@ async function handleChat(req, res, body) {
   res.end();
 }
 
-const server = http.createServer(async (req, res) => {
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
+export function guardShimToken(req, env = process.env) {
+  const guardTok = readShimToken(env);
+  const remote = req?.socket?.remoteAddress;
+  if (!guardTok) {
+    if (remote && !isLoopbackRemote(remote)) return false;
+    return true;
+  }
+  const shimHeader = req?.headers?.['x-shim-token'];
+  const fleetHeader = req?.headers?.['x-fleet-token'];
+  const candidate = String(
+    (Array.isArray(shimHeader) ? shimHeader[0] : shimHeader) ||
+      (Array.isArray(fleetHeader) ? fleetHeader[0] : fleetHeader) ||
+      bearerFrom(req) ||
+      ''
+  ).trim();
+  if (!candidate) return false;
+  return constantTimeEqualSecret(guardTok, candidate);
+}
+
+export const server = http.createServer(async (req, res) => {
   const started = Date.now();
   const url = (req.url || '').split('?')[0];
   try {
+    if (url !== '/health' && !guardShimToken(req)) {
+      openaiError(res, 401, 'Unauthorized: invalid ONEMIN_SHIM_TOKEN', 'authentication_error');
+      return;
+    }
     if (req.method === 'GET' && (url === '/v1/models' || url === '/models')) {
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify({
@@ -191,7 +270,14 @@ const server = http.createServer(async (req, res) => {
       }));
     } else if (req.method === 'GET' && url === '/health') {
       res.writeHead(200, { 'content-type': 'application/json' });
-      res.end(JSON.stringify({ status: 'ok', service: 'onemin-shim', upstream: UPSTREAM }));
+      res.end(
+        JSON.stringify({
+          status: 'ok',
+          service: 'onemin-shim',
+          upstream: UPSTREAM,
+          ...buildPublicHealthLight({ manifestDir: HERE }),
+        }),
+      );
     } else if (req.method === 'POST' && (url === '/v1/chat/completions' || url === '/chat/completions')) {
       let body = '';
       req.on('data', (c) => { body += c; if (body.length > 10_000_000) req.destroy(); });
@@ -210,6 +296,14 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, HOST, () => {
-  console.log(`onemin-shim listening on http://${HOST}:${PORT} -> ${UPSTREAM} (loopback only)`);
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
+
+if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(HERE);
+  const HOST = resolveShimBind(process.env, { port: PORT });
+  server.listen(PORT, HOST, () => {
+    console.log(`onemin-shim listening on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT}) -> ${UPSTREAM}`);
+  });
+}

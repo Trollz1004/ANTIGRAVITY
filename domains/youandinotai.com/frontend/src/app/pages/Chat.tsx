@@ -100,25 +100,25 @@ export function Chat() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#f4efe6]">
-      <div className="flex items-center gap-3 border-b-4 border-[#111111] bg-[#fffaf2] px-4 py-4 relative z-10">
+    <div className="flex h-screen flex-col bg-[#0A0B0D] text-[#F4F1EA]">
+      <div className="flex items-center gap-3 border-b border-[#3A3F45] bg-[#12151A] px-4 py-4 relative z-10">
         <Link to="/app/inbox" className="app-back-link p-1">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1">
           <div className="app-kicker mb-1">Messages</div>
-          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">
+          <h2 className="text-lg font-bold tracking-[-0.02em] text-[#F4F1EA]">
             {matchDisplayName}
           </h2>
           <div className="flex items-center gap-1.5">
             <div
               className={`w-2 h-2 rounded-full ${
-                connected ? 'bg-[#ff4f00]' : 'bg-[#8a8478]'
+                connected ? 'bg-[#58D68D]' : 'bg-[#FFD21E]'
               }`}
             />
             <span
               className={`text-xs font-bold uppercase tracking-[0.16em] ${
-                connected ? 'text-[#111111]' : 'text-[#5c594f]'
+                connected ? 'text-[#F4F1EA]' : 'text-[#C9CBCE]'
               }`}
             >
               {connected ? 'Online' : 'Connecting...'}
@@ -129,16 +129,16 @@ export function Chat() {
           <button
             type="button"
             onClick={() => setSafetyOpen(true)}
-            className="flex h-12 items-center justify-center gap-2 rounded-[1rem] border-[3px] border-[#111111] bg-white px-4 text-xs font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+            className="flex h-11 items-center justify-center gap-2 rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] px-4 text-xs font-bold uppercase tracking-[0.14em] text-[#F4F1EA] hover:border-[#FFD21E]"
           >
-            <Shield size={14} className="text-[#ff4f00]" />
+            <Shield size={14} className="text-[#FFD21E]" />
             Safety
           </button>
         )}
         {matchId && (
           <Link
             to={`/app/video/${matchId}`}
-            className="flex h-12 items-center justify-center gap-2 rounded-[1rem] border-[3px] border-[#111111] bg-[#ff4f00] px-4 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+            className="flex h-11 items-center justify-center gap-2 rounded-[10px] border border-[#FFD21E] bg-[#FFD21E] px-4 text-xs font-bold uppercase tracking-[0.14em] text-[#0A0B0D] no-underline"
           >
             <Video size={14} /> Video
           </Link>
@@ -159,10 +159,10 @@ export function Chat() {
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
             </div>
-            <p className="text-[#111111] font-black text-lg mb-1 tracking-[-0.05em]">
+            <p className="text-[#F4F1EA] font-bold text-lg mb-1 tracking-[-0.02em]">
               Break the Ice
             </p>
-            <p className="text-[#5c594f] text-xs mb-5 max-w-xs mx-auto font-medium">
+            <p className="text-[#C9CBCE] text-xs mb-5 max-w-xs mx-auto font-medium">
               Heart on fire but frozen on words? Let AI craft the perfect
               opener.
             </p>
@@ -182,7 +182,7 @@ export function Chat() {
                 </>
               )}
             </button>
-            <p className="text-[#5c594f] text-[10px] mt-3 uppercase tracking-widest font-bold">
+            <p className="text-[#9DA3AA] text-[10px] mt-3 uppercase tracking-widest font-bold">
               Powered by Gemini AI
             </p>
           </div>
@@ -198,7 +198,7 @@ export function Chat() {
             <div key={msg.id}>
               {showTimestamp && (
                 <div className="text-center my-4">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1 glass rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1 glass rounded-full text-[#C9CBCE]">
                     {new Date(msg.created_at).toLocaleString([], {
                       month: 'short',
                       day: 'numeric',
@@ -216,14 +216,14 @@ export function Chat() {
                 <div
                   className={`max-w-[75%] px-4 py-3 text-sm leading-relaxed ${
                     isMine
-                      ? 'rounded-2xl rounded-br-md border-[3px] border-[#111111] bg-[#111111] text-white shadow-[6px_6px_0_0_rgba(17,17,17,1)]'
-                      : 'glass text-[#111111] rounded-2xl rounded-bl-md'
+                      ? 'rounded-2xl rounded-br-md border border-[#FFD21E] bg-[#1A1E25] text-[#F4F1EA]'
+                      : 'rounded-2xl rounded-bl-md border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA]'
                   }`}
                 >
-                  <p className="break-words">{msg.content}</p>
+                  <p className="break-words text-[#F4F1EA]">{msg.content}</p>
                   <span
                     className={`text-[10px] mt-1.5 block text-right font-bold uppercase tracking-[0.12em] ${
-                      isMine ? 'text-white/60' : 'text-[#5c594f]'
+                      isMine ? 'text-[#FFD21E]' : 'text-[#9DA3AA]'
                     }`}
                   >
                     {new Date(msg.created_at).toLocaleTimeString([], {
@@ -239,20 +239,20 @@ export function Chat() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input — glass */}
-      <div className="border-t-4 border-[#111111] bg-[#fffaf2] p-4 relative">
+      {/* Input — dark DREAM Space surface */}
+      <div className="border-t border-[#3A3F45] bg-[#12151A] p-4 relative">
         <div className="flex gap-2 items-end">
           {/* Icebreaker mini button */}
           <button
             onClick={handleIcebreaker}
             disabled={icebreakerLoading}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-tranzinc-y-0.5 disabled:opacity-30"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E] transition-all duration-200 hover:border-[#FFD21E] disabled:opacity-30"
             title="Generate icebreaker"
           >
             {icebreakerLoading ? (
-              <Loader2 size={18} className="text-[#ff4f00] animate-spin" />
+              <Loader2 size={18} className="text-[#FFD21E] animate-spin" />
             ) : (
-              <Flame size={18} className="text-[#ff4f00]" />
+              <Flame size={18} className="text-[#FFD21E]" />
             )}
           </button>
           <input
@@ -266,9 +266,9 @@ export function Chat() {
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-tranzinc-y-0.5 disabled:opacity-30 disabled:shadow-none"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] border border-[#FFD21E] bg-[#FFD21E] text-[#0A0B0D] transition-all duration-200 hover:bg-[#E6B800] disabled:opacity-30 disabled:shadow-none"
           >
-            <Send size={18} className="text-[#ff4f00]" />
+            <Send size={18} className="text-[#0A0B0D]" />
           </button>
         </div>
       </div>

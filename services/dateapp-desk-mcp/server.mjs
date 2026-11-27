@@ -12,14 +12,20 @@
  * this repo already carries two MCP servers with their own node_modules.
  */
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { getServiceUrl } from '../../ops/fleet/fleet-map.mjs';
+import { logStartupEnvCheck } from '../../ops/agents/env-required.mjs';
+import { buildHealthEnvLight } from '../../ops/agents/node-light.mjs';
 
+const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = process.env.ANTIGRAVITY_ROOT || 'C:/ANTIGRAVITY';
 const INBOX = join(REPO, 'ops', 'marketing-inbox');
-const API = process.env.DATEAPP_API || 'http://127.0.0.1:8000';
-const MC = process.env.MISSION_CONTROL_API || 'http://127.0.0.1:3151';
+const API = process.env.DATEAPP_API || getServiceUrl('dateapp-api');
+const MC = process.env.MISSION_CONTROL_API || getServiceUrl('mission-os');
 
 const send = (m) => process.stdout.write(JSON.stringify(m) + '\n');
+logStartupEnvCheck(HERE, process.env, (msg) => process.stderr.write(`${msg}\n`));
 const ok = (id, result) => send({ jsonrpc: '2.0', id, result });
 const err = (id, code, message) => send({ jsonrpc: '2.0', id, error: { code, message } });
 const text = (s) => ({ content: [{ type: 'text', text: s }] });
@@ -28,7 +34,12 @@ async function get(url, ms = 10000) {
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), ms);
   try {
-    const r = await fetch(url, { signal: c.signal });
+    const headers = {};
+    const missionToken = String(process.env.MISSION_OS_TOKEN || process.env.FLEET_SHARED_TOKEN || '').trim();
+    if (missionToken && String(url).startsWith(MC)) {
+      headers['x-mission-os-token'] = missionToken;
+    }
+    const r = await fetch(url, { headers, signal: c.signal });
     return { status: r.status, body: await r.text() };
   } catch (e) {
     return { status: 0, body: String(e.message || e) };
@@ -110,10 +121,14 @@ async function call(name, args) {
         ? 'DOWN'
         : 'WRONG SERVICE — a port answered but it is not the date-app API';
     const mcVerdict = m.status === 200 ? 'UP' : m.status === 0 ? 'DOWN' : 'REACHABLE but not serving the queue';
+    const envLight = buildHealthEnvLight({ manifestDir: HERE });
     return text(
       'date-app backend ' + API + '\n  status: ' + a.status + '\n  identity: ' + ident +
       '\n  verdict: ' + backendVerdict + '\n\nmission control ' + MC +
-      '\n  /api/marketing/queue: ' + m.status + '\n  verdict: ' + mcVerdict
+      '\n  /api/marketing/queue: ' + m.status + '\n  verdict: ' + mcVerdict +
+      '\n\nenvLight: ' + envLight.nodeLight +
+      '\n  missingEnv: ' + (envLight.missingEnv.join(', ') || 'none') +
+      '\n  driftedCount: ' + envLight.driftedCount
     );
   }
 

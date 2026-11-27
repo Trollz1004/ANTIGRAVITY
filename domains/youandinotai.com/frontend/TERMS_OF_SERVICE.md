@@ -4,7 +4,8 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 30, 2026
+**Effective Date:** March 30, 2026 (previously updated November 13, 2026)
+**Last Updated:** November 21, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -27,9 +28,9 @@ To use YouAndINotAI, you must:
 - Be legally able to enter into a binding contract
 - Not be prohibited from using the service under applicable law
 - Not have been previously banned from the Platform
-- Complete the current Bot-Shield verification flow before using protected features
+- Complete the current Bot-Shield verification flow (or sign in with an authorized founder code) before using protected features
 
-Our current pre-launch verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
+Our current verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
 
 ## 3. Account Registration and Security
 
@@ -49,11 +50,11 @@ You are responsible for keeping your login credentials secure. Do not share your
 
 The current Bot-Shield flow includes:
 
-- Completing the launch liveness challenge presented inside the Platform
+- Completing the launch timed human check presented inside the Platform
 - Completing the linked Square payment checkpoint required for the badge
 - Passing anti-bot and abuse screening tied to your account activity
 
-We record verification status, challenge state, and payment confirmation tied to your account. We do not currently claim a government-ID or selfie-based verification flow in production.
+We record verification status, challenge state, payment confirmation, and any refund status tied to your account; where the app offers it, you can ask for the dollar back within three days, and the badge turns off. We do not currently claim a government-ID or selfie-based verification flow in production.
 
 ## 4. What YouAndINotAI Is (and Isn't)
 
@@ -66,7 +67,7 @@ YouAndINotAI is a dating platform with a Bot-Shield verification flow and founde
 - We are **not** a guarantee that you will find a partner, match, date, or relationship
 - We are **not** a background check service — verification confirms completion of our Bot-Shield flow, not character
 - We are **not** responsible for the behavior of other users outside the platform
-- We do **not** intentionally create AI-generated fake profiles, and verified badges are only assigned after the Bot-Shield flow is completed
+- We do **not** intentionally create AI-generated fake profiles, and verified badges are assigned only to accounts that complete the Bot-Shield flow or sign in with an authorized founder code
 - We do **not** provide relationship counseling, therapy, or professional advice
 
 ## 5. Prohibited Conduct
@@ -256,11 +257,11 @@ We strive for reliable service but do not guarantee 100% uptime. The platform ma
 
 ### 11.4 User Interactions
 
-We are not responsible for the conduct of users on or off the platform. While we verify identity, we do not conduct criminal background checks. Exercise your own judgment and caution when meeting people online or in person.
+We are not responsible for the conduct of users on or off the platform. We do not verify identity and we do not conduct criminal background checks. Exercise your own judgment and caution when meeting people online or in person.
 
 ### 11.5 AI Limitations
 
-Google Gemini's matchmaking suggestions are just that — suggestions. The AI may occasionally produce inaccurate or unhelpful results. We are not liable for the quality of AI-generated suggestions or icebreakers.
+Google Gemini's optional conversation icebreakers and AI tool responses are just suggestions. The AI may occasionally produce inaccurate or unhelpful results. We are not liable for the quality of AI-generated suggestions or icebreakers.
 
 ## 12. Limitation of Liability
 
@@ -268,7 +269,7 @@ To the maximum extent permitted by law:
 
 - **Trash Or Treasure Online Recycler LLC**, Joshua Coleman, and any affiliated parties shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill
 - Our total liability for any claim arising from your use of the platform shall not exceed the amount you have paid us in the **12 months** preceding the claim
-- We are not liable for the actions of other users, third-party services (Square, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
+- We are not liable for the actions of other users, third-party services (Square, Google, Cloudflare), or events beyond our reasonable control
 
 Some jurisdictions do not allow limitation of liability for certain types of damages. In those jurisdictions, our liability is limited to the maximum extent permitted by law.
 

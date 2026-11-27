@@ -69,6 +69,36 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   return { repo, envFile, lanIp, port, omni, missionControl, obsidianRest, crosslisting, trendsPath, nodeName: pick('NODE_NAME') || '', file };
 }
 
+function isLoopbackBindHost(host) {
+  const h = String(host || '').trim().toLowerCase();
+  return h === '127.0.0.1' || h === 'localhost' || h === '::1';
+}
+
+export function resolveMissionControlBind(
+  env = process.env,
+  { port = Number(env?.AIRI_DASHBOARD_PORT || 9150), warn = console.warn } = {}
+) {
+  const token = String(
+    env?.MISSION_OS_TOKEN || env?.MISSION_CONTROL_TOKEN || env?.DASHBOARD_BRIDGE_TOKEN || env?.FLEET_SHARED_TOKEN || ''
+  ).trim();
+  const explicit = String(env?.MISSION_CONTROL_HOST || '').trim();
+  if (explicit) {
+    if (!token && !isLoopbackBindHost(explicit)) {
+      throw new Error(
+        `[mission-control] Refusing to bind ${explicit} on port ${port} without MISSION_OS_TOKEN or MISSION_CONTROL_TOKEN configured.`
+      );
+    }
+    return explicit;
+  }
+  if (!token) {
+    warn?.(
+      `[mission-control] WARNING: MISSION_OS_TOKEN / MISSION_CONTROL_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+    );
+    return '127.0.0.1';
+  }
+  return '0.0.0.0';
+}
+
 /**
  * Obsidian vault resolution, self-healing: the configured path wins only when it
  * actually exists on this node (paths migrate between machines); otherwise the

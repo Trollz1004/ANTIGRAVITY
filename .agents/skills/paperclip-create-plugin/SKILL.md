@@ -1,103 +1,29 @@
 ---
 name: paperclip-create-plugin
 description: >
-  Create new Paperclip plugins with the current alpha SDK/runtime. Use when
-  scaffolding a plugin package, adding a new example plugin, or updating plugin
-  authoring docs. Covers the supported worker/UI surface, route conventions,
-  scaffold flow, and verification steps.
+  RETIRED plugin-scaffolding skill. Replaced by `.agents/skills/hermes-agent-skill-authoring/SKILL.md`
+  and `docs/standards/AGENT-STANDARD.md`.
 ---
 
-# Create a Paperclip Plugin
+# Retired Plugin-Creation Notice
 
-Use this skill when the task is to create, scaffold, or document a Paperclip plugin.
+> **Status: RETIRED.** Legacy orchestrator plugins are decommissioned. Author repo skills and MCP integrations instead using `.agents/skills/hermes-agent-skill-authoring/SKILL.md` and `docs/standards/AGENT-STANDARD.md`.
 
-## 1. Ground rules
-
-Read these first when needed:
-
-1. `doc/plugins/PLUGIN_AUTHORING_GUIDE.md`
-2. `packages/plugins/sdk/README.md`
-3. `doc/plugins/PLUGIN_SPEC.md` only for future-looking context
-
-Current runtime assumptions:
-
-- plugin workers are trusted code
-- plugin UI is trusted same-origin host code
-- worker APIs are capability-gated
-- plugin UI is not sandboxed by manifest capabilities
-- no host-provided shared plugin UI component kit yet
-- `ctx.assets` is not supported in the current runtime
-
-## 2. Preferred workflow
-
-Use the scaffold package instead of hand-writing the boilerplate:
-
-```bash
-pnpm --filter @paperclipai/create-paperclip-plugin build
-node packages/plugins/create-paperclip-plugin/dist/index.js <npm-package-name> --output <target-dir>
-```
-
-For a plugin that lives outside the Paperclip repo, pass `--sdk-path` and let the scaffold snapshot the local SDK/shared packages into `.paperclip-sdk/`:
-
-```bash
-pnpm --filter @paperclipai/create-paperclip-plugin build
-node packages/plugins/create-paperclip-plugin/dist/index.js @acme/plugin-name \
-  --output /absolute/path/to/plugin-repos \
-  --sdk-path /absolute/path/to/paperclip/packages/plugins/sdk
-```
-
-Recommended target inside this repo:
-
-- `packages/plugins/examples/` for example plugins
-- another `packages/plugins/<name>/` folder if it is becoming a real package
-
-## 3. After scaffolding
-
-Check and adjust:
-
-- `src/manifest.ts`
-- `src/worker.ts`
-- `src/ui/index.tsx`
-- `tests/plugin.spec.ts`
-- `package.json`
-
-Make sure the plugin:
-
-- declares only supported capabilities
-- does not use `ctx.assets`
-- does not import host UI component stubs
-- keeps UI self-contained
-- uses `routePath` only on `page` slots
-- is installed into Paperclip from an absolute local path during development
-
-## 4. If the plugin should appear in the app
-
-For bundled example/discoverable behavior, update the relevant host wiring:
-
-- bundled example list in `server/src/routes/plugins.ts`
-- any docs that list in-repo examples
-
-Only do this if the user wants the plugin surfaced as a bundled example.
-
-## 5. Verification
-
-Always run:
-
-```bash
-pnpm --filter <plugin-package> typecheck
-pnpm --filter <plugin-package> test
-pnpm --filter <plugin-package> build
-```
-
-If you changed SDK/host/plugin runtime code too, also run broader repo checks as appropriate.
-
-## 6. Documentation expectations
-
-When authoring or updating plugin docs:
-
-- distinguish current implementation from future spec ideas
-- be explicit about the trusted-code model
-- do not promise host UI components or asset APIs
-- prefer npm-package deployment guidance over repo-local workflows for production
+- Fleet topology & active services: `ops/fleet/fleet-map.json` (`192.168.0.40` Alienware, `192.168.0.15` T5500).
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+- `First read: the house index, https://github.com/Trollz1004/dream-online/blob/main/docs/house/INDEX.md, then the newest rulings in the claude.ai project Ai-Dream-Team as the index describes.`
+- `Funding comes first and game work is paused (ruled 2026-11-13).`
+- `The wheel: tickets in the .fable-kitchen inbox on the Alienware; runner ops/router/inbox-runner.ts in dream-online; lane rules in orders/RULES.md in the kitchen.`
+- `Merging (ruled 2026-11-16): nothing merges with a failing required check; platform and marketing changes need the checks plus one trusted review; game and engine work keeps two offerings and two judges; whoever merges looks at the files and leaves a one-line verdict.`
+- `Public text passes the go gate: the product does what the text says, stop-slop plus a humanizer pass, only what is true, every outside fact links the exact page.`
+- `Marketing team log: https://github.com/Trollz1004/ANTIGRAVITY/tree/main/marketing/team (public; nothing private goes in).`
+<!-- TROLLZ1004-SPINE:END -->

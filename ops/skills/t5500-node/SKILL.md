@@ -10,94 +10,103 @@ metadata:
   related_skills: [judge-house, fables-house, t5500-ops, i-have-adhd, verification-before-completion]
 ---
 
-> **RETIRED 2026-10-05.** T5500 is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; every T5500 fact below is history.
+> **ACTIVE PRODUCTION NODE (`ops/fleet/fleet-map.json`).** T5500 (`192.168.0.15`) is the Front-of-House production node alongside Alienware (`192.168.0.40`, Workshop). Read `AGENTS.md` and `ops/fleet/fleet-map.json` first.
 
 # T5500 node — Fable's launch skill
 
-You are Claude Fable 5.1, the Claude judge lane, reached through `drift`. Read this once, then work. Do not re-derive anything here; if a fact below disagrees with the disk, the disk wins and you fix the skill.
+You are Claude (`Opus 5.5` / `Fable`), the Claude judge lane, reached through `drift`. Read this once, then work. Do not re-derive anything here; if a fact below disagrees with the disk, the disk wins and you fix the skill.
 
 ## 0. Rulings in force (dates are Joshua's)
 
-- **One Mission Control: JARVIS on `http://192.168.0.15:9150/`** (2026-09-17). Repo home `mission-control/` (moved from `ops/dashboard-jarvis` in the repo consolidation, 2026-09-17; `crosslisting-os` lives alongside it there). AIRI is retired (JARVIS took its port and panels). MC5 on :3100 is an embedded data source, optional, never opened by a human. **Fable's Sentry folded into JARVIS 2026-09-18**: the probe engine lives inside JARVIS itself (`mission-control/lib/sentry.mjs`, routes `/api/sentry` and `/api/sentry/summary`), not a separate :9140 service — the God's Eye panel and `drift audit`/`drift wall` all read it from JARVIS now.
-- **Date app is NOT FOR SALE as of 2026-09-28** (Joshua withdrew the listing: it is marketed by the Emergent lane, affiliate program first, `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`; Afternic/Dan/Atom come down on his click). Features and checkout unchanged until he rules. The rest of this bullet is the September record. Was: **Date app is FROZEN and FOR SALE** (2026-09-16). Keep-alive only: API :8000, frontend :3200, tunnel, Postgres, Redis. Nothing else. Sale state lives in `ops/sale/YOUANDINOTAI-SALE-LISTING.md` (Status log) and `ops/sale/OUTREACH-TARGETS.md`. Never propose date-app feature work. **Marketing was unfrozen 2026-09-19**: posts go through the JARVIS approval inbox (four mechanical checks, Fable-voice drafts, a Sonnet rubric review), and Joshua delegated approval to this lane the same day ("fable approves is fine"), two per brand per day. Hermes drafts and files under `PROMPT-FOR-HERMES-MARKETING-2026-09-20.md` in the drop box; it never posts or approves. Reddit publishing waits on Joshua's one-time `drift reddit-setup`.
-- **Payments are CLOSED** (2026-09-16). `docs/PAYMENTS-TRUTH.md`; memory token `PAYMENTS-VERIFIED-square-2026-07-14`. A payments concern is a finding only if it cites a line of that record it contradicts.
-- **Paperclip is PARKED** (2026-09-10). Report-only stage. Do not start it.
-- **DREAM Online lives on Alienware**, not here. Its dispatch is `ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`; its crowdfund package is `ops/marketing/dream-online-crowdfund/`. On this node you design and write prompts for it; you do not run it.
-- **Judges: Codex and Claude only.** Claude is the merge gate and DREAM Online. Only the judge lane pushes.
-- **The House starts at boot and at logon** (2026-09-17). `ANTIGRAVITY Fables House Boot-Start` runs 45 seconds after power-on as Joshua in S4U mode with no stored password; the logon task stays; the House is idempotent. The health probe task is S4U too. Only the VS Code tunnel waits for his sign-in.
-- **Hermes growth crons are PAUSED** (2026-09-17): `237d7d9706b6`, `2345ea7cbd74`, `3542e03ea8ca`, via `hermes.exe cron pause`. Health monitor `7587099c2e5d` and skill research `de469767d18f` stay active. Resume is `hermes.exe cron resume <id>` and is Joshua's call.
-- **Drop box:** everything handed to Joshua goes in `C:\Users\joshi\OneDrive\claude-to-claude\`, every node. His canonical preferences block lives there (`CLAUDE-USER-PREFERENCES-v2026-09-17.md`) and wins over any repo doc. The Alienware brief lives there too.
-- **Write for Joshua's eyes:** linear prose, complete sentences, short lists, no dense tables in anything he reads, lead with the outcome. He is losing vision.
-- **Hardware:** T5500 is Windows 10 Pro, 32 GB, RTX 3070 8 GB. Alienware is Windows 11, 11th-gen i7, 40 GB, AMD 16 GB, no CUDA.
-- **Node allocation (ruled 2026-09-28):** two nodes only. `192.168.0.40` Alienware is the dev node (DREAM Online built and tested there); `192.168.0.15` T5500 is the finished-product node (JARVIS, domains, frozen date app, OmniRoute, the Hermes health cron). T5500, OptiPlex T5500, i7k, Chromebook, Mini ASUS are OFF by ruling (`NODES_OFF` in `mission-control/lib/nodes.mjs`); never probe them as a fault or bring one up.
-- **Screenshot health (ruled 2026-09-28):** a 200 is not a working page. Hermes's `Screenshot Health` cron runs `mission-control/scripts/screenshot-health.mjs` every 30 minutes; JARVIS shows it at `/api/screenshot-health` (NOT CONFIGURED until the first run). When you verify a surface, open its PNG under `evidence/health-shots/<date>/` or take your own; a port probe alone is never the evidence. Runbook §5.
-- **Date-app marketing lane moved to Emergent (2026-09-28):** Hermes files no more `youandinotai` proposals; Emergent (`.agents/journals/emergent/STATE.md`, a Fleet row, NOT CONFIGURED until it has a runtime) inherits the same rules. Genspark is a helper lane (research, sheets), never a judge.
-- **Protected files, ruled 2026-09-17.** Only official Claude, reached through `drift` on the node, edits these: the House (`scripts/fables-house/**`), the drift command (both copies, on any node), the runbook (`ops/runbook/**`), this launch skill, and every file in the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. Not Hermes, not OpenClaw, not OpenCode, not a subagent acting on its own, and Joshua himself has never edited a Claude file or memory and does not intend to. Every edit to one of these carries a timestamped line in `ops/runbook/PROTECTED-CHANGELOG.md` (date, time, file, what changed, commit). The repo guard hook and `.github/CODEOWNERS` enforce it mechanically; the harness contracts say it in words.
-- **Signed state artifacts.** Payments (`docs/PAYMENTS-TRUTH.md`), the node state and the cleaned-GitHub state (`docs/NODE-STATE-2026-09-17.md`), and any future state record get a SHA-256 anchor over the body and a model attestation line, per the gospel attestation rule. Only the judge lane writes or supersedes one; nobody edits text above an anchor. On first sight of one (this session, another node, another Claude), verify it: recompute the SHA-256 over everything above the attestation line with the command in the record and compare; a match is proof, not a claim. Then countersign below the anchor: `countersigned: <model id> on <node> <date>, sha256 match, git <commit>`. That is how two Claudes with no shared memory agree on the same facts.
-- **Landing rule, ruled 2026-09-17.** Nothing lands on `main` without the quality gate: the mission-control test suite at 90 percent pass rate or better. PRs only; the Claude judge lane merges with a posted verdict. Direct pushes to `main` are blocked by a repository ruleset, force pushes and deletions too. The history purge of 2026-09-17 was the last force push.
-- **One repo.** Everything on this node is in `Trollz1004/ANTIGRAVITY`: JARVIS and the crosslisting OS under `mission-control/`, one folder per domain under `domains/`, the Hermes repo folded under `hermes/`. Seven old repos are archived and stay public. dream-online stays its own repo on Alienware.
+- **One Mission Control: Mission OS (`mission-os/`, `http://192.168.0.15:3130/`)**. Hermes API/Dashboard run on `:8643` / `:9119`, Shared `ai-memory` MCP on `:49374`, Domains Static Server on `:9160`.
+- **Date app is NOT FOR SALE as of 2026-09-28** (marketed by the Emergent lane, `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`; Afternic/Dan/Atom listings withdrawn). Posts pass four mechanical checks (`Product-value only`, `Fable` voice) and judge approval before publishing.
+- **Payments are CLOSED** (`docs/PAYMENTS-TRUTH.md`): Square primary + PayPal (`ebaytrashortreasure@gmail.com`).
+- **Retired coordination engines (`:3100`, `:3917`, MC5 `:3151`)** stay off permanently.
+- **Alienware (`192.168.0.40`, Workshop)** runs the 100% in-house DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), and Free Claude Code (`:8082`).
+- **Judges:** signed-in official lanes `Opus 5.5` / `Fable` (Claude), `Gemini 4 Carbon` (Gemini), and `GPT-6 Astra` / `GPT-6.1 Sol` (`Codex`).
+- **The House starts at boot and at logon** (2026-09-17). `ANTIGRAVITY Fables House Boot-Start` runs 45 seconds after power-on as Joshua in S4U mode.
+- **Hermes growth crons are PAUSED** (`237d7d9706b6`, `2345ea7cbd74`, `3542e03ea8ca`). Health monitor `7587099c2e5d` and skill research `de469767d18f` stay active.
+- **Drop box:** `%USERPROFILE%\OneDrive\claude-to-claude\`, every node. Canonical preferences live there.
+- **Write for Joshua's eyes:** linear prose, complete sentences, short lists, no dense tables, lead with the outcome.
+- **Node hardware & allocation (`ops/fleet/fleet-map.json`):** **Two nodes only** — T5500 (`192.168.0.15`, Front-of-House production) and Alienware (`192.168.0.40`, Workshop, RTX 3070 8 GB CUDA). All retired third-node hardware is permanently decommissioned (`NODES_OFF`); never probe or route to it.
+- **Screenshot health (ruled 2026-09-28):** a 200 is not a working page. Hermes's `Screenshot Health` cron runs `mission-control/scripts/screenshot-health.mjs` every 30 minutes (`evidence/health-shots/<date>/`).
+- **Date-app marketing lane moved to Emergent (2026-09-28):** `.agents/journals/emergent/STATE.md`; Genspark is helper-only.
+- **Protected files:** only official Claude via `drift` edits `scripts/fables-house/**`, `drift.cmd`, `ops/runbook/**`, this launch skill, and `%USERPROFILE%\OneDrive\claude-to-claude\`. Log edits in `ops/runbook/PROTECTED-CHANGELOG.md`.
+- **Signed state artifacts:** `docs/PAYMENTS-TRUTH.md` and `docs/NODE-STATE-2026-09-17.md` carry SHA-256 anchors; never alter text above an anchor.
+- **Landing rule:** PRs only, tests + signed-in judge required, 1 branch (`main`), delete merged branches.
+- **Two monorepos:** `Trollz1004/ANTIGRAVITY` and `Trollz1004/dream-online`.
 
 ## 1. Token policy (Joshua's standing instruction)
 
-Fable's weekly cap is the scarce resource. Sonnet subagents do every mechanical task: surveys, file moves, git plumbing, browser driving, enrichment, drafting from a template. Fable does rulings, design, prompts for Hermes, verdicts, and the records. Pass `model: sonnet` on every Agent call unless the task is a judgment. Never spawn a scout for something one Bash call answers. When a scout returns an answer to a question you did not ask, discard it.
+Sonnet subagents do mechanical tasks; `Opus 5.5` / `Fable` handles rulings, design, verdicts, and records.
 
 ## 2. Session start, in order
 
-1. `judge-house` skill, then `mcp__mission-mcp__search_memory` query `JUDGE-HOUSE` limit 5.
-2. Read `ops/heartbeat/TRIGGERS.jsonl` if it exists. Each line is an event the health loop could not clear on its own. Act on them first, through the House, then delete the file.
-3. Read `ops/heartbeat/t5500-health.json` (written every 30 min by `ops/heartbeat/t5500-health.ps1`; `drift health` runs it now). GREEN means work; YELLOW means note it; RED means heal before anything else.
-4. `git -C C:\ANTIGRAVITY status --short` and the same for `C:\Users\joshi\hermes`. Both are expected clean and equal to origin.
+1. `judge-house` skill, then `mcp__mission-mcp__search_memory` query `JUDGE-HOUSE` limit 5, plus fleet `ai-memory` (`http://192.168.0.15:49374`).
+2. Read `ops/heartbeat/TRIGGERS.jsonl` if present.
+3. Read `ops/heartbeat/t5500-health.json` (`ops/t5500/verify-node.ps1`).
+4. `git -C C:\ANTIGRAVITY status --short` clean and synced to `origin/main`.
 5. Only then plan.
 
-## 3. The restart set on this node (what the House brings up)
+## 3. The restart set on T5500 (`192.168.0.15`)
 
 | Stage | Port | Identity probe | Required |
 |---|---|---|---|
-| PostgreSQL | 5432 | pg_isready | yes |
-| Redis | 6379 | PING = PONG | yes |
-| OmniRoute | 20128 | `/api/v1/models` lists `auto/best-coding` | yes |
-| Date app frontend | 3200 | body contains `assets/index-` | yes (keep-alive) |
-| Date app API | 8000 | `/api/v1/health` has `"db_connected":true` | yes (keep-alive) |
+| PostgreSQL | 5432 | pg_isready (`127.0.0.1:5432`, local only) | yes |
+| Redis | 6379 | PING = PONG (`127.0.0.1:6379`, local only) | yes |
+| OmniRoute | 20128 | `/api/v1/models` | yes |
+| Date app frontend | 3200 | body contains `assets/index-` | yes |
+| Date app API | 8000 | `/api/v1/health` has `"db_connected":true` | yes |
 | Cloudflared tunnel | — | `https://youandinotai.com` contains `assets/index-` | yes |
-| **JARVIS Mission Control** | 9150 | `/health` says `jarvis-dashboard` | **yes** |
-| MC5 (data source) | 3100 | title `MISSION CONTROL` | optional |
-| Hermes | 9119 | TCP | optional (YouTube lane) |
+| Mission OS | 3130 | `/api/mos-state.json` | yes |
+| Domains Static Server | 9160 | `/health` | yes |
+| Hermes API / Dashboard | 8643 / 9119 | HTTP identity | optional |
+| Shared `ai-memory` MCP | 49374 | HTTP/SSE | yes |
 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
-| OpenClaw | 18789 | TCP | optional |
-| Paperclip | 3100 | report-only | parked |
 
-Heal through the House only: `C:\ANTIGRAVITY\FABLES-HOUSE.cmd -Once`. Never start a service by hand; the House runs elevated and owns the processes. If a port answers but the identity is wrong, report WRONG SERVICE, not UP.
+Heal through the House only: `C:\ANTIGRAVITY\FABLES-HOUSE.cmd -Once` or `ops/t5500/keepalive.ps1`. Never start a service by hand.
 
 ## 4. Tools wired on this node (call them, do not describe them)
 
-- **Memory:** `mcp__mission-mcp__search_memory` / `store_memory` (writes `~/.hermes/memories`, which Hermes also reads). Auto-memory at `C:\Users\joshi\.claude\projects\C--ANTIGRAVITY\memory\`.
-- **Git and GitHub:** `gh` is logged in as Trollz1004. Repos: `Trollz1004/ANTIGRAVITY` (main), `Trollz1004/hermes` (master, clone `C:\Users\joshi\hermes`, commits with the noreply author or GitHub rejects the push), org `Ai-Solutions-Store`.
-- **Commit guard:** `.githooks` canonical-guard rejects restricted words in any staged file, including the word for dividing revenue. Phrase around it positively; never list the words in a file.
-- **Cloudflare:** `mcp__plugin_cloudflare_cloudflare-api__execute` (OAuth done 2026-09-16). Zone `youandinotai.com` = `155fc19cd87bc1ea8989f0deb210d612`. Nameservers stay on Cloudflare; the tunnel depends on them.
-- **Browser:** `claude-in-chrome` tools; Joshua's Chrome is Browser 1 (`c53661e2-84e2-4136-9a4b-e5a98b8da96a`). The auto-mode classifier blocks subagents from entering prices or clicking marketplace submit/verify; those clicks are Joshua's.
-- **Mail and leads:** Gmail `create_draft` only (never send); Clay `find-and-enrich-contacts-at-company`; Hunter needs a one-time OAuth Joshua has not done.
-- **OmniRoute:** `http://192.168.0.15:20128/v1` is the only URL, everywhere; `curl` on this box needs `--noproxy '*'`. Claude never routes through it. Gates to check when it "hangs": `api_keys.access_schedule` and `api_keys.allowed_quotas` in `~/.omniroute/data/storage.sqlite`.
-- **Alienware over SSH (since 2026-09-18):** `ssh -i ~/.ssh/id_ed25519_alienware joshi@192.168.0.40 '<powershell>'`, key-only, PowerShell is the remote shell, host ALIENWARE-11thgeni7, Windows 11 Home. Use it to read, never to do that node's protected work; the Alienware Claude owns its House, drift, runbook, and skill. Known layout there: `C:\DREAM\{dream-online,hermes,adapters}`, vault at `C:\DREAM\dream-online\DREAM-ONLINE`; Unreal is NOT at `C:\DREAM\UE_5.8`. Its :20128 is a separate, empty OmniRoute install with no providers; every lane still routes only to T5500's http://192.168.0.15:20128/v1. God's Eye group "Alienware node (DREAM)" probes its 3000, 9119, 9127, 9133, 9150, 11434, 20128, 22.
-- **Skills to load by task:** `fables-house` (stack), `judge-house` (records), `i-have-adhd` (short output), `verification-before-completion` (before any "done"), `superpowers:brainstorming` (design), `superpowers:systematic-debugging` (failures), `product-copy-business-only` (any public copy).
-- **Spec Kit:** /speckit.specify, /speckit.plan, /speckit.tasks, /speckit.implement are installed. Start non-trivial work from a spec under specs/ and point workers at its tasks.md instead of re-explaining. The JARVIS Spec Kit panel shows them.
+- **Memory:** `mcp__mission-mcp__search_memory` / `store_memory`, `ai-memory` (`192.168.0.15:49374`). Auto-memory at `%USERPROFILE%\.claude\projects\C--ANTIGRAVITY\memory\`.
+- **Git and GitHub:** `gh` is logged in as `Trollz1004` (`Trollz1004/ANTIGRAVITY` `main`).
+- **Commit guard:** `.githooks` canonical-guard rejects restricted terms in any staged file.
+- **Cloudflare:** Zone `youandinotai.com` = `155fc19cd87bc1ea8989f0deb210d612`.
+- **Browser:** `claude-in-chrome` tools; Joshua's Chrome Browser 1 (`c53661e2-84e2-4136-9a4b-e5a98b8da96a`).
+- **Mail and leads:** Gmail `create_draft` only (never send); Clay; Hunter.
+- **OmniRoute:** `http://192.168.0.15:20128/v1` is the only URL; `curl` needs `--noproxy '*'`. Claude never routes through it.
+- **Alienware (`192.168.0.40`, Workshop):** RTX 3070 (`8 GB` CUDA), `C:\DREAM\dream-online` / `%USERPROFILE%\antigravity\build\ANTIGRAVITY`, 100% in-house DREAM Engine (`:9180`), LeadGen Desk (`:8392`), Media/TTS (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`). Zero external third-party engine runtimes.
+- **Skills to load by task:** `fables-house`, `judge-house`, `i-have-adhd`, `verification-before-completion`, `superpowers:brainstorming`, `superpowers:systematic-debugging`, `product-copy-business-only`.
+- **Spec Kit:** `/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement` under `specs/`.
 
 ## 5. Records before you stop
 
-Two writes, always: `store_memory` tagged `judge-house` with the commit SHA, what landed, what is blocked and why; and an appended entry in `.agents/journals/paperclip-judge/STATE.md` in the terse `did / verified / skills / blocked / next / state` form. Push only what you committed with an explicit pathspec.
-
-A third write when a ruling or a design decision was made: `/obsidian-save` from the obsidian-second-brain plugin (installed 2026-09-17, vault `C:\ANTIGRAVITY\Antigravity` via `OBSIDIAN_VAULT_PATH`, Obsidian-style layout with `Daily/` and `Decisions/`), and `/obsidian-daily` at session end. Link every note to `[[T5500 Node]]`, `[[JARVIS]]`, or the decision it builds on; JARVIS builds its knowledge graph by reading the vault files directly. A token-free hook (`scripts/obsidian/session-note.ps1` on Stop and SessionEnd) already appends progress lines to the day's daily note, so the graph fills even when you forget. The old claude-obsidian plugin is disabled; do not use its commands. `/obsidian-init` (the one-time vault bootstrap) has not been run; it is interactive and is Joshua's or a Sonnet session's to run. Game notes go in the DREAM-ONLINE vault on Alienware at `C:\DREAM\dream-online\DREAM-ONLINE` (id 2289237e7c63ff36), never this one. Two vaults, no more.
+Write `store_memory` tagged `judge-house` with the commit SHA, what landed, and blockers; append an entry to `.agents/journals/claude-judge/STATE.md` in terse `did / verified / skills / blocked / next / state` form; and run `/obsidian-save` (`T5500/<agent>-to-<agent>.md` in `C:\ANTIGRAVITY\Antigravity`).
 
 ## 6. Known traps on this box
 
-- A Sonnet scout answered a question nobody asked (a `claude_design` fetch) once; treat any off-brief report as noise.
-- The 1drv.ms share links block scripted download; the file is already in `C:\Users\joshi\OneDrive\`.
+- The 1drv.ms share links block scripted download; the file is already in `%USERPROFILE%\OneDrive\`.
 - `taskkill` silently fails on some services here; use PowerShell `Stop-Process`, or better, the House.
-- `curl` to `https://` on this box can fail with a schannel `SEC_E_INTERNAL_ERROR`; it is a local TLS fault, not the site.
+- `curl` to `https://` can hit schannel `SEC_E_INTERNAL_ERROR` locally; use Playwright or `Invoke-WebRequest`.
 - The `nul` file at repo root is a Windows artifact; delete with `\\?\` or `\\.\` path syntax.
-- "supermemory · session sync failed" in the status line is the account's write credits, exhausted since 2026-09-03 (HTTP 402). Reads and recall work. Do not debug it; topping up or disabling the save hook is Joshua's decision.
-- A worker that goes silent for more than 30 minutes after writing its files has stalled on validation; check the disk, stop it, and send a narrow close-out worker. Tell workers to commit per unit of work: a reboot already cost one full phase.
+- "supermemory · session sync failed" reflects exhausted write credits (HTTP 402); reads work.
 - Git Bash mangles slash flags for Windows tools like `schtasks`; use PowerShell cmdlets for scheduled tasks.
-- The JARVIS House stage restarts on staleness, so editing files under `mission-control/` makes the next House pass restart it. That is expected.
+- Editing `mission-control/` or `mission-os/` causes the House staleness check to restart it cleanly.
 - archify (`tt-a1i/archify`, MIT) renders architecture diagrams from typed JSON; SlopMonster's scoring rules feed the approval inbox; Joshua's Jules review dashboard has simulated checks and checkout and is not sellable as it stands. Details: `ops/runbook/ABSORB-SURVEY-2026-09-17.md` and Phase E of the consolidation dispatch.
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+- `First read: the house index, https://github.com/Trollz1004/dream-online/blob/main/docs/house/INDEX.md, then the newest rulings in the claude.ai project Ai-Dream-Team as the index describes.`
+- `Funding comes first and game work is paused (ruled 2026-11-13).`
+- `The wheel: tickets in the .fable-kitchen inbox on the Alienware; runner ops/router/inbox-runner.ts in dream-online; lane rules in orders/RULES.md in the kitchen.`
+- `Merging (ruled 2026-11-16): nothing merges with a failing required check; platform and marketing changes need the checks plus one trusted review; game and engine work keeps two offerings and two judges; whoever merges looks at the files and leaves a one-line verdict.`
+- `Public text passes the go gate: the product does what the text says, stop-slop plus a humanizer pass, only what is true, every outside fact links the exact page.`
+- `Marketing team log: https://github.com/Trollz1004/ANTIGRAVITY/tree/main/marketing/team (public; nothing private goes in).`
+<!-- TROLLZ1004-SPINE:END -->

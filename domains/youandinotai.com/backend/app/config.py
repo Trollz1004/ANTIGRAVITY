@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
 
     database_url: str = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost:5432/youandinotai"
+        default="postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/youandinotai"
     )
     supabase_db_url: str = Field(
         default="",
@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     square_bot_shield_payment_link: str = (
         ""  # Pre-configured Square payment link for $1 Bot-Shield
     )
+    bot_shield_refund_enabled: bool = False
     square_subscription_payment_link: str = (
         ""  # Pre-configured Square payment link for subscriptions
     )
@@ -104,6 +105,7 @@ class Settings(BaseSettings):
     # ClawX 6-AI Council Integration
     # -------------------------------------------------------------------------
     clawx_enabled: bool = False
+    graphql_enabled: bool = False
     clawx_base_url: str = "https://api.clawx.example.com"
     clawx_agent_keys: str = "{}"  # JSON dict of agent_name: api_key
 
@@ -129,9 +131,11 @@ class Settings(BaseSettings):
         description="REQUIRED. JWT signing secret. Must be set via JWT_SECRET env var. No fallback.",
     )
     metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
+    beta_access_enabled: bool = False
     beta_access_codes: str = ""
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
+    password_reset_expire_minutes: int = 30
 
     # -------------------------------------------------------------------------
     # CDN / static asset delivery
@@ -147,19 +151,21 @@ class Settings(BaseSettings):
     # -------------------------------------------------------------------------
     # Redis
     # -------------------------------------------------------------------------
-    redis_url: str = "redis://localhost:6379/0"
+    redis_url: str = "redis://127.0.0.1:6379/0"
     redis_max_connections: int = 20
     redis_cache_default_ttl: int = 300
     redis_session_ttl: int = 3600
     redis_rate_limit_window: int = 60
 
     cors_origins: str = (
-        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://127.0.0.1:3200,http://[IP_ADDRESS]:8000"
+        "https://youandinotai.com,http://192.168.0.15:3200,http://192.168.0.15:8000,http://192.168.0.40:4315"
     )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
     verify_rate_limit_per_minute: int = 5
     waitlist_rate_limit_per_minute: int = 5
+    password_reset_rate_limit_per_minute: int = 5
+    public_stats_rate_limit_per_minute: int = 20
     rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50
