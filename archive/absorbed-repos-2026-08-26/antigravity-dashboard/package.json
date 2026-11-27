@@ -8,6 +8,6 @@
     "deploy": "npx wrangler pages deploy ."
   },
   "devDependencies": {
-    "wrangler": "^3.99.0"
+    "wrangler": "^4.168.0"
   }
 }
