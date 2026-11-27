@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-tell-if-a-match-is-using-someon
 
 # How to tell if a match is using someone else's photos
 
-Dating profiles sometimes feature pictures that belong to someone else. Dishonest accounts take images from social media profiles, commercial photo websites, or modeling pages. In an article published on August 22, 2022, the [Federal Trade Commission](https://consumer.ftc.gov/articles/what-know-about-romance-scams) stated that scammers create fake profiles using photos of other people stolen from the web. The Federal Trade Commission advises running a reverse image search on a profile picture to see if the photo connects to another name or details that do not match what the person told you. Learning how to check profile pictures helps you identify accounts that rely on stolen images.
+Dating profiles sometimes feature pictures that belong to someone else. Dishonest accounts take images from social media profiles, commercial photo websites, or modeling pages. In guidance dated August 2022, the [Federal Trade Commission](https://consumer.ftc.gov/articles/what-know-about-romance-scams) stated that romance scammers create fake profiles on dating sites and apps. The Federal Trade Commission advises running a reverse image search on a profile picture to see if the photo connects to another name or details that do not match what the person told you. Learning how to check profile pictures helps you identify accounts that rely on stolen images.
 
 ## Inspect the photos for visual inconsistencies
 
