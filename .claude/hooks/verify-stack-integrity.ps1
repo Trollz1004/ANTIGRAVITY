@@ -1,4 +1,4 @@
-# verify-stack-integrity.ps1 - checks the stack for every failure mode that
+﻿# verify-stack-integrity.ps1 - checks the stack for every failure mode that
 # has actually taken it down. Read-only: starts nothing, kills nothing.
 #
 #   stack-status.ps1  answers "is it running?"
@@ -84,7 +84,8 @@ if (Test-Path $hermesCfg) {
 # fallback chain the moment the primary provider hiccups.
 Head 'Model routing'
 $tags = @()
-try { $tags = (Invoke-RestMethod 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6).models.name } catch {}
+$ollamaBase = if ($env:OLLAMA_HOST) { $env:OLLAMA_HOST.TrimEnd('/') } else { 'http://192.168.0.40:11434' }
+try { $tags = (Invoke-RestMethod "$ollamaBase/api/tags" -TimeoutSec 6).models.name } catch {}
 if ($tags.Count -eq 0) { Warn 'Ollama not reachable - cannot verify local model tags' 'ollama serve' }
 else {
   $referenced = @()

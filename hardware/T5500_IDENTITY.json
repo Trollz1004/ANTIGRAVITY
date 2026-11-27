@@ -16,6 +16,6 @@
   "device_id": "15089836-E455-4E9B-AFA1-5F2CD61B269B",
   "product_id": "00330-54390-05713-AAOEM",
   "vram_policy": "8 GB budget: queue model loads, one large model at a time, no thrash",
-  "grindroid": "not on this node; not created yet; not touched",
+  "other_private_projects": "not part of this repo and not on this node; they live in their own folders, repositories and agent sessions on a separate drive; never open, read, copy or mix their files, prompts or memory with this repo; a task for one of them is written as a handoff file for its own session in the drop box, and nothing else is done",
   "secrets": "none in this file and none in git"
 }

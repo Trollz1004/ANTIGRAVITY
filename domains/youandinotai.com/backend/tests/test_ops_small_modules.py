@@ -20,7 +20,7 @@ from tests.helpers import override_user
 
 
 def _make_user() -> User:
-    return User(
+    user = User(
         id=uuid.uuid4(),
         email=f"ops-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
@@ -28,6 +28,8 @@ def _make_user() -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
+    user.is_admin = True
+    return user
 
 
 @pytest.fixture()

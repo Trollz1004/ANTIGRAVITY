@@ -1,6 +1,8 @@
 """Authentication router - register, login, refresh, me."""
 
 import hashlib
+import hmac
+import logging
 import uuid
 from datetime import datetime, timezone
 
@@ -10,37 +12,47 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.age_gate import ensure_adult
 from app.auth import (
+    consume_password_reset_token,
     create_access_token,
-    create_refresh_token,
     decode_token,
     ensure_active_user,
     get_current_user,
     hash_password,
+    issue_password_reset_token,
+    issue_refresh_token,
     rotate_refresh_token,
     verify_google_token,
     verify_password,
 )
 from app.config import get_settings
 from app.database import get_db
+from app.email_service import _smtp_is_configured, send_password_reset_email
 from app.error_responses import (
     ErrorCode,
     bad_request,
     conflict,
+    not_found,
     unauthorized,
 )
-from app.models import Profile, User
+from app.models import Profile, User, VerificationEvent
 from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
     AuthBetaAccessRequest,
+    AuthForgotPasswordRequest,
+    AuthForgotPasswordResponse,
     AuthLoginRequest,
     AuthRefreshRequest,
     AuthRegisterRequest,
+    AuthResetPasswordRequest,
+    AuthResetPasswordResponse,
     AuthTokenResponse,
     GoogleLoginRequest,
     UserMeResponse,
+    normalize_signup_source,
 )
 from app.subscriptions import user_has_active_subscription
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth")
 
 
@@ -69,6 +81,17 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
         return hashlib.sha256(
             f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode()
         ).hexdigest()
+
+
+def _resolve_signup_source(
+    signup_source: str | None, referral_code: str | None
+) -> str | None:
+    if signup_source is not None:
+        return signup_source
+    cleaned_ref = (referral_code or "").strip()
+    if cleaned_ref:
+        return normalize_signup_source(f"ref:{cleaned_ref}")
+    return None
 
 
 @router.post(
@@ -144,6 +167,9 @@ async def register(
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
         referral_code=payload.referral_code,
+        signup_source=_resolve_signup_source(
+            payload.signup_source, payload.referral_code
+        ),
     )
     db.add(user)
     await db.commit()
@@ -169,8 +195,10 @@ async def register(
             )
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -226,8 +254,10 @@ async def login(
     ensure_active_user(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -257,6 +287,7 @@ async def google_login(
             raise bad_request(
                 message="Date of birth is required to create an account (18+ only)"
             )
+        referral_code = (payload.referral_code or "").strip() or None
         # Create a new user
         user = User(
             id=uuid.uuid4(),
@@ -266,6 +297,8 @@ async def google_login(
             google_id=id_info.get("sub"),
             date_of_birth=payload.date_of_birth,
             adult_verified_at=datetime.now(timezone.utc),
+            referral_code=referral_code,
+            signup_source=_resolve_signup_source(payload.signup_source, referral_code),
         )
         db.add(user)
         await db.commit()
@@ -282,8 +315,10 @@ async def google_login(
     ensure_active_user(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -294,9 +329,25 @@ async def beta_access(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:beta_access",
+        limit=settings.verify_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+    if not settings.beta_access_enabled:
+        raise not_found(message="Beta access is not enabled")
+
     normalized_code = _normalize_beta_code(payload.code)
-    allowed_codes = get_settings().beta_access_code_list
-    if not allowed_codes or normalized_code not in allowed_codes:
+    allowed_codes = settings.beta_access_code_list
+    if not allowed_codes or not any(
+        hmac.compare_digest(
+            normalized_code.encode("utf-8"),
+            candidate.encode("utf-8"),
+        )
+        for candidate in allowed_codes
+    ):
         raise unauthorized(
             message="Invalid beta access code",
             details={"code": ErrorCode.BETA_ACCESS_DENIED},
@@ -305,7 +356,6 @@ async def beta_access(
     if payload.date_of_birth is not None:
         ensure_adult(payload.date_of_birth)
 
-    settings = get_settings()
     email, password_seed, display_name = _beta_identity(
         normalized_code, settings.jwt_secret
     )
@@ -316,6 +366,7 @@ async def beta_access(
             raise bad_request(
                 message="Date of birth is required to create an account (18+ only)"
             )
+        now = datetime.now(timezone.utc)
         user = User(
             id=uuid.uuid4(),
             email=email,
@@ -324,8 +375,8 @@ async def beta_access(
             ),
             display_name=display_name,
             date_of_birth=payload.date_of_birth,
-            adult_verified_at=datetime.now(timezone.utc),
-            bot_shield_verified=True,
+            adult_verified_at=now,
+            bot_shield_verified=False,
             subscription_tier="founding_member",
             subscription_active=True,
             is_active=True,
@@ -333,6 +384,18 @@ async def beta_access(
             member_badge="Founder",
         )
         db.add(user)
+        await db.flush()
+        db.add(
+            VerificationEvent(
+                id=uuid.uuid4(),
+                user_id=user.id,
+                challenge_type="payment",
+                challenge_token="beta_access",
+                status="completed",
+                amount_cents=0,
+                completed_at=now,
+            )
+        )
         await db.commit()
         await db.refresh(user)
     elif not user.is_active:
@@ -350,8 +413,10 @@ async def beta_access(
         await db.refresh(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -433,13 +498,104 @@ async def refresh_token(
         user_agent=user_agent,
     )
 
-    new_access_token = create_access_token(str(user.id))
+    new_access_token = create_access_token(
+        str(user.id), password_hash=user.password_hash
+    )
 
     return AuthTokenResponse(
         access_token=new_access_token,
         refresh_token=new_refresh_token,
         user_id=user.id,
     )
+
+
+@router.post(
+    "/forgot-password",
+    response_model=AuthForgotPasswordResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Request a password reset link",
+    description="Issue a single-use 30-minute password reset link. Returns the same response whether or not the email exists.",
+)
+async def forgot_password(
+    request: Request,
+    payload: AuthForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> AuthForgotPasswordResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:forgot-password",
+        limit=settings.password_reset_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    mail_configured = _smtp_is_configured(settings)
+    if not mail_configured:
+        logger.warning("Password reset requested while SMTP mail is not configured.")
+
+    normalized_email = payload.email.strip().lower()
+    user = await db.scalar(select(User).where(User.email == normalized_email))
+    matched = bool(user and user.is_active)
+    mail_outcome = "mail skipped"
+    if matched:
+        ip_address = request.client.host if request.client else None
+        raw_token = await issue_password_reset_token(
+            db,
+            user.id,
+            ip_address=ip_address,
+        )
+        if mail_configured:
+            app_url = (
+                str(settings.app_url or "https://youandinotai.com").strip()
+                or "https://youandinotai.com"
+            ).rstrip("/")
+            reset_url = f"{app_url}/reset-password?token={raw_token}"
+            try:
+                await send_password_reset_email(
+                    recipient_email=user.email,
+                    display_name=user.display_name,
+                    reset_url=reset_url,
+                    expires_minutes=settings.password_reset_expire_minutes,
+                    settings=settings,
+                )
+                mail_outcome = "mail sent"
+            except Exception as exc:
+                mail_outcome = f"mail failed {type(exc).__name__}"
+                logger.warning("Password reset email delivery failed")
+
+    # One line per request, with nothing personal: no email, no token, no body.
+    logger.info(
+        "password reset %s %s %s",
+        datetime.now(timezone.utc).isoformat(),
+        "matched" if matched else "not matched",
+        mail_outcome,
+    )
+
+    return AuthForgotPasswordResponse()
+
+
+@router.post(
+    "/reset-password",
+    response_model=AuthResetPasswordResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Reset password with single-use token",
+    description="Set a new password using a valid 30-minute reset token, burn the token, and end existing sessions.",
+)
+async def reset_password(
+    request: Request,
+    payload: AuthResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> AuthResetPasswordResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:reset-password",
+        limit=settings.password_reset_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    await consume_password_reset_token(db, payload.token, payload.new_password)
+    return AuthResetPasswordResponse()
 
 
 @router.get(

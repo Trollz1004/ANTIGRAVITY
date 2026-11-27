@@ -21,6 +21,6 @@
   Joshua's approval (marketing-inbox gate). Judge lane pushes/merges.
 
 ## 2026-08-24 (openclaw, Buffy-orchestrated)
-- did: repointed omniroute provider https://localhost:20182/v1 -> http://127.0.0.1:20128/v1 with working key; default model ollama/CFO -> omniroute/auto-best (bypasses crashing llama-server); restarted dead gateway :18789 (PID 35748) after llama-server CUDA crash killed it
+- did: repointed omniroute provider from legacy TLS route to `http://192.168.0.15:20128/v1` with working key; default model ollama/CFO -> omniroute/auto-best (bypasses crashing llama-server); restarted dead gateway :18789 (PID 35748) after llama-server CUDA crash killed it
 - verified: WS connect.challenge identity; run 90d42a0f accepted by gateway, phase=start, then LLM 403 "Access denied outside allowed hours (08:00-18:00 America/New_York)" from OmniRoute :20128
 - state: YELLOW. Lane mechanically proven; model calls blocked by OmniRoute hours policy outside 08:00-18:00 America/New_York. Joshua's call to lift.

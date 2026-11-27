@@ -47,7 +47,7 @@ const systems = [
     icon: Shield,
     title: 'Human Verification',
     detail:
-      'Human check, payment checkpoint, and verification state stay tied to the same account flow.',
+      'Timed question, $1 payment checkpoint, and verification state stay tied to the same account flow.',
   },
   {
     icon: Wallet,

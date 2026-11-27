@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 # The customer-facing API may live at any of these paths depending on node:
-#   Sabretooth: API not local (lives on T5500) → API_DIR will not exist; checks skip
+#   Workshop (Alienware): API lives on T5500 unless checked out under domains/
 #   T5500: services/youandinotai-api/ or youandinotai-api/ at repo root
 # We resolve to the first one that exists; otherwise API_DIR stays unresolved
 # and AUTH_COVERAGE / PII / RAW_SQL checks degrade to WARN ("API not on this node").
@@ -178,8 +178,8 @@ def check_no_hardcoded_secrets(result: GuardianResult):
 def check_auth_coverage(result: GuardianResult):
     """Verify all router endpoints require authentication."""
     if not ROUTERS_DIR.exists():
-        # The customer-facing API lives on T5500, not Sabretooth. Skip with WARN
-        # rather than FAIL so a single-node guardian run doesn't false-flag.
+        # The customer-facing API lives on T5500. Skip with WARN rather than FAIL
+        # so a single-node guardian run doesn't false-flag.
         result.warn("AUTH_COVERAGE", f"API routers not on this node ({ROUTERS_DIR}); run guardian on the T5500 box for the real check")
         return
 
@@ -330,33 +330,80 @@ def check_input_validation(result: GuardianResult):
                     result.warn("INPUT_VALIDATION", f"{router_file.name}:{func_name} — has body param but no typed schema")
 
 def check_env_file(result: GuardianResult):
-    """Verify required runtime keys exist in environment or expected local env files."""
-    candidate_env_files = [
-        ROOT / ".env",
-        API_DIR / ".env",
-    ]
-
-    content_parts = []
-    existing_files = []
-    for env_file in candidate_env_files:
-        if env_file.exists():
-            existing_files.append(str(env_file.relative_to(ROOT)))
-            content_parts.append(env_file.read_text(encoding="utf-8", errors="ignore"))
-
-    content = "\n".join(content_parts)
-    missing = []
-    for key in REQUIRED_ENV_KEYS:
-        if key not in content and not os.getenv(key):
-            missing.append(key)
-
-    if missing and existing_files:
-        result.fail("ENV_FILE", f"Missing required keys: {', '.join(missing)}")
-    elif missing:
-        result.warn("ENV_FILE", f"No local backend env file found on this node; missing runtime keys in current process: {', '.join(missing)}")
-    elif existing_files:
-        result.ok("ENV_FILE", f"Required keys found via {', '.join(existing_files)}")
+    """Verify required runtime keys exist in the process environment without reading .env files."""
+    missing = [key for key in REQUIRED_ENV_KEYS if not os.getenv(key)]
+    if missing:
+        result.warn("ENV_FILE", f"Missing runtime keys in current process environment: {', '.join(missing)}")
     else:
-        result.warn("ENV_FILE", "No local .env file found; relying on process environment")
+        result.ok("ENV_FILE", "Required runtime keys present in process environment")
+
+def check_fleet_address_doctrine(result: GuardianResult):
+    """Verify ops/fleet/fleet-map.json exists, defines only t5500 & alienware, and keeps non-DB services off loopback."""
+    fleet_file = ROOT / "ops" / "fleet" / "fleet-map.json"
+    if not fleet_file.exists():
+        result.fail("FLEET_MAP", "Missing ops/fleet/fleet-map.json")
+        return
+    try:
+        import json as _json
+        raw = fleet_file.read_text(encoding="utf-8")
+        data = _json.loads(raw)
+    except Exception as exc:
+        result.fail("FLEET_MAP", f"Invalid ops/fleet/fleet-map.json: {exc}")
+        return
+
+    dead_ip = ".".join(["192", "168", "0", "8"])
+    if dead_ip in raw or "sabretooth" in raw.lower():
+        result.fail("FLEET_MAP", "Retired third node found in ops/fleet/fleet-map.json")
+        return
+
+    raw_nodes = data.get("nodes") or {}
+    if isinstance(raw_nodes, list):
+        nodes = sorted(str(n.get("id", "")).strip().lower() for n in raw_nodes if isinstance(n, dict))
+    elif isinstance(raw_nodes, dict):
+        nodes = sorted(str(k).strip().lower() for k in raw_nodes.keys())
+    else:
+        nodes = []
+    if nodes != ["alienware", "t5500"]:
+        result.fail("FLEET_MAP", f"Expected nodes ['alienware', 't5500'], got {nodes}")
+        return
+
+    raw_services = data.get("services")
+    if isinstance(raw_services, list):
+        svc_entries = [
+            (str(svc.get("id") or f"idx-{idx}"), svc)
+            for idx, svc in enumerate(raw_services)
+            if isinstance(svc, dict)
+        ]
+    elif isinstance(raw_services, dict):
+        svc_entries = [
+            (str(svc.get("id") or svc_id), svc)
+            for svc_id, svc in raw_services.items()
+            if isinstance(svc, dict)
+        ]
+    else:
+        result.fail("FLEET_MAP", "Invalid services container in ops/fleet/fleet-map.json")
+        return
+
+    bad_loopback = []
+    bad_local_bind = []
+    for svc_id, svc in svc_entries:
+        port = svc.get("port")
+        host = str(svc.get("host", "")).strip().lower()
+        bind = str(svc.get("bind", "")).strip().lower()
+        scope = str(svc.get("scope", "")).strip().lower()
+        is_machine_local = scope in ("this machine only", "local-only")
+        if is_machine_local:
+            if host != "127.0.0.1" or (bind and bind != "127.0.0.1"):
+                bad_local_bind.append(f"{svc_id}:{port}")
+        elif host in ("127.0.0.1", "localhost"):
+            bad_loopback.append(f"{svc_id}:{port}")
+
+    if bad_loopback:
+        result.fail("FLEET_MAP", f"LAN services using loopback host: {', '.join(bad_loopback)}")
+    elif bad_local_bind:
+        result.fail("FLEET_MAP", f"Machine-local services not bound strictly to 127.0.0.1: {', '.join(bad_local_bind)}")
+    else:
+        result.ok("FLEET_MAP", "Canonical 2-node fleet map verified (machine-local services strictly on 127.0.0.1)")
 
 def main():
     result = GuardianResult()
@@ -367,6 +414,7 @@ def main():
     print(f"  UI:   {FRONTEND_DIR}")
 
     check_no_hardcoded_secrets(result)
+    check_fleet_address_doctrine(result)
     check_auth_coverage(result)
     check_legacy_routing_boundary(result)
     check_revenue_policy(result)

@@ -346,3 +346,42 @@ class TestMalformedHeaderRejection:
             400,
             401,
         ), f"Wrong-key signature must be rejected, got {response.status_code}"
+
+    def test_failed_signature_skips_sigfail_database_payload_write(
+        self, client, db_session_factory
+    ):
+        """Failed Square signature checks must not write unbounded sigfail-* rows to webhook_events."""
+        import asyncio
+
+        from sqlalchemy import select
+
+        from app.models import WebhookEvent
+
+        payload, _ = _make_signed_payment_payload()
+        payload["untrusted_blob"] = "X" * 32_768
+        body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+
+        response = client.post(
+            "/api/v1/webhooks/square-payment",
+            headers={
+                "x-square-hmacsha256-signature": "invalid-signature",
+                "Content-Type": "application/json",
+            },
+            content=body,
+        )
+        assert response.status_code == 400
+
+        async def fetch_sigfail_rows() -> list[WebhookEvent]:
+            async with db_session_factory() as session:
+                rows = await session.scalars(
+                    select(WebhookEvent).where(
+                        (WebhookEvent.event_type == "verification_failed")
+                        | WebhookEvent.event_source_id.like("sigfail-%")
+                    )
+                )
+                return list(rows)
+
+        sigfail_rows = asyncio.run(fetch_sigfail_rows())
+        assert (
+            sigfail_rows == []
+        ), f"Expected failed signature check to skip sigfail-* DB writes, got {len(sigfail_rows)} row(s)"

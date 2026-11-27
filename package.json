@@ -14,13 +14,14 @@
     "dev:openclaw": "pnpm --filter opuspawclaw dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
-    "test": "node --test tests/definitions-drift.test.mjs && pnpm -r test",
+    "test": "node --test tests/definitions-drift.test.mjs tests/onlinerecycle-pages.test.mjs && pnpm -r test",
     "format": "prettier --write .",
     "fable": "node scripts/fable/fable.mjs"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^5.2.1",
+    "parse5": "^8.0.1",
     "prettier": "^3.8.3"
   },
   "dependencies": {

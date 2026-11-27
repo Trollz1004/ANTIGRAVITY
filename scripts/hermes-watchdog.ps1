@@ -1,14 +1,18 @@
 ﻿# Hermes Router Watchdog — runs forever, completely hidden, no window, no focus steal.
-# Checks Hermes Router (port 11435) every 30 seconds.
-# Restarts via WSL on failure. Logs to E:\ANTIGRAVITY\logs\hermes-watchdog.log
+# Checks local Hermes Router port every 30 seconds (canonical T5500 Hermes API :8643 / Dashboard :9119 in ops/fleet/fleet-map.json).
+# Restarts via WSL on failure. Logs to <RepoRoot>\logs\hermes-watchdog.log
+
+param(
+    [string]$RepoRoot = $(if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { Split-Path -Parent $PSScriptRoot })
+)
 
 $ErrorActionPreference = 'Continue'
 
-$LogDir     = 'E:\ANTIGRAVITY\logs'
+$LogDir     = Join-Path $RepoRoot 'logs'
 $LogFile    = "$LogDir\hermes-watchdog.log"
 $MaxLogBytes = 10MB
 
-$HermesScript  = 'E:\ANTIGRAVITY\scripts\start-hermes-router.cmd'
+$HermesScript  = Join-Path $RepoRoot 'scripts\start-hermes-router.cmd'
 $HermesPort    = 11435
 $CheckInterval = 30   # seconds between health checks
 
@@ -28,7 +32,7 @@ function Rotate-Log {
 function Test-LocalPort($port) {
     try {
         $client = New-Object System.Net.Sockets.TcpClient
-        $async  = $client.BeginConnect('127.0.0.1', $port, $null, $null)
+        $async  = $client.BeginConnect([System.Net.IPAddress]::Loopback, $port, $null, $null)
         $ok     = $async.AsyncWaitHandle.WaitOne(2000, $false)
         $client.Close()
         return $ok

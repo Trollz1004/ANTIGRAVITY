@@ -1,0 +1,26 @@
+{
+  "/auth/me": {
+    "user_id": "00000000-0000-4000-8000-000000000002",
+    "email": "member-demo@youandinotai.com",
+    "display_name": "Verified Member",
+    "bot_shield_verified": true,
+    "subscription_tier": null,
+    "subscription_active": false,
+    "subscription_expires_at": null,
+    "has_profile": true,
+    "adult_verified": true
+  },
+  "/verify/status": {
+    "verified": true,
+    "trust_score": 60,
+    "tier": "gold",
+    "bot_shield_paid": true,
+    "subscription_active": false,
+    "checks_completed": 2
+  },
+  "/verify/refund-status": {
+    "available": true,
+    "expires_at": "2026-11-23T12:00:00Z",
+    "until": "2026-11-23T12:00:00Z"
+  }
+}

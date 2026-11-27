@@ -1,0 +1,333 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import net from 'node:net';
+import path from 'node:path';
+import { spawn, spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { resolveFrontendBind } from './bind.mjs';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const TSX_CLI = path.join(HERE, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+const HAS_FRONTEND_DEPS =
+  fs.existsSync(path.join(HERE, 'node_modules', 'express')) &&
+  fs.existsSync(TSX_CLI);
+const LOOPBACK = ['127', '0', '0', '1'].join('.');
+
+function getFreePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.listen(0, LOOPBACK, () => {
+      const addr = srv.address();
+      const port = addr && typeof addr === 'object' ? addr.port : 0;
+      srv.close(() => resolve(port));
+    });
+    srv.on('error', reject);
+  });
+}
+
+test('resolveFrontendBind uses explicit HOST without FLEET_SHARED_TOKEN and never throws, binds 127.0.0.1 when HOST and token are unset, and binds 0.0.0.0 with token', () => {
+  const warnings = [];
+  const host = resolveFrontendBind(
+    {},
+    { port: 3200, bind: '0.0.0.0', warn: m => warnings.push(m) }
+  );
+  assert.equal(host, LOOPBACK);
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /FLEET_SHARED_TOKEN/);
+  assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
+
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: '0.0.0.0' },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    '0.0.0.0'
+  );
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: '192.168.0.15' },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    '192.168.0.15'
+  );
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: LOOPBACK },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    LOOPBACK
+  );
+  assert.equal(
+    resolveFrontendBind(
+      { FLEET_SHARED_TOKEN: 'fleet-tok' },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    '0.0.0.0'
+  );
+});
+
+test(
+  'youandinotai frontend server serves public routes (200) without fleet token in both no-token (127.0.0.1) and token-set (0.0.0.0) modes',
+  {
+    skip: !HAS_FRONTEND_DEPS
+      ? 'requires frontend node_modules (express + tsx)'
+      : false,
+  },
+  async () => {
+    for (const mode of [
+      { name: 'no-token', token: '', expectedBind: LOOPBACK, expectWarn: true },
+      {
+        name: 'token-set',
+        token: 'test-fleet-token-3200',
+        expectedBind: '0.0.0.0',
+        expectWarn: false,
+      },
+    ]) {
+      const port = await getFreePort();
+      const env = {
+        ...process.env,
+        NODE_ENV: 'production',
+        PORT: String(port),
+      };
+      delete env.HOST;
+      if (mode.token) env.FLEET_SHARED_TOKEN = mode.token;
+      else delete env.FLEET_SHARED_TOKEN;
+
+      const child = spawn(process.execPath, [TSX_CLI, 'server.ts'], {
+        cwd: HERE,
+        env,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      let logs = '';
+      child.stdout.on('data', c => {
+        logs += String(c);
+      });
+      child.stderr.on('data', c => {
+        logs += String(c);
+      });
+
+      try {
+        await new Promise((resolve, reject) => {
+          const deadline = setTimeout(
+            () => reject(new Error(`frontend did not start; logs=${logs}`)),
+            10000
+          );
+          const check = () => {
+            if (
+              logs.includes(
+                `Server running on http://${mode.expectedBind}:${port}`
+              )
+            ) {
+              clearTimeout(deadline);
+              resolve();
+            }
+          };
+          child.stdout.on('data', check);
+          child.stderr.on('data', check);
+          child.on('exit', code => {
+            clearTimeout(deadline);
+            reject(new Error(`frontend exited early (${code}); logs=${logs}`));
+          });
+        });
+
+        if (mode.expectWarn) {
+          assert.match(logs, /WARNING: FLEET_SHARED_TOKEN is not set/);
+          assert.match(
+            logs,
+            /Startup env check: missing required setting names: FLEET_SHARED_TOKEN/
+          );
+        }
+
+        const health = await fetch(`http://${LOOPBACK}:${port}/health`);
+        assert.equal(
+          health.status,
+          200,
+          `${mode.name}: /health must return 200 without fleet token`
+        );
+        const healthBody = await health.json();
+        // Public route (youandinotai.com): light and counts only, never names or file paths.
+        assert.equal('missingEnv' in healthBody, false);
+        assert.equal('driftedFiles' in healthBody, false);
+        assert.equal(JSON.stringify(healthBody).includes('FLEET_SHARED_TOKEN'), false);
+        assert.equal(typeof healthBody.missingEnvCount, 'number');
+
+        const apiHealth = await fetch(`http://${LOOPBACK}:${port}/api/health`);
+        assert.equal(
+          apiHealth.status,
+          200,
+          `${mode.name}: /api/health must return 200 without fleet token`
+        );
+        const apiHealthBody = await apiHealth.json();
+        if (mode.token) {
+          assert.equal(apiHealthBody.missingEnvCount, 0);
+          assert.equal(
+            JSON.stringify(apiHealthBody).includes(mode.token),
+            false
+          );
+        } else {
+          assert.equal('missingEnv' in apiHealthBody, false);
+          assert.equal(JSON.stringify(apiHealthBody).includes('FLEET_SHARED_TOKEN'), false);
+          assert.equal(apiHealthBody.missingEnvCount, 1);
+          assert.equal(apiHealthBody.nodeLight, 'amber');
+        }
+
+        if (fs.existsSync(path.join(HERE, 'dist', 'index.html'))) {
+          const home = await fetch(`http://${LOOPBACK}:${port}/`);
+          assert.equal(
+            home.status,
+            200,
+            `${mode.name}: / must return 200 without fleet token`
+          );
+        }
+      } finally {
+        child.kill();
+      }
+    }
+  }
+);
+
+test('youandinotai frontend server preloads manifest/drift outside /health handlers, avoids route-level res.sendFile, and includes in-memory rate limiting', () => {
+  const src = fs.readFileSync(path.join(HERE, 'server.ts'), 'utf8');
+  assert.match(src, /loadEnvRequiredManifest/);
+  assert.match(src, /readAgentDriftStatus/);
+  assert.doesNotMatch(src, /res\.sendFile\s*\(/);
+  assert.match(src, /429/);
+
+  const healthBlock =
+    src.match(/app\.get\(['"]\/health['"][\s\S]*?\}\);/)?.[0] || '';
+  const apiHealthBlock =
+    src.match(/app\.get\(['"]\/api\/health['"][\s\S]*?\}\);/)?.[0] || '';
+  assert.ok(healthBlock.length > 0 && apiHealthBlock.length > 0);
+  assert.doesNotMatch(healthBlock, /\bfs\./);
+  assert.doesNotMatch(apiHealthBlock, /\bfs\./);
+  assert.doesNotMatch(healthBlock, /buildHealthEnvLight/);
+  assert.doesNotMatch(apiHealthBlock, /buildHealthEnvLight/);
+});
+
+test('tab-dateapp-api.ps1 warns and uses DATEAPP_API_HOST when FLEET_SHARED_TOKEN is missing instead of exiting', () => {
+  const apiLauncherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp-api.ps1');
+  const src = fs.readFileSync(apiLauncherPath, 'utf8');
+  assert.doesNotMatch(src, /Refusing to bind/);
+
+  const match = src.match(/\$fleetToken\s*=\s*\[string\]\$env:FLEET_SHARED_TOKEN[\s\S]*?\$ApiBindHost\s*=\s*Get-FleetBindHost\s+-ServiceId\s+'dateapp-api'\s*\}/);
+  assert.ok(match, 'Expected bind resolution block in tab-dateapp-api.ps1');
+
+  const psSnippet = [
+    "$ErrorActionPreference = 'Stop'",
+    '$ApiPort = 8000',
+    "$env:FLEET_SHARED_TOKEN = ''",
+    "$env:DATEAPP_API_HOST = '0.0.0.0'",
+    match[0],
+    'Write-Output "BIND_HOST=$ApiBindHost"',
+  ].join('\n');
+
+  const res = spawnSync(
+    'powershell',
+    ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', psSnippet],
+    { encoding: 'utf8', timeout: 8000 }
+  );
+  assert.equal(res.status, 0, `Expected exit 0, got ${res.status}: ${res.stdout} ${res.stderr}`);
+  assert.match(`${res.stdout}\n${res.stderr}`, /WARNING:/i);
+  assert.match(res.stdout, /BIND_HOST=0\.0\.0\.0/);
+});
+test('tab-dateapp.cmd HOST value is accepted by resolveFrontendBind with no FLEET_SHARED_TOKEN', () => {
+  const cmdPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp.cmd');
+  const cmdSrc = fs.readFileSync(cmdPath, 'utf8');
+  const match = cmdSrc.match(/^\s*set\s+"HOST=([^"\r\n]+)"/im);
+  assert.ok(match, 'tab-dateapp.cmd must set HOST');
+  const launcherHost = match[1].trim();
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: launcherHost },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    launcherHost
+  );
+});
+
+test(
+  'youandinotai frontend server starts and listens with launcher env (HOST=0.0.0.0, NODE_ENV=production, no FLEET_SHARED_TOKEN)',
+  {
+    skip: !HAS_FRONTEND_DEPS
+      ? 'requires frontend node_modules (express + tsx)'
+      : false,
+  },
+  async () => {
+    const distDir = path.join(HERE, 'dist');
+    const distIndex = path.join(distDir, 'index.html');
+    const hadDistDir = fs.existsSync(distDir);
+    const hadDistIndex = fs.existsSync(distIndex);
+    if (!hadDistIndex) {
+      fs.mkdirSync(distDir, { recursive: true });
+      fs.writeFileSync(distIndex, '<!doctype html><html><body>stub</body></html>\n', 'utf8');
+    }
+
+    const port = await getFreePort();
+    const env = {
+      ...process.env,
+      NODE_ENV: 'production',
+      HOST: '0.0.0.0',
+      PORT: String(port),
+    };
+    delete env.FLEET_SHARED_TOKEN;
+
+    const child = spawn(process.execPath, [TSX_CLI, 'server.ts'], {
+      cwd: HERE,
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let logs = '';
+    child.stdout.on('data', c => {
+      logs += String(c);
+    });
+    child.stderr.on('data', c => {
+      logs += String(c);
+    });
+
+    try {
+      await new Promise((resolve, reject) => {
+        const deadline = setTimeout(
+          () => reject(new Error(`frontend did not start; logs=${logs}`)),
+          10000
+        );
+        const check = () => {
+          if (logs.includes(`Server running on http://0.0.0.0:${port}`)) {
+            clearTimeout(deadline);
+            resolve();
+          }
+        };
+        child.stdout.on('data', check);
+        child.stderr.on('data', check);
+        child.on('exit', code => {
+          clearTimeout(deadline);
+          reject(new Error(`frontend exited early (${code}); logs=${logs}`));
+        });
+      });
+
+      const health = await fetch(`http://${LOOPBACK}:${port}/health`);
+      assert.equal(health.status, 200);
+      const home = await fetch(`http://${LOOPBACK}:${port}/`);
+      assert.equal(home.status, 200);
+    } finally {
+      child.kill();
+      if (!hadDistIndex) {
+        try {
+          fs.rmSync(distIndex, { force: true });
+          if (!hadDistDir) {
+            fs.rmSync(distDir, { recursive: true, force: true });
+          }
+        } catch {
+          // ignore cleanup error
+        }
+      }
+    }
+  }
+);
+test('start-mission-control.ps1 resolves mission-os/server.mjs for port 3130 with WindowStyle Hidden and loopback bind when token is missing', () => {
+  const launcherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'start-mission-control.ps1');
+  const src = fs.readFileSync(launcherPath, 'utf8');
+  assert.match(src, /mission-os[\\/]server\.mjs/);
+  assert.match(src, /-WindowStyle\s+Hidden/);
+  assert.match(src, /MISSION_OS_HOST/);
+});

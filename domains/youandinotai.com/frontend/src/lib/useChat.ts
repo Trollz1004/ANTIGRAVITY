@@ -7,9 +7,17 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { api } from './api';
 
-const WS_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
-  .replace(/^http/, 'ws')
-  .replace('/api/v1', '');
+const PUBLIC_API_BASE = 'https://api.youandinotai.com/api/v1';
+const PUBLIC_APP_HOSTS = new Set(['youandinotai.com', 'www.youandinotai.com']);
+
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' &&
+  PUBLIC_APP_HOSTS.has(window.location.hostname)
+    ? PUBLIC_API_BASE
+    : 'http://192.168.0.15:8000/api/v1');
+
+const WS_BASE = API_BASE.replace(/^http/, 'ws').replace('/api/v1', '');
 
 const UNREADABLE_MESSAGE_TEXT = 'This message could not be shown';
 
