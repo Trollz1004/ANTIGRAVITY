@@ -48,4 +48,4 @@ Requests for money or external payment links signal dishonest behavior.
 
 ## Account features on YouAndINotAI
 
-YouAndINotAI provides messaging, topic boards, and member events. Members receive a Verified Human badge after a one dollar check. Available features include discovery, block and report, and 30-day deletion. Founder prices are .99 a month, .99 for 3 months, and .99 for 12 months. You can join on the [member sign-up page](https://youandinotai.com/register).
+YouAndINotAI provides messaging, topic boards, and member events. Members receive a Verified Human badge after a one dollar check. Available features include discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. You can join on the [member sign-up page](https://youandinotai.com/register).
