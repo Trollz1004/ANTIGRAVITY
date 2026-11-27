@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-spot-a-fake-dating-profile-that
 
 # How to spot a fake dating profile that claims to be overseas for work
 
-Online dating connects people across cities and backgrounds. When a match claims to work overseas, evaluate the profile carefully before building an attachment. On February 9, 2023, the [Federal Trade Commission reported](https://www.ftc.gov/news-events/news/press-releases/2023/02/new-ftc-data-reveals-top-lies-told-romance-scammers) that nearly 70,000 consumers filed romance scam reports in 2022, with losses reaching $1.3 billion. The report noted that scammers build excuses not to meet into their profiles, such as claiming to work on a faraway military base or an offshore oil rig. Recognizing these profile claims helps you identify accounts that avoid meeting in person.
+Online dating connects people across cities and backgrounds. When a match claims to work overseas, evaluate the profile carefully before building an attachment. On February 9, 2023, a [Federal Trade Commission Data Spotlight reported](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2023/02/romance-scammers-favorite-lies-exposed) that nearly 70,000 consumers filed romance scam reports in 2022, with losses reaching $1.3 billion. The report noted that scammers build excuses not to meet into their profiles, such as claiming to work on a faraway military base or an offshore oil rig. Recognizing these profile claims helps you identify accounts that avoid meeting in person.
 
 ## Common overseas job claims on fake profiles
 
