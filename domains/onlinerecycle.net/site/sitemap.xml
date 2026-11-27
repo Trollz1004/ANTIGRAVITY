@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://onlinerecycle.net/blog/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -61,38 +61,8 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-lake-county-florida.html</loc>
-    <lastmod>2026-11-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://onlinerecycle.net/blog/what-to-do-with-a-broken-laptop-in-orlando.html</loc>
     <lastmod>2026-11-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-altamonte-springs-florida.html</loc>
-    <lastmod>2026-11-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-sanford-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-electronics-in-apopka-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-mount-dora-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -133,24 +103,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-clermont-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-winter-garden-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-lake-mary-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://onlinerecycle.net/blog/how-to-recycle-ups-battery-backups-in-central-florida.html</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
@@ -164,24 +116,6 @@
   </url>
   <url>
     <loc>https://onlinerecycle.net/blog/how-to-recycle-docking-stations-and-cables-in-central-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-leesburg-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-winter-park-florida.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-oviedo-florida.html</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -201,6 +135,108 @@
   <url>
     <loc>https://onlinerecycle.net/blog/how-to-recycle-home-office-routers-and-firewalls-in-central-florida.html</loc>
     <lastmod>2026-11-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-clear-out-a-home-office-before-a-move.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-clear-out-old-electronics-after-a-family-member-passes.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-count-your-items-and-pick-the-right-pickup-size.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-get-old-electronics-ready-before-a-pickup.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-plan-a-garage-cleanout-of-old-electronics.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-plan-an-office-equipment-cleanout-before-a-move.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-prepare-a-church-or-school-office-for-an-electronics-cleanout.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-all-in-one-pcs-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-game-controllers-and-accessories-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-game-discs-cartridges-and-dvds-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-gpus-ram-and-processors-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-handheld-game-systems-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-soundbars-and-subwoofers-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/how-to-recycle-workstations-in-central-florida.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/towns-we-pick-up-from.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/what-happens-at-a-free-electronics-drop-off-in-sorrento.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinerecycle.net/blog/what-to-do-with-old-computers-after-a-business-closes.html</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
