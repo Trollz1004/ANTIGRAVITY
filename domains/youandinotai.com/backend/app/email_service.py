@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 
 
 def _smtp_is_configured(settings: Settings) -> bool:
-    has_host = bool(str(settings.smtp_host or "").strip())
-    has_from = bool(str(settings.email_from_address or "").strip())
-    has_user = bool(str(settings.smtp_username or "").strip())
-    has_password = bool(str(settings.smtp_password or "").strip())
+    has_host = bool(str(getattr(settings, "smtp_host", "") or "").strip())
+    has_from = bool(str(getattr(settings, "email_from_address", "") or "").strip())
+    has_user = bool(str(getattr(settings, "smtp_username", "") or "").strip())
+    has_password = bool(str(getattr(settings, "smtp_password", "") or "").strip())
 
     if not has_host or not has_from:
         return False
@@ -368,6 +368,102 @@ async def send_waitlist_operator_notice(
     )
     await asyncio.to_thread(_deliver_email, message, settings)
     logger.info("Waitlist operator notice sent for %s", recipient_email)
+    return True
+
+
+def _build_password_reset_subject() -> str:
+    return "Reset your YouAndINotAI password"
+
+
+def _build_password_reset_text(
+    *,
+    display_name: str | None,
+    reset_url: str,
+    expires_minutes: int,
+) -> str:
+    name = (display_name or "there").strip() or "there"
+    return (
+        f"Hi {name},\n\n"
+        "We received a request to reset your YouAndINotAI password.\n\n"
+        f"Use this single-use link to set a new password (valid for {expires_minutes} minutes):\n"
+        f"{reset_url}\n\n"
+        "If you did not request a password reset, you can ignore this email and your password will stay the same.\n\n"
+        "Josh Coleman\n"
+        "Founder, YouAndINotAI\n"
+    )
+
+
+def _build_password_reset_html(
+    *,
+    display_name: str | None,
+    reset_url: str,
+    expires_minutes: int,
+) -> str:
+    name = html.escape((display_name or "there").strip() or "there")
+    safe_url = html.escape(reset_url, quote=True)
+    return f"""
+<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;color:#1f2937;line-height:1.6;">
+  <div style="background:#111827;padding:28px 24px;text-align:center;border-radius:16px 16px 0 0;">
+    <div style="color:#f9fafb;font-size:28px;font-weight:700;">YouAndINotAI</div>
+    <div style="color:#ffd21e;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:6px;">
+      Password reset
+    </div>
+  </div>
+  <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 16px 16px;padding:28px 24px;background:#ffffff;">
+    <p style="margin:0 0 16px;">Hi {name},</p>
+    <p style="margin:0 0 16px;">
+      We received a request to reset your YouAndINotAI password. This single-use link expires in {expires_minutes} minutes.
+    </p>
+    <p style="margin:20px 0;">
+      <a href="{safe_url}" style="display:inline-block;background:#111827;color:#ffd21e;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:700;">
+        Reset Password
+      </a>
+    </p>
+    <p style="margin:0 0 16px;word-break:break-all;font-size:13px;color:#4b5563;">
+      {safe_url}
+    </p>
+    <p style="margin:0;">
+      If you did not request a password reset, you can ignore this email and your password will stay the same.
+    </p>
+    <p style="margin:24px 0 0;">
+      Josh Coleman<br>
+      Founder, YouAndINotAI
+    </p>
+  </div>
+</div>
+""".strip()
+
+
+async def send_password_reset_email(
+    *,
+    recipient_email: str,
+    display_name: str | None,
+    reset_url: str,
+    expires_minutes: int,
+    settings: Settings,
+) -> bool:
+    """Deliver a single-use password reset link when SMTP is configured."""
+    if not _smtp_is_configured(settings):
+        logger.warning("Skipping password reset email; SMTP mail is not configured.")
+        return False
+
+    message = _build_email_message(
+        recipients=[recipient_email],
+        subject=_build_password_reset_subject(),
+        text_body=_build_password_reset_text(
+            display_name=display_name,
+            reset_url=reset_url,
+            expires_minutes=expires_minutes,
+        ),
+        html_body=_build_password_reset_html(
+            display_name=display_name,
+            reset_url=reset_url,
+            expires_minutes=expires_minutes,
+        ),
+        settings=settings,
+    )
+    await asyncio.to_thread(_deliver_email, message, settings)
+    logger.info("Password reset email sent")
     return True
 
 

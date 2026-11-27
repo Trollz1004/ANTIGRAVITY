@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   CalendarCheck,
   Camera,
@@ -89,9 +89,36 @@ const INTEREST_OPTIONS = [
   'Safety First',
 ];
 
+const PROFILE_DRAFT_STORAGE_KEY = 'youandinotai_profile_setup_draft';
+
+interface ProfileDraft {
+  email?: string;
+  displayName?: string;
+}
+
+function readProfileDraft(): ProfileDraft {
+  try {
+    const raw = sessionStorage.getItem(PROFILE_DRAFT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === 'string' ? record.email : undefined,
+      displayName:
+        typeof record.displayName === 'string' ? record.displayName : undefined,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function ProfileSetup() {
   const { user, fetchUser } = useAuth();
   const navigate = useNavigate();
+  const [initialDraft] = useState<ProfileDraft>(() => readProfileDraft());
+  const draftEmail = user?.email ?? initialDraft.email ?? '';
+  const draftDisplayName = user?.display_name ?? initialDraft.displayName ?? '';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [bio, setBio] = useState('');
@@ -106,6 +133,24 @@ export function ProfileSetup() {
   const [safetyPreference, setSafetyPreference] = useState('');
 
   useEffect(() => {
+    try {
+      if (!draftEmail && !draftDisplayName) {
+        sessionStorage.removeItem(PROFILE_DRAFT_STORAGE_KEY);
+        return;
+      }
+      sessionStorage.setItem(
+        PROFILE_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          email: draftEmail,
+          displayName: draftDisplayName,
+        })
+      );
+    } catch {
+      // Ignore sessionStorage errors
+    }
+  }, [draftEmail, draftDisplayName]);
+
+  useEffect(() => {
     let active = true;
     api
       .get<SavedProfileResponse>('/profiles/me')
@@ -113,8 +158,12 @@ export function ProfileSetup() {
         if (!active || !profile) return;
         const parsed = parseStructuredBio(profile.bio);
         setBio(parsed.bio);
-        if (parsed.promptAnswer) setPromptAnswer(parsed.promptAnswer);
-        if (parsed.dateComfort) setDateComfort(parsed.dateComfort);
+        if (parsed.promptAnswer) {
+          setPromptAnswer(parsed.promptAnswer);
+        }
+        if (parsed.dateComfort) {
+          setDateComfort(parsed.dateComfort);
+        }
         if (parsed.safetyPreference) {
           setSafetyPreference(parsed.safetyPreference);
         }
@@ -178,7 +227,7 @@ export function ProfileSetup() {
         .join('\n\n');
 
       await api.put('/profiles/me', {
-        display_name: user?.display_name || null,
+        display_name: draftDisplayName || null,
         bio: profileBio || null,
         age: age ? parseInt(age, 10) : derivedAge,
         date_of_birth: birthDateIso,
@@ -187,8 +236,13 @@ export function ProfileSetup() {
         location: location || null,
         interests: selectedInterests,
       });
+      try {
+        sessionStorage.removeItem(PROFILE_DRAFT_STORAGE_KEY);
+      } catch {
+        // Ignore sessionStorage errors
+      }
       await fetchUser();
-      navigate('/app');
+      navigate(user?.bot_shield_verified ? '/app' : '/app/verify');
     } catch (err: any) {
       setError(err.message || 'Failed to save profile');
     } finally {
@@ -202,7 +256,7 @@ export function ProfileSetup() {
         <div className="mb-10 grid gap-6 md:grid-cols-[1.15fr_0.85fr] md:items-end">
           <div>
             <div className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E] mb-3">
-              Profile Setup · CLAUDE&apos;s N Joshua&apos;s
+              Profile Setup
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-[#F4F1EA] mb-4">
               Tell people who you are.
@@ -217,7 +271,7 @@ export function ProfileSetup() {
               Current account
             </div>
             <p className="font-display text-xl font-bold tracking-tight text-[#F4F1EA]">
-              {user?.display_name}
+              {draftDisplayName}
             </p>
             <p className="mt-3 text-sm text-[#C9CBCE] leading-relaxed">
               This profile becomes the public side of your account inside
@@ -225,6 +279,26 @@ export function ProfileSetup() {
             </p>
           </div>
         </div>
+
+        {!user?.bot_shield_verified && (
+          <div className="mb-8 rounded-xl border border-[#FFD21E]/30 bg-[#FFD21E]/10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#FFD21E]">
+                Next Step: $1 Human Check
+              </div>
+              <p className="mt-1 text-sm text-[#F4F1EA]">
+                Complete the one-time $1 human check to activate matching and
+                discovery.
+              </p>
+            </div>
+            <Link
+              to="/app/verify"
+              className="inline-flex items-center justify-center rounded-lg bg-[#FFD21E] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#ffe066] transition-colors shrink-0 no-underline"
+            >
+              Finish your $1 human check
+            </Link>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (

@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 .venv/
+.venv-*/
 venv/
 __pycache__/
 *.pyc
@@ -94,6 +95,7 @@ _handoff-staging-*/_deploy/node_modules/
 
 # Service runtime data
 services/mission-control-api/data/
+mission-control/crosslisting-os/data/
 infra/paperclip-worker/.wrangler/
 apps/paperweight/data/
 
@@ -311,6 +313,8 @@ ops/heartbeat/backup-node.log
 ops/t5500/status.json
 ops/t5500/bridge-registry-state.json
 ops/t5500/TRIGGERS.jsonl
+ops/t5500/watchdog-incidents.json
+ops/t5500/chat-queue/
 
 # Private Claude<->Joshua drop box (lives in OneDrive); never copy it in
 claude-to-claude/
@@ -350,3 +354,9 @@ ops/agy-jobs/*.txt
 # Security audit output
 ops/security/runs/
 !/.agents/skills/**
+
+# DateApp prerendered blog HTML and sitemap (generated from public/blog/*.md by build_blog_static.py)
+domains/youandinotai.com/frontend/public/sitemap.xml
+domains/youandinotai.com/frontend/public/blog/index.html
+domains/youandinotai.com/frontend/public/blog/*/index.html
+

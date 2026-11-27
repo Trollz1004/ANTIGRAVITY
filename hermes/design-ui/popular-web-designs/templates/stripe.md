@@ -1,4 +1,4 @@
-# Design System: Stripe
+# Design System: Fintech Violet
 
 
 > **Hermes Agent — Implementation Notes**
@@ -15,11 +15,11 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Stripe's website is the gold standard of fintech design -- a system that manages to feel simultaneously technical and luxurious, precise and warm. The page opens on a clean white canvas (`#ffffff`) with deep navy headings (`#061b31`) and a signature purple (`#533afd`) that functions as both brand anchor and interactive accent. This isn't the cold, clinical purple of enterprise software; it's a rich, saturated violet that reads as confident and premium. The overall impression is of a financial institution redesigned by a world-class type foundry.
+This fintech reference design manages to feel simultaneously technical and luxurious, precise and warm. The page opens on a clean white canvas (`#ffffff`) with deep navy headings (`#061b31`) and a signature purple (`#533afd`) that functions as both brand anchor and interactive accent. This isn't the cold, clinical purple of enterprise software; it's a rich, saturated violet that reads as confident and premium. The overall impression is of a financial institution redesigned by a world-class type foundry.
 
-The custom `sohne-var` variable font is the defining element of Stripe's visual identity. Every text element enables the OpenType `"ss01"` stylistic set, which modifies character shapes for a distinctly geometric, modern feel. At display sizes (48px-56px), sohne-var runs at weight 300 -- an extraordinarily light weight for headlines that creates an ethereal, almost whispered authority. This is the opposite of the "bold hero headline" convention; Stripe's headlines feel like they don't need to shout. The negative letter-spacing (-1.4px at 56px, -0.96px at 48px) tightens the text into dense, engineered blocks. At smaller sizes, the system also uses weight 300 with proportionally reduced tracking, and tabular numerals via `"tnum"` for financial data display.
+The custom `sohne-var` variable font is the defining element of this visual identity. Every text element enables the OpenType `"ss01"` stylistic set, which modifies character shapes for a distinctly geometric, modern feel. At display sizes (48px-56px), sohne-var runs at weight 300 -- an extraordinarily light weight for headlines that creates an ethereal, almost whispered authority. This is the opposite of the "bold hero headline" convention; these headlines feel like they don't need to shout. The negative letter-spacing (-1.4px at 56px, -0.96px at 48px) tightens the text into dense, engineered blocks. At smaller sizes, the system also uses weight 300 with proportionally reduced tracking, and tabular numerals via `"tnum"` for financial data display.
 
-What truly distinguishes Stripe is its shadow system. Rather than the flat or single-layer approach of most sites, Stripe uses multi-layer, blue-tinted shadows: the signature `rgba(50,50,93,0.25)` combined with `rgba(0,0,0,0.1)` creates shadows with a cool, almost atmospheric depth -- like elements are floating in a twilight sky. The blue-gray undertone of the primary shadow color (50,50,93) ties directly to the navy-purple brand palette, making even elevation feel on-brand.
+What truly distinguishes Fintech Violet is its shadow system. Rather than the flat or single-layer approach of most sites, this system uses multi-layer, blue-tinted shadows: the signature `rgba(50,50,93,0.25)` combined with `rgba(0,0,0,0.1)` creates shadows with a cool, almost atmospheric depth -- like elements are floating in a twilight sky. The blue-gray undertone of the primary shadow color (50,50,93) ties directly to the navy-purple brand palette, making even elevation feel on-brand.
 
 **Key Characteristics:**
 - sohne-var with OpenType `"ss01"` on all text -- a custom stylistic set that defines the brand's letterforms
@@ -34,7 +34,7 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Stripe Purple** (`#533afd`): Primary brand color, CTA backgrounds, link text, interactive highlights. A saturated blue-violet that anchors the entire system.
+- **Fintech Violet** (`#533afd`): Primary brand color, CTA backgrounds, link text, interactive highlights. A saturated blue-violet that anchors the entire system.
 - **Deep Navy** (`#061b31`): `--hds-color-heading-solid`. Primary heading color. Not black, not gray -- a very dark blue that adds warmth and depth to text.
 - **Pure White** (`#ffffff`): Page background, card surfaces, button text on dark backgrounds.
 
@@ -109,7 +109,7 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 | Code Micro | SourceCodePro | 9px (0.56rem) | 500 | 1.00 (tight) | normal | ss01 | Tiny code annotations |
 
 ### Principles
-- **Light weight as signature**: Weight 300 at display sizes is Stripe's most distinctive typographic choice. Where others use 600-700 to command attention, Stripe uses lightness as luxury -- the text is so confident it doesn't need weight to be authoritative.
+- **Light weight as signature**: Weight 300 at display sizes is the most distinctive typographic choice. Where others use 600-700 to command attention, Fintech Violet uses lightness as luxury -- the text is so confident it doesn't need weight to be authoritative.
 - **ss01 everywhere**: The `"ss01"` stylistic set is non-negotiable. It modifies specific glyphs (likely alternate `a`, `g`, `l` forms) to create a more geometric, contemporary feel across all sohne-var text.
 - **Two OpenType modes**: `"ss01"` for display/body text, `"tnum"` for tabular numerals in financial data. These never overlap -- a number in a paragraph uses ss01, a number in a data table uses tnum.
 - **Progressive tracking**: Letter-spacing tightens proportionally with size: -1.4px at 56px, -0.96px at 48px, -0.64px at 32px, -0.26px at 26px, normal at 16px and below.
@@ -209,7 +209,7 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 ### Spacing System
 - Base unit: 8px
 - Scale: 1px, 2px, 4px, 6px, 8px, 10px, 11px, 12px, 14px, 16px, 18px, 20px
-- Notable: The scale is dense at the small end (every 2px from 4-12), reflecting Stripe's precision-oriented UI for financial data
+- Notable: The scale is dense at the small end (every 2px from 4-12), reflecting a precision-oriented UI for financial data
 
 ### Grid & Container
 - Max content width: approximately 1080px
@@ -219,7 +219,7 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 - Code/dashboard previews as contained cards with blue-tinted shadows
 
 ### Whitespace Philosophy
-- **Precision spacing**: Unlike the vast emptiness of minimalist systems, Stripe uses measured, purposeful whitespace. Every gap is a deliberate typographic choice.
+- **Precision spacing**: Unlike the vast emptiness of minimalist systems, Fintech Violet uses measured, purposeful whitespace. Every gap is a deliberate typographic choice.
 - **Dense data, generous chrome**: Financial data displays (tables, charts) are tightly packed, but the UI chrome around them is generously spaced. This creates a sense of controlled density -- like a well-organized spreadsheet in a beautiful frame.
 - **Section rhythm**: White sections alternate with dark brand sections (`#1c1e54`), creating a dramatic light/dark cadence that prevents monotony without introducing arbitrary color.
 
@@ -242,7 +242,7 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 | Deep (Level 4) | `rgba(3,3,39,0.25) 0px 14px 21px -14px, rgba(0,0,0,0.1) 0px 8px 17px -8px` | Modals, floating panels |
 | Ring (Accessibility) | `2px solid #533afd` outline | Keyboard focus ring |
 
-**Shadow Philosophy**: Stripe's shadow system is built on a principle of chromatic depth. Where most design systems use neutral gray or black shadows, Stripe's primary shadow color (`rgba(50,50,93,0.25)`) is a deep blue-gray that echoes the brand's navy palette. This creates shadows that don't just add depth -- they add brand atmosphere. The multi-layer approach pairs this blue-tinted shadow with a pure black secondary layer (`rgba(0,0,0,0.1)`) at a different offset, creating a parallax-like depth where the branded shadow sits farther from the element and the neutral shadow sits closer. The negative spread values (-30px, -18px) ensure shadows don't extend beyond the element's footprint horizontally, keeping elevation vertical and controlled.
+**Shadow Philosophy**: This shadow system is built on a principle of chromatic depth. Where most design systems use neutral gray or black shadows, Fintech Violet's primary shadow color (`rgba(50,50,93,0.25)`) is a deep blue-gray that echoes the brand's navy palette. This creates shadows that don't just add depth -- they add brand atmosphere. The multi-layer approach pairs this blue-tinted shadow with a pure black secondary layer (`rgba(0,0,0,0.1)`) at a different offset, creating a parallax-like depth where the branded shadow sits farther from the element and the neutral shadow sits closer. The negative spread values (-30px, -18px) ensure shadows don't extend beyond the element's footprint horizontally, keeping elevation vertical and controlled.
 
 ### Decorative Depth
 - Dark brand sections (`#1c1e54`) create immersive depth through background color contrast
@@ -263,12 +263,12 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 
 ### Don't
 - Don't use weight 600-700 for sohne-var headlines -- weight 300 is the brand voice
-- Don't use large border-radius (12px+, pill shapes) on cards or buttons -- Stripe is conservative
+- Don't use large border-radius (12px+, pill shapes) on cards or buttons -- keep corners conservative
 - Don't use neutral gray shadows -- always tint with blue (`rgba(50,50,93,...)`)
 - Don't skip `"ss01"` on any sohne-var text -- the alternate glyphs define the personality
 - Don't use pure black (`#000000`) for headings -- always `#061b31` deep navy
 - Don't use warm accent colors (orange, yellow) for interactive elements -- purple is primary
-- Don't apply positive letter-spacing at display sizes -- Stripe tracks tight
+- Don't apply positive letter-spacing at display sizes -- Fintech Violet tracks tight
 - Don't use the magenta/ruby accents for buttons or links -- they're decorative/gradient only
 
 ## 8. Responsive Behavior
@@ -305,14 +305,14 @@ What truly distinguishes Stripe is its shadow system. Rather than the flat or si
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
-- Primary CTA: Stripe Purple (`#533afd`)
+- Primary CTA: Fintech Violet (`#533afd`)
 - CTA Hover: Purple Dark (`#4434d4`)
 - Background: Pure White (`#ffffff`)
 - Heading text: Deep Navy (`#061b31`)
 - Body text: Slate (`#64748d`)
 - Label text: Dark Slate (`#273951`)
 - Border: Soft Blue (`#e5edf5`)
-- Link: Stripe Purple (`#533afd`)
+- Link: Fintech Violet (`#533afd`)
 - Dark section: Brand Dark (`#1c1e54`)
 - Success: Green (`#15be53`)
 - Accent decorative: Ruby (`#ea2261`), Magenta (`#f96bee`)

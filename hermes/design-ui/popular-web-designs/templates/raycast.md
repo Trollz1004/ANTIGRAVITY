@@ -17,14 +17,14 @@
 
 Raycast's marketing site feels like the dark interior of a precision instrument — a Swiss watch case carved from obsidian. The background isn't just dark, it's an almost-black blue-tint (`#07080a`) that creates a sense of being inside a macOS native application rather than a website. Every surface, every border, every shadow is calibrated to evoke the feeling of a high-performance desktop utility: fast, minimal, trustworthy.
 
-The signature move is the layered shadow system borrowed from macOS window chrome: multi-layer box-shadows with inset highlights that simulate physical depth, as if cards and buttons are actual pressed or raised glass elements on a dark desk. Combined with Raycast Red (`#FF6363`) — deployed almost exclusively in the hero's iconic diagonal stripe pattern — the palette creates a brand that reads as "powerful tool with personality." The red doesn't dominate; it punctuates.
+The signature move is the layered shadow system borrowed from macOS window chrome: multi-layer box-shadows with inset highlights that simulate physical depth, as if cards and buttons are actual pressed or raised glass elements on a dark desk. Combined with Raycast Red (`#FF6363`) — deployed almost exclusively in the hero's iconic diagonal accent pattern — the palette creates a brand that reads as "powerful tool with personality." The red doesn't dominate; it punctuates.
 
 Inter is used everywhere — headings, body, buttons, captions — with extensive OpenType features (`calt`, `kern`, `liga`, `ss03`) creating a consistent, readable typographic voice. The positive letter-spacing (0.2px–0.4px on body text) is unusual for a dark UI and gives the text an airy, breathable quality that counterbalances the dense, dark surfaces. GeistMono appears for code elements, reinforcing the developer-tool identity.
 
 **Key Characteristics:**
 - Near-black blue-tinted background (`#07080a`) — not pure black, subtly blue-shifted
 - macOS-native shadow system with multi-layer inset highlights simulating physical depth
-- Raycast Red (`#FF6363`) as a punctuation color — hero stripes, not pervasive
+- Raycast Red (`#FF6363`) as a punctuation color — hero accent bands, not pervasive
 - Inter with positive letter-spacing (0.2px) for an airy, readable dark-mode experience
 - Radix UI component primitives powering the interaction layer
 - Subtle rgba white borders (0.06–0.1 opacity) for containment on dark surfaces
@@ -35,7 +35,7 @@ Inter is used everywhere — headings, body, buttons, captions — with extensiv
 ### Primary
 - **Near-Black Blue** (`#07080a`): Primary page background — the foundational void with a subtle blue-cold undertone
 - **Pure White** (`#ffffff`): Primary heading text, high-emphasis elements
-- **Raycast Red** (`#FF6363` / `hsl(0, 100%, 69%)`): Brand accent — hero stripes, danger states, critical highlights
+- **Raycast Red** (`#FF6363` / `hsl(0, 100%, 69%)`): Brand accent — hero bands, danger states, critical highlights
 
 ### Secondary & Accent
 - **Raycast Blue** (`hsl(202, 100%, 67%)` / ~`#55b3ff`): Interactive accent — links, focus states, selected items
@@ -138,7 +138,7 @@ Inter is used everywhere — headings, body, buttons, captions — with extensiv
 ### Image Treatment
 - **Product screenshots**: macOS window chrome style — rounded corners (12px), deep shadows simulating floating windows
 - **Full-bleed sections**: Dark screenshots blend seamlessly into the dark background
-- **Hero illustration**: Diagonal stripe pattern in Raycast Red — abstract, geometric, brand-defining
+- **Hero illustration**: Diagonal band pattern in Raycast Red — abstract, geometric, brand-defining
 - **App UI embeds**: Showing actual Raycast command palette and extensions — product as content
 
 ### Keyboard Shortcut Keys
@@ -250,7 +250,7 @@ Raycast's shadow system is the most macOS-native on the web. Multi-layer shadows
 
 ### Image Behavior
 - Product screenshots scale responsively within fixed-ratio containers
-- Hero diagonal stripe pattern scales proportionally
+- Hero diagonal band pattern scales proportionally
 - macOS window chrome rounded corners maintained at all sizes
 - No lazy-loading artifacts — images are critical to the product narrative
 

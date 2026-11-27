@@ -18,7 +18,7 @@ This guide helps you diagnose and fix common issues with app registrations and a
 **Error message:**
 
 ```
-AADSTS50011: The redirect URI 'http://localhost:3000' specified in the request
+AADSTS50011: The redirect URI 'https://192.168.0.40:3000' specified in the request
 does not match the redirect URIs configured for the application.
 ```
 
@@ -41,7 +41,7 @@ does not match the redirect URIs configured for the application.
    # Portal: Authentication → Add redirect URI
    # CLI:
    az ad app update --id $APP_ID \
-     --web-redirect-uris "http://localhost:3000" "https://myapp.com/callback"
+     --web-redirect-uris "https://192.168.0.40:3000" "https://myapp.com/callback"
    ```
 
 3. **Check platform type:**

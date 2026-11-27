@@ -60,9 +60,10 @@ awaiting Joshua's ci-validate dispatch for fresh checks.
   audits 5 low/3 moderate), f6e37264 (all actions to Node 24 majors).
 - CI Validate verified green via workflow_dispatch (runs 31956025342, 31956278280) —
   root package.json is OUTSIDE its push path filter; dispatch is the only proof.
-- Durable notes mirrored here as memory-ci-truth-2026-08-16.md and
-  memory-sabretooth-reinstall-2026-08-16.md (canonical copies in the Claude Code
-  auto-memory dir on Sabretooth).
+- Durable notes mirrored here as `memory-ci-truth-2026-08-16.md` and
+  `memory-sabretooth-reinstall-2026-08-16.md` (archived third-node reinstall
+  note; canonical 2-node fleet map lives in `ops/fleet/fleet-map.json` across
+  Alienware `192.168.0.40` and T5500 `192.168.0.15`).
 
 ## 2026-08-16 — OmniRoute provider restore (local, Fable 5)
 - Gateway :20128 was healthy but empty (0 providers configured post-reinstall).

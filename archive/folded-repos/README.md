@@ -22,7 +22,7 @@ READMEs are stored as `README.source.md` so they do not shadow this index.
 - `Trollz1004/DREAM-ONLINE-MMORPG-PvP-OPENWORLD-OR-OPEN-DREAM-` — README only, and
   it is game material. It belongs in `dream-online`, not in this repo.
 - `Trollz1004/llc-crosslisting-os` — its work is real and lives at
-  `apps/crosslisting-os`, not on this shelf. See that directory's `PROVENANCE.md`.
+  `archive/2026-11-18-apps-crosslisting-os`, not on this shelf. See that directory's `PROVENANCE.md`.
 - `youandinotai-links`, `youandinotai-join` — **not archived at all.** Both serve
   live GitHub Pages (verified HTTP 200 on 2026-08-26) and campaign traffic is
   pointed at the links one from `mission-control-v5/server/data/marketing-queue.json`.

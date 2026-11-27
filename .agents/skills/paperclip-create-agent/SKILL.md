@@ -1,144 +1,33 @@
 ---
 name: paperclip-create-agent
 description: >
-  Create new agents in Paperclip with governance-aware hiring. Use when you need
-  to inspect adapter configuration options, compare existing agent configs,
-  draft a new agent prompt/config, and submit a hire request.
+  RETIRED agent-creation skill. Replaced by `docs/standards/AGENT-STANDARD.md`
+  and Mission OS (`http://192.168.0.15:3130`).
 ---
 
-# Paperclip Create Agent Skill
+# Retired Agent-Hiring Notice
 
-Use this skill when you are asked to hire/create an agent.
+> **Status: RETIRED.** Legacy agent-creation adapters and endpoints are decommissioned.
 
-## Preconditions
+## Active Agent Standards & Models
 
-You need either:
-
-- board access, or
-- agent permission `can_create_agents=true` in your company
-
-If you do not have this permission, escalate to your CEO or board.
-
-## Workflow
-
-1. Confirm identity and company context.
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/api/agents/me" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-2. Discover available adapter configuration docs for this Paperclip instance.
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/llms/agent-configuration.txt" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-3. Read adapter-specific docs (example: `claude_local`).
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/llms/agent-configuration/claude_local.txt" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-4. Compare existing agent configurations in your company.
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/api/companies/$PAPERCLIP_COMPANY_ID/agent-configurations" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-5. Discover allowed agent icons and pick one that matches the role.
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/llms/agent-icons.txt" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-6. Draft the new hire config:
-- role/title/name
-- icon (required in practice; use one from `/llms/agent-icons.txt`)
-- reporting line (`reportsTo`)
-- adapter type
-- optional `desiredSkills` from the company skill library when this role needs installed skills on day one
-- adapter and runtime config aligned to this environment
-- capabilities
-- run prompt in adapter config (`promptTemplate` where applicable)
-- source issue linkage (`sourceIssueId` or `sourceIssueIds`) when this hire came from an issue
-
-7. Submit hire request.
-
-```sh
-curl -sS -X POST "$PAPERCLIP_API_URL/api/companies/$PAPERCLIP_COMPANY_ID/agent-hires" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "CTO",
-    "role": "cto",
-    "title": "Chief Technology Officer",
-    "icon": "crown",
-    "reportsTo": "<ceo-agent-id>",
-    "capabilities": "Owns technical roadmap, architecture, staffing, execution",
-    "desiredSkills": ["vercel-labs/agent-browser/agent-browser"],
-    "adapterType": "codex_local",
-    "adapterConfig": {"cwd": "/abs/path/to/repo", "model": "o4-mini"},
-    "runtimeConfig": {"heartbeat": {"enabled": true, "intervalSec": 300, "wakeOnDemand": true}},
-    "sourceIssueId": "<issue-id>"
-  }'
-```
-
-8. Handle governance state:
-- if response has `approval`, hire is `pending_approval`
-- monitor and discuss on approval thread
-- when the board approves, you will be woken with `PAPERCLIP_APPROVAL_ID`; read linked issues and close/comment follow-up
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/api/approvals/<approval-id>" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-
-curl -sS -X POST "$PAPERCLIP_API_URL/api/approvals/<approval-id>/comments" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"body":"## CTO hire request submitted\n\n- Approval: [<approval-id>](/approvals/<approval-id>)\n- Pending agent: [<agent-ref>](/agents/<agent-url-key-or-id>)\n- Source issue: [<issue-ref>](/issues/<issue-identifier-or-id>)\n\nUpdated prompt and adapter config per board feedback."}'
-```
-
-If the approval already exists and needs manual linking to the issue:
-
-```sh
-curl -sS -X POST "$PAPERCLIP_API_URL/api/issues/<issue-id>/approvals" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"approvalId":"<approval-id>"}'
-```
-
-After approval is granted, run this follow-up loop:
-
-```sh
-curl -sS "$PAPERCLIP_API_URL/api/approvals/$PAPERCLIP_APPROVAL_ID" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-
-curl -sS "$PAPERCLIP_API_URL/api/approvals/$PAPERCLIP_APPROVAL_ID/issues" \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY"
-```
-
-For each linked issue, either:
-- close it if approval resolved the request, or
-- comment in markdown with links to the approval and next actions.
-
-## Quality Bar
-
-Before sending a hire request:
-
-- if the role needs skills, make sure they already exist in the company library or install them first using the Paperclip company-skills workflow
-- Reuse proven config patterns from related agents where possible.
-- Set a concrete `icon` from `/llms/agent-icons.txt` so the new hire is identifiable in org and task views.
-- Avoid secrets in plain text unless required by adapter behavior.
-- Ensure reporting line is correct and in-company.
-- Ensure prompt is role-specific and operationally scoped.
-- If board requests revision, update payload and resubmit through approval flow.
-
-For endpoint payload shapes and full examples, read:
-`skills/paperclip-create-agent/references/api-reference.md`
+- Follow `docs/standards/AGENT-STANDARD.md` and `.agents/skills/mission-control/SKILL.md`.
+- **Active fleet models**: `Opus 5.5` / `Fable` (Claude), `Gemini 4 Carbon` (Gemini), `GPT-6 Astra` / `GPT-6.1 Sol` / `Codex` (OpenAI), `Grok` (X.com lane), `OPSis` (`Hermes`).
+- **Active nodes**: **Alienware** (`192.168.0.40`) and **T5500** (`192.168.0.15`) per `ops/fleet/fleet-map.json`.
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+- `First read: the house index, https://github.com/Trollz1004/dream-online/blob/main/docs/house/INDEX.md, then the newest rulings in the claude.ai project Ai-Dream-Team as the index describes.`
+- `Funding comes first and game work is paused (ruled 2026-11-13).`
+- `The wheel: tickets in the .fable-kitchen inbox on the Alienware; runner ops/router/inbox-runner.ts in dream-online; lane rules in orders/RULES.md in the kitchen.`
+- `Merging (ruled 2026-11-16): nothing merges with a failing required check; platform and marketing changes need the checks plus one trusted review; game and engine work keeps two offerings and two judges; whoever merges looks at the files and leaves a one-line verdict.`
+- `Public text passes the go gate: the product does what the text says, stop-slop plus a humanizer pass, only what is true, every outside fact links the exact page.`
+- `Marketing team log: https://github.com/Trollz1004/ANTIGRAVITY/tree/main/marketing/team (public; nothing private goes in).`
+<!-- TROLLZ1004-SPINE:END -->

@@ -14,7 +14,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
-from app.auth import get_current_user
+from app.auth import require_founder_or_admin
 from app.error_responses import not_found
 from app.models import User
 
@@ -66,7 +66,7 @@ class OpsRunListResponse(BaseModel):
 )
 async def create_ops_run(
     body: OpsRunCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> OpsRunResponse:
     run = {
         "id": str(uuid.uuid4()),
@@ -90,7 +90,7 @@ async def create_ops_run(
 async def list_ops_runs(
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict:
     # Sort runs by recorded_at in descending order (most recent first)
     sorted_runs = sorted(_RUNS, key=lambda r: r.get("recorded_at", ""), reverse=True)
@@ -131,7 +131,7 @@ async def list_ops_runs(
 )
 async def get_ops_run(
     run_id: str,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> OpsRunResponse:
     for run in _RUNS:
         if run["id"] == run_id:

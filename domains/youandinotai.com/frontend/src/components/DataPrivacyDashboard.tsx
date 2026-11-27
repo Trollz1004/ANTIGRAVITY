@@ -195,7 +195,7 @@ export default function DataPrivacyDashboard() {
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-xl border border-[#3A3F45] bg-[#12151A] px-5 py-6 text-[#F4F1EA] sm:px-8">
       <div className="flex flex-col gap-3 rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6">
         <span className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[#FFD21E]">
-          Privacy Center · CLAUDE&apos;s N Joshua&apos;s
+          Privacy Center
         </span>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
@@ -377,16 +377,16 @@ export default function DataPrivacyDashboard() {
                   'export',
                   '/privacy/export',
                   () =>
-                    'Data export requested. We will keep it queued until it is ready.'
+                    'Data copy requested. The founder sends your copy to you.'
                 )
               }
               className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5 text-left transition hover:border-[#FFD21E] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#FFD21E]">
-                Download My Data
+                Request My Data
               </div>
               <div className="mt-2 font-display text-lg font-bold text-[#F4F1EA]">
-                Queue a full export
+                Request a copy
               </div>
               <p className="mt-2 text-sm text-[#C9CBCE]">
                 {degradedMode

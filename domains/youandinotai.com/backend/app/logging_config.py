@@ -10,10 +10,18 @@ Features:
 
 import json
 import logging
+import logging.handlers
+import os
 import sys
 from contextvars import ContextVar
 from datetime import datetime, timezone
 from typing import Any, Optional
+
+# The API's log on disk. On by default, but only when the folder already exists,
+# so a machine without it keeps logging to the console exactly as before.
+DEFAULT_LOG_FILE = r"C:\ANTIGRAVITY\logs\dateapp-api.log"
+LOG_FILE_MAX_BYTES = 5 * 1024 * 1024
+LOG_FILE_BACKUP_COUNT = 5
 
 # Context variable for request correlation ID
 correlation_id_var: ContextVar[Optional[str]] = ContextVar(
@@ -142,6 +150,19 @@ def clear_correlation_id() -> None:
     correlation_id_var.set(None)
 
 
+def resolve_log_file(log_file: Optional[str] = None) -> Optional[str]:
+    """Pick the log file path, or None when disk logging should stay off.
+
+    An explicit path is always used. With no path given, the default file is
+    used only when its folder already exists.
+    """
+    if log_file is not None:
+        return log_file or None
+    if os.path.isdir(os.path.dirname(DEFAULT_LOG_FILE)):
+        return DEFAULT_LOG_FILE
+    return None
+
+
 def setup_logging(
     level: str = "INFO",
     use_json: bool = True,
@@ -152,7 +173,8 @@ def setup_logging(
     Args:
         level: Root logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         use_json: Whether to output logs in JSON format (default: True)
-        log_file: Optional file path to write logs to
+        log_file: File path to write logs to. Defaults to the rotating
+            dateapp-api.log when its folder exists, and stays off otherwise.
     """
     root_logger = logging.getLogger()
     root_logger.setLevel(level.upper())
@@ -178,9 +200,16 @@ def setup_logging(
     console_handler.addFilter(cid_filter)
     root_logger.addHandler(console_handler)
 
-    # File handler (optional, for persistent logs inside the container)
-    if log_file:
-        file_handler = logging.FileHandler(log_file)
+    # Rotating file handler: 5 files of 5 MB. On by default when the folder
+    # exists, so a reset request leaves a trace instead of only a console line.
+    resolved_log_file = resolve_log_file(log_file)
+    if resolved_log_file:
+        file_handler = logging.handlers.RotatingFileHandler(
+            resolved_log_file,
+            maxBytes=LOG_FILE_MAX_BYTES,
+            backupCount=LOG_FILE_BACKUP_COUNT,
+            encoding="utf-8",
+        )
         file_handler.setFormatter(formatter)
         file_handler.addFilter(cid_filter)
         root_logger.addHandler(file_handler)
