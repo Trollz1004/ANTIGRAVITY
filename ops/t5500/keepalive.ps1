@@ -9,6 +9,7 @@
 #   One pass (testing):                               keepalive.ps1 -Once
 #
 # Outputs:  logs\t5500-keepalive.log   ops\t5500\status.json   ops\t5500\TRIGGERS.jsonl
+# Pause:    ops\t5500\PAUSE (while present, probes and logs every pass without healing)
 # A stage that stays down for 3 consecutive passes writes a line to TRIGGERS.jsonl so the
 # next Claude session sees exactly what the script could not clear by itself.
 #
@@ -25,11 +26,18 @@ param(
 $ErrorActionPreference = 'Continue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$Repo        = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY\ops\t5500\keepalive.ps1') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
+$ScriptRepo  = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$Repo        = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY\ops\t5500\keepalive.ps1') { 'C:\ANTIGRAVITY' } else { $ScriptRepo }
+$script:BoundRepo = $Repo
 $Dir         = Join-Path $Repo 'ops\t5500'
-. (Join-Path $Repo 'ops\fleet\Get-FleetEndpoint.ps1')
+$FleetHelper = Join-Path $Repo 'ops\fleet\Get-FleetEndpoint.ps1'
+if (-not (Test-Path -LiteralPath $FleetHelper)) {
+    $FleetHelper = Join-Path $ScriptRepo 'ops\fleet\Get-FleetEndpoint.ps1'
+}
+. $FleetHelper
 $T5500Ip     = Get-FleetEndpoint -NodeId 't5500' -SelectField 'Ip'
 $DomainsSvc  = Get-FleetService -ServiceId 'domains-server'
+$PauseFile   = Join-Path $Repo 'ops\t5500\PAUSE'
 $LogFile     = Join-Path $Repo 'logs\t5500-keepalive.log'
 $StatusFile  = Join-Path $Dir 'status.json'
 $Triggers    = Join-Path $Dir 'TRIGGERS.jsonl'
@@ -59,9 +67,39 @@ if (-not $DryRun -and -not $Test -and -not $FunctionsOnly) {
     }
 }
 
+function Sync-KeepalivePaths {
+    if ($Repo -and $Repo -ne $script:BoundRepo) {
+        $script:BoundRepo  = $Repo
+        $script:Dir        = Join-Path $Repo 'ops\t5500'
+        $script:PauseFile  = Join-Path $Repo 'ops\t5500\PAUSE'
+        $script:LogFile    = Join-Path $Repo 'logs\t5500-keepalive.log'
+        $script:StatusFile = Join-Path $script:Dir 'status.json'
+        $script:Triggers   = Join-Path $script:Dir 'TRIGGERS.jsonl'
+    } elseif (-not $script:PauseFile) {
+        $script:PauseFile  = Join-Path $Repo 'ops\t5500\PAUSE'
+    }
+}
+
+function Get-KeepalivePauseFile([string]$repoPath = $Repo) {
+    $base = if ($repoPath) { $repoPath } else { $Repo }
+    return (Join-Path $base 'ops\t5500\PAUSE')
+}
+
+function Test-KeepalivePaused([string]$repoPath = $Repo) {
+    Sync-KeepalivePaths
+    $pf = Get-KeepalivePauseFile $repoPath
+    $script:PauseFile = $pf
+    return [bool](Test-Path -LiteralPath $pf)
+}
+
 function Log([string]$msg) {
+    Sync-KeepalivePaths
     $line = '[{0}] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $msg
     try {
+        $logDir = [IO.Path]::GetDirectoryName($LogFile)
+        if ($logDir -and -not (Test-Path -LiteralPath $logDir)) {
+            New-Item -ItemType Directory -Force -Path $logDir | Out-Null
+        }
         if ((Test-Path $LogFile) -and ((Get-Item $LogFile).Length -gt 4MB)) { Move-Item $LogFile ($LogFile + '.1') -Force }
         Add-Content -Path $LogFile -Value $line -ErrorAction Stop
     } catch {}
@@ -172,6 +210,7 @@ function Get-TunnelProcs {
 
 # One connector is enough on this box; extras only confuse diagnosis. Keep the oldest.
 function Remove-DuplicateTunnels {
+    if (Test-KeepalivePaused) { return }
     $procs = @(Get-TunnelProcs | Sort-Object CreationDate)
     if ($procs.Count -le 1) { return }
     foreach ($p in ($procs | Select-Object -Skip 1)) {
@@ -497,40 +536,6 @@ function Get-KeepaliveAgentDriftAndEnv {
     }
 }
 
-if ($FunctionsOnly) {
-    return
-}
-
-if ($Test) {
-    $testScript = Join-Path $Dir 'test-frontend-staleness.ps1'
-    if (Test-Path $testScript) {
-        & $testScript -RepoPath $Repo
-        exit $LASTEXITCODE
-    } else {
-        Write-Error "Test script not found at $testScript"
-        exit 1
-    }
-}
-
-if ($DryRun) {
-    $stale = Get-FrontendStaleness $Repo
-    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:$true
-    Write-Host "=== Date-App Frontend Rebuild Decision (Dry-Run) ==="
-    Write-Host ("Repository root:    " + $Repo)
-    Write-Host ("Frontend directory: domains\youandinotai.com\frontend")
-    Write-Host ("Target:             dist\index.html (Exists: " + ($stale.DistTime -ne $null) + ", Time: " + $(if ($stale.DistTime) { $stale.DistTime.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC' } else { 'none' }) + ")")
-    Write-Host ("Git HEAD commit:    " + $(if ($stale.GitHead) { $stale.GitHead } else { 'none' }))
-    Write-Host ("Build commit file:  dist\build-commit.txt (Recorded: " + $(if ($stale.BuildCommit) { $stale.BuildCommit } else { 'none' }) + ")")
-    Write-Host ("Build inputs count: " + $stale.InputsCount + " files (src, public [filtered], index.html, content\blog\youandinotai, build_blog_static.py, vite.config.ts, package files)")
-    Write-Host ("Newest input file:  " + $(if ($stale.NewestFile) { $stale.NewestFile + ' (' + $stale.NewestTime.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC)' } else { 'none' }))
-    Write-Host ""
-    Write-Host ("DECISION:           " + $(if ($stale.NeedsRebuild) { "REBUILD NEEDED" } else { "UP TO DATE" }))
-    Write-Host ("REASON:             " + $stale.Reason)
-    Write-Host ("[DRY RUN] agentDrift: light={0} ok={1} scanned={2} drifted={3} envTargets={4} nodeLight={5}" -f $e4.agentDrift.light, $e4.agentDrift.ok, $e4.agentDrift.scannedCount, $e4.agentDrift.driftedCount, $e4.envTargets.targetCount, $e4.nodeLight)
-    Write-Host "===================================================="
-    exit 0
-}
-
 # ── Stages (dependency order) ──────────────────────────────────────────────
 $Stages = @(
     @{ Key = 'ollama'; Name = 'Ollama (Fable pinned)'; Settle = 25
@@ -614,7 +619,9 @@ $Stages = @(
                }
                return $false
            }
-           Record-FrontendBuildCommit $Repo
+           if (-not (Test-KeepalivePaused)) {
+               Record-FrontendBuildCommit $Repo
+           }
            $script:FrontendRebuildPending = $false
            return $true
        }
@@ -751,7 +758,9 @@ $Stages = @(
                $hidden  = @($all | Where-Object { $_.CommandLine -notmatch '-Console' })
                $visible = @($all | Where-Object { $_.CommandLine -match '-Console' })
                if ($visible.Count -ge 1) {
-                   foreach ($p in $hidden) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue; Log ('  retired hidden Hermes PID ' + $p.ProcessId + ' (visible window owns support)') }
+                   if (-not (Test-KeepalivePaused)) {
+                       foreach ($p in $hidden) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue; Log ('  retired hidden Hermes PID ' + $p.ProcessId + ' (visible window owns support)') }
+                   }
                }
                return ($visible.Count -ge 1)
            }
@@ -780,9 +789,25 @@ function Add-Trigger([string]$stage, [int]$passes) {
 
 function Invoke-Stage($s) {
     $key = $s.Key; $name = $s.Name
+    $paused = Test-KeepalivePaused
     $ok = $false
     try { $ok = [bool](& $s.Probe) } catch { $ok = $false }
-    if ($ok) { $script:Up[$key] = $true; $script:Result[$key] = 'UP'; $script:Fails[$key] = 0; return }
+    if ($ok) {
+        $script:Up[$key] = $true
+        $script:Result[$key] = 'UP'
+        $script:Fails[$key] = 0
+        if ($paused) {
+            Log ('[' + $name + '] UP (healing is paused)')
+        }
+        return
+    }
+
+    if ($paused) {
+        $n = 1 + [int]$script:Fails[$key]; $script:Fails[$key] = $n
+        $script:Up[$key] = $false; $script:Result[$key] = 'DOWN'
+        Log ('[' + $name + '] DOWN - healing is paused (' + $PauseFile + ') (consecutive pass ' + $n + ')')
+        return
+    }
 
     foreach ($n in @($s.Needs)) {
         if ($n -and -not $script:Up[$n]) {
@@ -815,6 +840,8 @@ function Invoke-Stage($s) {
 }
 
 function Write-Status {
+    Sync-KeepalivePaths
+    $paused = Test-KeepalivePaused
     $stages = foreach ($s in $Stages) { [ordered]@{ stage = $s.Name; status = $script:Result[$s.Key]; consecutive_failures = [int]$script:Fails[$s.Key] } }
     $doms = foreach ($d in $Domains) {
         $ns = Get-NsState $d.Host
@@ -822,26 +849,74 @@ function Write-Status {
         $pm = if ($d.PublicMark) { $d.PublicMark } else { $d.Mark }; $public = if ($ns -ne 'cloudflare') { 'PENDING NAMESERVERS' } elseif (Test-Http ('https://' + $d.Host) 20 $pm) { 'UP' } else { 'DOWN' }
         [ordered]@{ domain = $d.Host; nameservers = $ns; origin = $origin; public = $public }
     }
-    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:$DryRun
+    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:([bool]$DryRun -or $paused)
     $anyStageDown = @($stages | Where-Object { $_.status -ne 'UP' }).Count -gt 0
     $nodeLight = if ($anyStageDown) { 'red' } elseif ($e4.agentDrift.driftedCount -gt 0) { 'amber' } else { 'green' }
     $o = [ordered]@{
         updated = (Get-Date).ToString('s')
         node = $env:COMPUTERNAME
+        paused = $paused
+        pauseFile = $(if ($paused) { $PauseFile } else { $null })
         nodeLight = $nodeLight
         agentDrift = $e4.agentDrift
         envTargets = $e4.envTargets
         stages = @($stages)
         domains = @($doms)
     }
-    try { $o | ConvertTo-Json -Depth 6 | Set-Content -Path $StatusFile -Encoding UTF8 } catch {}
+    try {
+        $statusDir = [IO.Path]::GetDirectoryName($StatusFile)
+        if ($statusDir -and -not (Test-Path -LiteralPath $statusDir)) {
+            New-Item -ItemType Directory -Force -Path $statusDir | Out-Null
+        }
+        $o | ConvertTo-Json -Depth 6 | Set-Content -Path $StatusFile -Encoding UTF8
+    } catch {}
 }
 
 function Invoke-Pass {
+    Sync-KeepalivePaths
     $script:Up = @{}; $script:Result = @{}
-    Remove-DuplicateTunnels
+    if (Test-KeepalivePaused) {
+        Log ('[PAUSE] ' + $PauseFile + ' exists - healing is paused; probing and logging only')
+    } else {
+        Remove-DuplicateTunnels
+    }
     foreach ($s in $Stages) { Invoke-Stage $s }
     Write-Status
+}
+
+if ($FunctionsOnly) {
+    return
+}
+
+if ($Test) {
+    $testScript = Join-Path $Dir 'test-frontend-staleness.ps1'
+    if (Test-Path $testScript) {
+        & $testScript -RepoPath $Repo
+        exit $LASTEXITCODE
+    } else {
+        Write-Error "Test script not found at $testScript"
+        exit 1
+    }
+}
+
+if ($DryRun) {
+    $stale = Get-FrontendStaleness $Repo
+    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:$true
+    Write-Host "=== Date-App Frontend Rebuild Decision (Dry-Run) ==="
+    Write-Host ("Repository root:    " + $Repo)
+    Write-Host ("Pause file:         " + $PauseFile + " (Paused: " + (Test-KeepalivePaused) + ")")
+    Write-Host ("Frontend directory: domains\youandinotai.com\frontend")
+    Write-Host ("Target:             dist\index.html (Exists: " + ($stale.DistTime -ne $null) + ", Time: " + $(if ($stale.DistTime) { $stale.DistTime.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC' } else { 'none' }) + ")")
+    Write-Host ("Git HEAD commit:    " + $(if ($stale.GitHead) { $stale.GitHead } else { 'none' }))
+    Write-Host ("Build commit file:  dist\build-commit.txt (Recorded: " + $(if ($stale.BuildCommit) { $stale.BuildCommit } else { 'none' }) + ")")
+    Write-Host ("Build inputs count: " + $stale.InputsCount + " files (src, public [filtered], index.html, content\blog\youandinotai, build_blog_static.py, vite.config.ts, package files)")
+    Write-Host ("Newest input file:  " + $(if ($stale.NewestFile) { $stale.NewestFile + ' (' + $stale.NewestTime.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC)' } else { 'none' }))
+    Write-Host ""
+    Write-Host ("DECISION:           " + $(if ($stale.NeedsRebuild) { "REBUILD NEEDED" } else { "UP TO DATE" }))
+    Write-Host ("REASON:             " + $stale.Reason)
+    Write-Host ("[DRY RUN] agentDrift: light={0} ok={1} scanned={2} drifted={3} envTargets={4} nodeLight={5}" -f $e4.agentDrift.light, $e4.agentDrift.ok, $e4.agentDrift.scannedCount, $e4.agentDrift.driftedCount, $e4.envTargets.targetCount, $e4.nodeLight)
+    Write-Host "===================================================="
+    exit 0
 }
 
 Log ('keep-alive started (once=' + [bool]$Once + ', pid=' + $PID + ')')
