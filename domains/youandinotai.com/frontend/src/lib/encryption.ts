@@ -98,11 +98,11 @@ export async function decryptPayload(
   key: CryptoKey | null
 ): Promise<string> {
   if (payload.type === 'plain') return payload.content;
-  if (!key) return '[encrypted message — key not yet available]';
+  if (!key) return 'This message could not be shown';
   try {
     return await decryptMessage(payload, key);
   } catch {
-    return '[failed to decrypt]';
+    return 'This message could not be shown';
   }
 }
 

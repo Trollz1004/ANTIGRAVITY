@@ -5,7 +5,7 @@ import unittest
 import urllib.request
 import urllib.error
 
-BASE = os.environ.get('MOS_TEST_URL', 'http://127.0.0.1:3130')
+BASE = os.environ.get('MOS_TEST_URL', 'http://192.168.0.15:3130')
 LEGACY = ['mission_control_overview', 'mission_control_jarvis_command_console',
           'mission_control_agents_fleet', 'mission_control_board_journal',
           'mission_control_omniroute_gateway', 'mission_control_paperclip_marketing',

@@ -7,9 +7,10 @@
     "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "skipLibCheck": true,
     "declaration": false
   },
-  "include": ["*.ts"],
+  "include": ["*.ts", "bind.mjs"],
   "exclude": ["dist", "node_modules"]
 }

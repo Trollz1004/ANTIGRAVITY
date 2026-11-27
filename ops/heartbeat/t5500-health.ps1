@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   T5500 deterministic health probe. No AI CLI is invoked anywhere in this
   script — it is plain PowerShell 5.1-compatible code (no modules) that probes,
@@ -16,12 +16,15 @@
   matching the House's own "watchdog never steals the console" rule.
 #>
 [CmdletBinding()]
-param()
+param(
+    [switch]$FunctionsOnly,
+    [string]$RepoPath = 'C:\ANTIGRAVITY'
+)
 
 $ErrorActionPreference = 'Continue'
 [System.Net.WebRequest]::DefaultWebProxy = $null
 
-$Repo = 'C:\ANTIGRAVITY'
+$Repo = if ([string]::IsNullOrWhiteSpace($RepoPath)) { 'C:\ANTIGRAVITY' } else { $RepoPath }
 $HeartbeatDir = Join-Path $Repo 'ops\heartbeat'
 $JsonOut = Join-Path $HeartbeatDir 't5500-health.json'
 $LogOut = Join-Path $HeartbeatDir 'health.log'
@@ -29,7 +32,9 @@ $TriggersOut = Join-Path $HeartbeatDir 'TRIGGERS.jsonl'
 $HealLock = Join-Path $HeartbeatDir '.heal-lock'
 $AutoHealFlag = Join-Path $HeartbeatDir '.auto-heal-enabled'
 $HouseScript = Join-Path $Repo 'scripts\fables-house\FABLES-HOUSE.ps1'
-New-Item -ItemType Directory -Force -Path $HeartbeatDir | Out-Null
+if (-not $FunctionsOnly) {
+    New-Item -ItemType Directory -Force -Path $HeartbeatDir | Out-Null
+}
 
 function Nowz { (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }
 
@@ -64,7 +69,7 @@ function Test-TcpPort {
 }
 
 # Raw TCP PING\r\n against Redis — redis-cli.exe is not installed on this box's
-# PATH check path (the House uses the absolute path under C:\Users\joshi\redis-win,
+# PATH check path (the House uses the absolute path under $env:USERPROFILE\redis-win,
 # this probe avoids depending on that binary at all).
 function Test-RedisPing {
     param([string]$HostName = '127.0.0.1', [int]$Port = 6379, [int]$TimeoutMs = 6000)
@@ -141,7 +146,7 @@ function Invoke-ProbePass {
     $optional = [ordered]@{}
 
     # PostgreSQL 5432 — same pg_isready path the House uses.
-    $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
+    $pgReady = (Join-Path $env:USERPROFILE 'pgsql16\bin\pg_isready.exe')
     if (Test-Path $pgReady) {
         & $pgReady -h 127.0.0.1 -p 5432 -q 2>$null
         $pgOk = ($LASTEXITCODE -eq 0)
@@ -157,12 +162,12 @@ function Invoke-ProbePass {
 
     # OmniRoute — /api/health ok AND /api/v1/models contains auto/best-coding.
     $omniKey = Get-EnvKey 'OMNI_ROUTE_API_KEY'
-    $omniHealth = Test-HttpIdentity -Url 'http://127.0.0.1:20128/api/health' -MustContain 'ok'
+    $omniHealth = Test-HttpIdentity -Url 'http://192.168.0.15:20128/api/health' -MustContain 'ok'
     $modelsOk = $false; $modelsDetail = 'not probed'
     try {
         $hdr = @{}
         if ($omniKey) { $hdr['Authorization'] = "Bearer $omniKey" }
-        $r = Invoke-WebRequest -Uri 'http://127.0.0.1:20128/api/v1/models' -UseBasicParsing -TimeoutSec 6 -Headers $hdr -ErrorAction Stop
+        $r = Invoke-WebRequest -Uri 'http://192.168.0.15:20128/api/v1/models' -UseBasicParsing -TimeoutSec 6 -Headers $hdr -ErrorAction Stop
         $modelsOk = ($r.StatusCode -eq 200 -and $r.Content -match 'auto/best-coding')
         $modelsDetail = "HTTP $($r.StatusCode)"
     } catch { $modelsDetail = $_.Exception.Message }
@@ -170,11 +175,11 @@ function Invoke-ProbePass {
     $required['omniroute_20128'] = @{ status = $(if ($omniOk) { 'UP' } else { 'DOWN' }); detail = "health=$($omniHealth.detail); models=$modelsDetail" }
 
     # Backend API — db_connected:true.
-    $backend = Test-HttpIdentity -Url 'http://127.0.0.1:8000/api/v1/health' -MustContain '"db_connected":true'
+    $backend = Test-HttpIdentity -Url 'http://192.168.0.15:8000/api/v1/health' -MustContain '"db_connected":true'
     $required['backend_8000'] = @{ status = $(if ($backend.ok) { 'UP' } else { 'DOWN' }); detail = $backend.detail }
 
     # Frontend — production bundle marker.
-    $frontend = Test-HttpIdentity -Url 'http://127.0.0.1:3200/' -MustContain 'assets/index-'
+    $frontend = Test-HttpIdentity -Url 'http://192.168.0.15:3200/' -MustContain 'assets/index-'
     $required['frontend_3200'] = @{ status = $(if ($frontend.ok) { 'UP' } else { 'DOWN' }); detail = $frontend.detail }
 
     # Public site — SCHANNEL is recorded, not counted as a failure.
@@ -183,7 +188,7 @@ function Invoke-ProbePass {
     $required['public_youandinotai'] = @{ status = $pubStatus; detail = $public.detail }
 
     # JARVIS — required, port 9150, identity jarvis-dashboard.
-    $jarvis = Test-HttpIdentity -Url 'http://127.0.0.1:9150/health' -MustContain 'jarvis-dashboard'
+    $jarvis = Test-HttpIdentity -Url 'http://192.168.0.15:9150/health' -MustContain 'jarvis-dashboard'
     $required['jarvis_9150'] = @{ status = $(if ($jarvis.ok) { 'UP' } else { 'DOWN' }); detail = $jarvis.detail }
 
     # ── optional targets ──
@@ -196,12 +201,12 @@ function Invoke-ProbePass {
     $hermesPort = Test-TcpPort -Port 9119
     $optional['hermes_9119'] = @{ status = $(if ($hermesPort) { 'UP' } else { 'DOWN' }); detail = 'TCP probe' }
 
-    $ollama = Test-HttpIdentity -Url 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
+    $ollama = Test-HttpIdentity -Url 'http://192.168.0.15:11434/api/tags' -TimeoutSec 6
     $optional['ollama_11434'] = @{ status = $(if ($ollama.ok) { 'UP' } else { 'DOWN' }); detail = $ollama.detail }
 
     # Domains phase (2026-09-18) — local static vhost server for the three
     # landing sites (dream-online.net, untilnokidinneed.com, onlinerecycle.net).
-    $domainsSrv = Test-HttpIdentity -Url 'http://127.0.0.1:9160/health' -MustContain 'domains-server'
+    $domainsSrv = Test-HttpIdentity -Url 'http://192.168.0.15:9160/health' -MustContain 'domains-server'
     $optional['domains_9160'] = @{ status = $(if ($domainsSrv.ok) { 'UP' } else { 'DOWN' }); detail = $domainsSrv.detail }
 
     # dashboard.aidoesitall.website is gated by Cloudflare Access on purpose —
@@ -212,7 +217,7 @@ function Invoke-ProbePass {
     $optional['dashboard_access_aidoesitall'] = @{ status = $(if ($dashAccess.ok -eq $true) { 'UP' } elseif ($dashAccess.status -eq 'SCHANNEL') { 'SCHANNEL' } else { 'DOWN' }); detail = $dashAccess.detail }
 
     # The three domains are pending Joshua's one-time nameserver click at the
-    # registrar (see C:\Users\joshi\OneDrive\claude-to-claude\
+    # registrar (see $env:USERPROFILE\OneDrive\claude-to-claude\
     # DNS-NAMESERVERS-TO-SET-2026-09-18.md). Until that propagates, live NS
     # still resolves to IONOS (or fails), which is an expected, named state —
     # PENDING NAMESERVERS — not a DOWN. Once NS shows cloudflare, this probes
@@ -276,6 +281,15 @@ function Write-VerboseTable {
     }
     Write-Host ("git  {0}: {1} dirty lines, equal_to_origin={2}" -f 'ANTIGRAVITY', $Snapshot.git.antigravity.dirty_lines, $Snapshot.git.antigravity.equal_to_origin) -ForegroundColor DarkGray
     Write-Host ("sale: {0}" -f $Snapshot.sale.status_line) -ForegroundColor DarkGray
+    if ($Snapshot.Contains('agentDrift') -and $null -ne $Snapshot.agentDrift) {
+        Write-Host ("agentDrift: light={0} drifted={1} scanned={2}" -f $Snapshot.agentDrift.light, $Snapshot.agentDrift.driftedCount, $Snapshot.agentDrift.scannedCount) -ForegroundColor DarkGray
+    }
+    if ($Snapshot.Contains('envTargets') -and $null -ne $Snapshot.envTargets) {
+        Write-Host ("envTargets: node={0} count={1} ({2})" -f $Snapshot.envTargets.node, $Snapshot.envTargets.targetCount, ($Snapshot.envTargets.services -join ', ')) -ForegroundColor DarkGray
+    }
+    if ($Snapshot.Contains('nodeLight')) {
+        Write-Host ("nodeLight: {0}" -f $Snapshot.nodeLight) -ForegroundColor DarkGray
+    }
     Write-Host ''
 }
 
@@ -289,23 +303,131 @@ function Get-Overall {
     return 'GREEN'
 }
 
+function Get-NodeLight {
+    param([string]$Overall, $AgentDrift)
+    if ($Overall -eq 'RED') { return 'red' }
+    $drifted = if ($null -ne $AgentDrift -and $null -ne $AgentDrift.driftedCount) { [int]$AgentDrift.driftedCount } else { 0 }
+    if ($Overall -eq 'YELLOW' -or $drifted -gt 0) { return 'amber' }
+    return 'green'
+}
+
+function Get-AgentDriftAndEnvSummary {
+    param(
+        [string]$RepoRoot = $Repo,
+        [string]$Node = 't5500',
+        [string]$Scope = 'all',
+        [string]$StatusJsonPath = '',
+        [string]$UserProfileRoot = $env:USERPROFILE,
+        [string]$LocalAppDataRoot = $env:LOCALAPPDATA,
+        [bool]$NoWriteStatus = $false
+    )
+
+    $driftScript = Join-Path $RepoRoot 'ops\agents\check-agent-drift.ps1'
+    $envCheckScript = Join-Path $RepoRoot 'ops\agents\env-names-check.ps1'
+
+    $driftedFiles = New-Object System.Collections.Generic.List[object]
+    $scannedCount = 0
+    $driftedCount = 0
+    $driftLight = 'green'
+    $driftOk = $true
+
+    if (Test-Path -LiteralPath $driftScript) {
+        $driftArgs = @{
+            Node = $Node
+            Scope = $Scope
+            RepoRoot = $RepoRoot
+            SoftExit = $true
+            NoWriteStatus = $NoWriteStatus
+        }
+        if (-not [string]::IsNullOrWhiteSpace($StatusJsonPath)) { $driftArgs['StatusJsonPath'] = $StatusJsonPath }
+        if (-not [string]::IsNullOrWhiteSpace($UserProfileRoot)) { $driftArgs['UserProfileRoot'] = $UserProfileRoot }
+        if (-not [string]::IsNullOrWhiteSpace($LocalAppDataRoot)) { $driftArgs['LocalAppDataRoot'] = $LocalAppDataRoot }
+
+        $rawLines = @(& $driftScript @driftArgs 2>&1)
+        foreach ($item in $rawLines) {
+            $line = [string]$item
+            if ($line -match '^\[DRIFT\]\s+\(([^)]+)\)\s+(.+)$') {
+                $driftedFiles.Add([ordered]@{ file = $matches[2].Trim(); reason = $matches[1].Trim() })
+            } elseif ($line -match '^\[CHECK\]\s+Summary\b.*light=([a-z]+),\s+ok=(true|false),\s+scanned=(\d+),\s+drifted=(\d+)') {
+                $driftLight = $matches[1]
+                $driftOk = ($matches[2] -eq 'true')
+                $scannedCount = [int]$matches[3]
+                $driftedCount = [int]$matches[4]
+            }
+        }
+        if ($driftedFiles.Count -gt 0 -and $driftedCount -eq 0) {
+            $driftedCount = $driftedFiles.Count
+            $driftOk = $false
+            $driftLight = 'amber'
+        }
+    } else {
+        $driftLight = 'amber'
+        $driftOk = $false
+    }
+
+    $targetServices = New-Object System.Collections.Generic.List[string]
+    if (Test-Path -LiteralPath $envCheckScript) {
+        $envRaw = (& $envCheckScript -RepoRoot $RepoRoot -Node $Node -ListTargetsOnly -Json 2>$null) -join "`n"
+        if (-not [string]::IsNullOrWhiteSpace($envRaw)) {
+            try {
+                $parsed = $envRaw | ConvertFrom-Json
+                foreach ($svc in @($parsed.services)) {
+                    if ($null -ne $svc -and -not [string]::IsNullOrWhiteSpace([string]$svc.service)) {
+                        $targetServices.Add([string]$svc.service)
+                    }
+                }
+            } catch {
+                # Ignore malformed target summary JSON
+            }
+        }
+    }
+
+    return [ordered]@{
+        agentDrift = [ordered]@{
+            light = $driftLight
+            ok = $driftOk
+            scannedCount = $scannedCount
+            driftedCount = $driftedCount
+            driftedFiles = $driftedFiles.ToArray()
+        }
+        envTargets = [ordered]@{
+            listOnly = $true
+            node = $Node
+            targetCount = $targetServices.Count
+            services = $targetServices.ToArray()
+        }
+    }
+}
+
+function New-HealthSnapshot {
+    param($Pass, $GitStatus, [string]$SaleLine, $DriftAndEnv, [string]$Overall, [string]$NodeLight)
+    return [ordered]@{
+        ts = Nowz
+        node = 't5500'
+        required = $Pass.required
+        optional = $Pass.optional
+        git = $GitStatus
+        sale = @{ status_line = $SaleLine }
+        agentDrift = $DriftAndEnv.agentDrift
+        envTargets = $DriftAndEnv.envTargets
+        nodeLight = $NodeLight
+        overall = $Overall
+    }
+}
+
+if ($FunctionsOnly) { return }
+
 # ── run pass 1 ───────────────────────────────────────────────────────────
 $pass = Invoke-ProbePass
 $gitStatus = @{
     antigravity = Get-GitStatus -Path $Repo -Branch 'main'
 }
 $saleLine = Get-SaleStatusLine
+$driftAndEnv = Get-AgentDriftAndEnvSummary -RepoRoot $Repo -Node 't5500' -NoWriteStatus:$false
 $overall = Get-Overall -Pass $pass -Git $gitStatus
+$nodeLight = Get-NodeLight -Overall $overall -AgentDrift $driftAndEnv.agentDrift
 
-$snapshot = [ordered]@{
-    ts = Nowz
-    node = 't5500'
-    required = $pass.required
-    optional = $pass.optional
-    git = $gitStatus
-    sale = @{ status_line = $saleLine }
-    overall = $overall
-}
+$snapshot = New-HealthSnapshot -Pass $pass -GitStatus $gitStatus -SaleLine $saleLine -DriftAndEnv $driftAndEnv -Overall $overall -NodeLight $nodeLight
 
 # ── RED path: log trigger, run the House one pass, re-probe, rewrite ──────
 if ($overall -eq 'RED') {
@@ -330,16 +452,10 @@ if ($overall -eq 'RED') {
         antigravity = Get-GitStatus -Path $Repo -Branch 'main'
     }
     $saleLine = Get-SaleStatusLine
+    $driftAndEnv = Get-AgentDriftAndEnvSummary -RepoRoot $Repo -Node 't5500' -NoWriteStatus:$false
     $overall = Get-Overall -Pass $pass -Git $gitStatus
-    $snapshot = [ordered]@{
-        ts = Nowz
-        node = 't5500'
-        required = $pass.required
-        optional = $pass.optional
-        git = $gitStatus
-        sale = @{ status_line = $saleLine }
-        overall = $overall
-    }
+    $nodeLight = Get-NodeLight -Overall $overall -AgentDrift $driftAndEnv.agentDrift
+    $snapshot = New-HealthSnapshot -Pass $pass -GitStatus $gitStatus -SaleLine $saleLine -DriftAndEnv $driftAndEnv -Overall $overall -NodeLight $nodeLight
 
     # Opt-in escalation, documented but left UNUSED by default: if
     # ops/heartbeat/.auto-heal-enabled exists (it does not ship with this repo

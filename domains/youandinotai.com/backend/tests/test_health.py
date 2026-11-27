@@ -122,3 +122,48 @@ def test_health_check_unproven_only_when_square_not_configured(monkeypatch):
     assert response.wallet_rails_proven is False
     assert response.wallet_rails_status == "unproven"
     assert response.payment_proof_labels == []
+
+
+def test_health_check_reports_missing_env_and_node_light(monkeypatch, tmp_path):
+    mock_db = AsyncMock()
+    mock_db.scalar = AsyncMock(return_value=1)
+
+    monkeypatch.setattr(health, "settings", _settings())
+    monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
+    monkeypatch.setattr(
+        health, "redis_health_check", AsyncMock(return_value={"status": "ok"})
+    )
+    monkeypatch.setattr(
+        health, "_runtime_payment_proof_labels", AsyncMock(return_value=[])
+    )
+    drift_file = tmp_path / "agent-drift.json"
+    drift_file.write_text('{"driftedFiles": []}', encoding="utf-8")
+    monkeypatch.setenv("AGENT_DRIFT_PATH", str(drift_file))
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_DB_URL", raising=False)
+
+    amber_response = asyncio.run(health.health_check(mock_db))
+    # Public route (api.youandinotai.com/health): light and count only, never setting names.
+    amber_dump = amber_response.model_dump()
+    assert "missingEnv" not in amber_dump
+    assert "DATABASE_URL" not in str(amber_dump)
+    assert amber_response.missingEnvCount == 1
+    assert amber_response.nodeLight == "amber"
+
+    fake_db_secret = "postgresql+asyncpg://u:fake-secret-99@127.0.0.1/db"
+    monkeypatch.setenv("DATABASE_URL", fake_db_secret)
+    green_response = asyncio.run(health.health_check(mock_db))
+    assert green_response.missingEnvCount == 0
+    assert green_response.nodeLight == "green"
+    assert fake_db_secret not in str(green_response.model_dump())
+
+    from app.env_health import warn_backend_missing_env
+
+    logged: list[str] = []
+    warn_backend_missing_env(
+        env={"JWT_SECRET": "fake-jwt-secret-value"},
+        logger_fn=logged.append,
+    )
+    assert len(logged) == 1
+    assert "DATABASE_URL" in logged[0]
+    assert "fake-jwt-secret-value" not in logged[0]

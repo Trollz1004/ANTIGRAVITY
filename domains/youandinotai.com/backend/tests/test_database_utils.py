@@ -82,35 +82,117 @@ def test_health_endpoint_full_shape(client):
     assert isinstance(data["user_count"], int)
 
 
-def test_health_allocations_empty_and_populated(client, db_session_factory):
-    from app.models import RevenueAllocation
+def _make_health_user(*, email: str, is_admin: bool = False):
+    import uuid
 
-    resp = client.get("/api/v1/health/allocations")
-    assert resp.status_code == 200
-    assert resp.json() == {"allocations": []}
+    from app.models import User
 
-    allocation = RevenueAllocation(
-        user_id=None,
-        source_event_id="evt_health_1",
-        square_payment_id="pay_health_1",
-        payment_tier="bot_shield",
-        gross_amount_cents=100,
-        reserve_amount_cents=0,
-        operating_amount_cents=100,
-        payer_type="customer",
+    user = User(
+        id=uuid.uuid4(),
+        email=email,
+        password_hash="hashed",
+        display_name="Health Test User",
+        is_active=True,
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
     )
-    seed(allocation, db_session_factory=db_session_factory)
+    user.is_admin = is_admin
+    return user
 
-    resp = client.get("/api/v1/health/allocations")
-    assert resp.status_code == 200
-    rows = resp.json()["allocations"]
-    assert len(rows) == 1
-    assert rows[0]["square_payment_id"] == "pay_health_1"
-    assert rows[0]["status"] == "reserved"
+
+def test_health_detail_routes_require_founder_or_admin_while_plain_health_stays_public(
+    client, monkeypatch
+):
+    from app.auth import get_current_user
+    from app.config import get_settings
+    from app.main import app
+    from tests.helpers import override_user
+
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
+    assert client.get("/health").status_code == 200
+    assert client.get("/api/v1/health").status_code == 200
+
+    detail_paths = (
+        "/api/v1/health/allocations",
+        "/api/v1/health/allocations/summary",
+        "/api/v1/health/webhooks",
+    )
+    for path in detail_paths:
+        assert client.get(path).status_code in (401, 403), f"Expected 401/403 on {path}"
+
+    member = _make_health_user(email="ordinary@example.com", is_admin=False)
+    app.dependency_overrides[get_current_user] = override_user(member)
+    try:
+        for path in detail_paths:
+            assert client.get(path).status_code == 403, f"Expected 403 on {path}"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+    admin_user = _make_health_user(email="admin@example.com", is_admin=True)
+    app.dependency_overrides[get_current_user] = override_user(admin_user)
+    try:
+        for path in detail_paths:
+            assert (
+                client.get(path).status_code == 200
+            ), f"Expected 200 for is_admin on {path}"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+    founder_user = _make_health_user(email="founder@youandinotai.com", is_admin=False)
+    app.dependency_overrides[get_current_user] = override_user(founder_user)
+    try:
+        for path in detail_paths:
+            assert (
+                client.get(path).status_code == 200
+            ), f"Expected 200 for founder on {path}"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+        get_settings.cache_clear()
+
+
+def test_health_allocations_empty_and_populated(client, db_session_factory):
+    from app.auth import get_current_user
+    from app.main import app
+    from app.models import RevenueAllocation
+    from tests.helpers import override_user
+
+    admin_user = _make_health_user(email="admin@example.com", is_admin=True)
+    app.dependency_overrides[get_current_user] = override_user(admin_user)
+    try:
+        resp = client.get("/api/v1/health/allocations")
+        assert resp.status_code == 200
+        assert resp.json() == {"allocations": []}
+
+        allocation = RevenueAllocation(
+            user_id=None,
+            source_event_id="evt_health_1",
+            square_payment_id="pay_health_1",
+            payment_tier="bot_shield",
+            gross_amount_cents=100,
+            reserve_amount_cents=0,
+            operating_amount_cents=100,
+            payer_type="customer",
+        )
+        seed(allocation, db_session_factory=db_session_factory)
+
+        resp = client.get("/api/v1/health/allocations")
+        assert resp.status_code == 200
+        rows = resp.json()["allocations"]
+        assert len(rows) == 1
+        assert rows[0]["square_payment_id"] == "pay_health_1"
+        assert rows[0]["status"] == "reserved"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_health_allocations_summary_groups_by_payer(client, db_session_factory):
+    from app.auth import get_current_user
+    from app.main import app
     from app.models import RevenueAllocation
+    from tests.helpers import override_user
 
     customer = RevenueAllocation(
         user_id=None,
@@ -134,34 +216,51 @@ def test_health_allocations_summary_groups_by_payer(client, db_session_factory):
     )
     seed(customer, founder, db_session_factory=db_session_factory)
 
-    resp = client.get("/api/v1/health/allocations/summary")
-    assert resp.status_code == 200
-    data = resp.json()
-    assert data["customer_only"]["payments"] == 1
-    assert data["customer_only"]["gross_cents"] == 100
-    assert data["founder_test"]["payments"] == 1
-    assert data["founder_test"]["gross_cents"] == 1499
-    assert data["with_test"]["payments"] == 2
-    assert data["with_test"]["gross_cents"] == 1599
-    # There is no revenue split. The summary reports payments and gross only;
-    # any reserve/operating field reappearing here is a regression.
-    for bucket in ("customer_only", "founder_test", "with_test"):
-        assert set(data[bucket]) == {
-            "payments",
-            "gross_cents",
-        }, f"{bucket} exposed unexpected fields: {sorted(data[bucket])}"
+    admin_user = _make_health_user(email="admin@example.com", is_admin=True)
+    app.dependency_overrides[get_current_user] = override_user(admin_user)
+    try:
+        resp = client.get("/api/v1/health/allocations/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["customer_only"]["payments"] == 1
+        assert data["customer_only"]["gross_cents"] == 100
+        assert data["founder_test"]["payments"] == 1
+        assert data["founder_test"]["gross_cents"] == 1499
+        assert data["with_test"]["payments"] == 2
+        assert data["with_test"]["gross_cents"] == 1599
+        # There is no revenue split. The summary reports payments and gross only;
+        # any reserve/operating field reappearing here is a regression.
+        for bucket in ("customer_only", "founder_test", "with_test"):
+            assert set(data[bucket]) == {
+                "payments",
+                "gross_cents",
+            }, f"{bucket} exposed unexpected fields: {sorted(data[bucket])}"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_health_allocations_summary_empty(client):
-    resp = client.get("/api/v1/health/allocations/summary")
-    assert resp.status_code == 200
-    data = resp.json()
-    assert data["customer_only"]["payments"] == 0
-    assert data["with_test"]["gross_cents"] == 0
+    from app.auth import get_current_user
+    from app.main import app
+    from tests.helpers import override_user
+
+    admin_user = _make_health_user(email="admin@example.com", is_admin=True)
+    app.dependency_overrides[get_current_user] = override_user(admin_user)
+    try:
+        resp = client.get("/api/v1/health/allocations/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["customer_only"]["payments"] == 0
+        assert data["with_test"]["gross_cents"] == 0
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_health_webhooks_listing(client, db_session_factory):
+    from app.auth import get_current_user
+    from app.main import app
     from app.models import WebhookEvent
+    from tests.helpers import override_user
 
     event = WebhookEvent(
         event_source_id="evt_health_webhook",
@@ -172,12 +271,17 @@ def test_health_webhooks_listing(client, db_session_factory):
     )
     seed(event, db_session_factory=db_session_factory)
 
-    resp = client.get("/api/v1/health/webhooks")
-    assert resp.status_code == 200
-    rows = resp.json()["webhooks"]
-    assert len(rows) == 1
-    assert rows[0]["event_source_id"] == "evt_health_webhook"
-    assert rows[0]["processed"] in (True, 1)
+    admin_user = _make_health_user(email="admin@example.com", is_admin=True)
+    app.dependency_overrides[get_current_user] = override_user(admin_user)
+    try:
+        resp = client.get("/api/v1/health/webhooks")
+        assert resp.status_code == 200
+        rows = resp.json()["webhooks"]
+        assert len(rows) == 1
+        assert rows[0]["event_source_id"] == "evt_health_webhook"
+        assert rows[0]["processed"] in (True, 1)
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_health_wallet_rails_proven_with_square_labels(client, db_session_factory):

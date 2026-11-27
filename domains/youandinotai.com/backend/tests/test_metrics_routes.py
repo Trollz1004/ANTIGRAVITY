@@ -11,10 +11,15 @@ PII contract: NONE of the following may appear in any /metrics response:
 Auth: X-Metrics-Key header (NOT user JWT).
 """
 
+import inspect
 import uuid
 from datetime import date, datetime, timezone
 
+import pytest
+
+from app.config import get_settings
 from app.models import User
+from app.routers import metrics as metrics_router
 from tests.helpers import seed
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -28,8 +33,15 @@ _PII_FIELDS = {
     "square_customer_id",
 }
 
-# JWT secret is set in conftest — the fallback key for metrics auth
-_TEST_METRICS_KEY = "test-secret-that-is-at-least-32-characters-long-for-security"
+_TEST_METRICS_KEY = "test-dedicated-metrics-key-distinct-from-jwt-secret"
+
+
+@pytest.fixture(autouse=True)
+def _configure_metrics_key(monkeypatch):
+    monkeypatch.setenv("METRICS_API_KEY", _TEST_METRICS_KEY)
+    get_settings.cache_clear()
+    yield
+    get_settings.cache_clear()
 
 
 def _metrics_headers(key: str = _TEST_METRICS_KEY) -> dict[str, str]:
@@ -68,6 +80,43 @@ def test_metrics_impact_wrong_key_returns_403(client):
 def test_metrics_security_audit_missing_key_returns_403(client):
     resp = client.get("/api/v1/metrics/security-audit")
     assert resp.status_code == 403
+
+
+def test_prometheus_metrics_requires_metrics_key(client):
+    missing_resp = client.get("/api/v1/metrics")
+    assert missing_resp.status_code == 403
+
+    wrong_resp = client.get(
+        "/api/v1/metrics",
+        headers={"X-Metrics-Key": "definitely-wrong-key"},
+    )
+    assert wrong_resp.status_code == 403
+
+    authed_resp = client.get("/api/v1/metrics", headers=_metrics_headers())
+    assert authed_resp.status_code in (200, 503)
+
+
+def test_metrics_rejects_jwt_secret_fallback(client, monkeypatch):
+    jwt_secret = get_settings().jwt_secret
+    assert jwt_secret != _TEST_METRICS_KEY
+
+    for path in ("/api/v1/metrics", "/api/v1/metrics/impact"):
+        resp = client.get(path, headers={"X-Metrics-Key": jwt_secret})
+        assert resp.status_code == 403
+
+    monkeypatch.setenv("METRICS_API_KEY", "")
+    get_settings.cache_clear()
+
+    for path in ("/api/v1/metrics", "/api/v1/metrics/impact"):
+        resp = client.get(path, headers={"X-Metrics-Key": jwt_secret})
+        assert resp.status_code == 403
+
+
+def test_require_metrics_key_uses_hmac_compare_digest_without_jwt_fallback():
+    require_source = inspect.getsource(metrics_router._require_metrics_key)
+    expected_source = inspect.getsource(metrics_router._expected_metrics_key)
+    assert "hmac.compare_digest" in require_source
+    assert "jwt_secret" not in expected_source
 
 
 # ── Happy path ────────────────────────────────────────────────────────────────

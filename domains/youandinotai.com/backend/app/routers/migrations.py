@@ -15,7 +15,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
 
-from app.auth import get_current_user
+from app.auth import require_founder_or_admin
 from app.database import engine
 
 logger = logging.getLogger("youandinotai.api.migrations")
@@ -45,7 +45,7 @@ async def _get_applied_count() -> int:
 
 @router.get("/status")
 async def migration_status(
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Get current migration state."""
     current = await _get_current_revision()
@@ -89,7 +89,7 @@ async def migration_status(
 
 @router.get("/health")
 async def migration_health(
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Get comprehensive migration health report with pre-flight checks."""
     try:
@@ -105,7 +105,7 @@ async def migration_health(
 @router.post("/dry-run")
 async def migration_dry_run(
     target: str = "head",
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Run a migration in dry-run mode (generate SQL without executing)."""
     try:
@@ -124,7 +124,7 @@ async def migration_dry_run(
 
 @router.post("/check")
 async def migration_pre_flight_check(
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Run pre-flight safety checks before migration."""
     try:

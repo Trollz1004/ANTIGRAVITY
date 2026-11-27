@@ -4,8 +4,19 @@
 
 import { create } from 'zustand';
 import { api } from './api';
+import {
+  capturePartnerId,
+  clearPartnerId,
+  normalizeRef,
+} from './partnerAttribution';
+import {
+  clearSignupSource,
+  getStoredSignupSource,
+  normalizeSignupSource,
+} from './signupSource';
 
 interface User {
+  id?: string;
   user_id: string;
   email: string;
   display_name: string;
@@ -15,6 +26,7 @@ interface User {
   subscription_expires_at?: string | null;
   has_profile: boolean;
   adult_verified: boolean;
+  member_badge?: string | null;
 }
 
 interface RegisterPayload {
@@ -26,14 +38,20 @@ interface RegisterPayload {
   acceptedCookiePolicy: boolean;
   confirmedOver18: boolean;
   referralCode?: string | null;
+  signupSource?: string | null;
 }
 
 interface AuthState {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  googleLogin: (idToken: string) => Promise<void>;
-  betaAccess: (code: string) => Promise<void>;
+  googleLogin: (
+    idToken: string,
+    dateOfBirth?: string,
+    referralCode?: string | null,
+    signupSource?: string | null
+  ) => Promise<void>;
+  betaAccess: (code: string, dateOfBirth?: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
   fetchUser: () => Promise<void>;
@@ -55,24 +73,42 @@ export const useAuth = create<AuthState>(set => ({
     set({ user });
   },
 
-  googleLogin: async idToken => {
+  googleLogin: async (idToken, dateOfBirth, referralCode, signupSource) => {
+    const resolvedReferralCode =
+      referralCode !== undefined
+        ? normalizeRef(referralCode)
+        : capturePartnerId(window.location.search);
+    const resolvedSignupSource =
+      signupSource !== undefined
+        ? normalizeSignupSource(signupSource)
+        : getStoredSignupSource();
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
       user_id: string;
-    }>('/auth/google', { id_token: idToken });
+    }>('/auth/google', {
+      id_token: idToken,
+      ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
+      ...(resolvedReferralCode ? { referral_code: resolvedReferralCode } : {}),
+      ...(resolvedSignupSource ? { signup_source: resolvedSignupSource } : {}),
+    });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
+    clearPartnerId();
+    clearSignupSource();
     const user = await api.get<User>('/auth/me');
     set({ user });
   },
 
-  betaAccess: async code => {
+  betaAccess: async (code, dateOfBirth) => {
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
       user_id: string;
-    }>('/auth/beta-access', { code });
+    }>('/auth/beta-access', {
+      code,
+      ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
+    });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
     localStorage.removeItem('beta_access_code');
@@ -89,7 +125,12 @@ export const useAuth = create<AuthState>(set => ({
     acceptedCookiePolicy,
     confirmedOver18,
     referralCode,
+    signupSource,
   }) => {
+    const resolvedSignupSource =
+      signupSource !== undefined
+        ? normalizeSignupSource(signupSource)
+        : getStoredSignupSource();
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -105,9 +146,12 @@ export const useAuth = create<AuthState>(set => ({
       // Influencer attribution. Omitted entirely when absent so the
       // backend default (NULL) applies rather than an empty string.
       ...(referralCode ? { referral_code: referralCode } : {}),
+      ...(resolvedSignupSource ? { signup_source: resolvedSignupSource } : {}),
     });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
+    clearPartnerId();
+    clearSignupSource();
     const user = await api.get<User>('/auth/me');
     set({ user });
   },

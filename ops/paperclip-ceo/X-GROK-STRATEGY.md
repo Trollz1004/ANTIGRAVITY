@@ -1,56 +1,52 @@
 <!--
 LOCKED-AND-SIGNED
 signer: Grok Judge
-agentId: 44a7bbb7-d01e-4f88-aa45-899b60f987de
 adapter: grok_local
-runtime: C:/Users/joshi/.grok/bin/grok.exe
-identity: official grok.com CLI grok 1.0.5 (5115b46bc9)
+runtime: %USERPROFILE%/.grok/bin/grok.exe
+identity: official grok.com CLI
 not: OmniRoute, Hermes, OpenClaw, OpenCode, Codex, Claude, Gemini, X Developer API, third-party X poster
 -->
-# X.com strategy — Grok exclusive (youandinotai.com)
+# X.com Strategy — Grok Exclusive (`youandinotai.com`)
 
-**Rule:** Anything associated with X.com (search, thread fetch, mentions, replies, posts, polls, DMs, media, twitter-cli, developer.x.com, cookies) is **Grok only**. Hermes, OpenClaw, OpenCode, Buffy, Codex, Claude, and Gemini must not call X. They may *assign* X work to [X Marketing (Grok)](/ANT/agents/x-marketing-grok) or [Grok Judge](/ANT/agents/grok-judge).
+**Rule:** Anything associated with X.com (search, thread fetch, mentions, replies, posts, polls, DMs, media) is **Grok only**. Other agent lanes (`Opus 5.5` / `Fable`, `Gemini 4 Carbon`, `GPT-6 Astra` / `GPT-6.1 Sol` / `Codex`, `OPSis` / `Hermes`, `OpenClaw`, `OpenCode`) assign X work to the official `Grok` lane rather than calling X directly.
 
-**Why:** Official X Developer API is the limited, billed route (pay-per-use since 2026: ~$0.015/post, **$0.20 if the post contains a URL**, $0.005/read; Free-tier write ~17 posts/day; unverified account cap ~50 original posts + 200 replies/day across web+API). Grok’s native X tools (`x_search` / keyword / semantic / user / thread) are first-party access to the X corpus via grok.com account-auth — not the X Developer app quota. Reads and research stay on Grok so we do not burn the $100/mo X Basic search tax or the 15-minute POST `/2/tweets` bucket.
+**Why:** Official X Developer API is pay-per-use and strictly rate-limited. Grok's native X tools (`x_search` / keyword / semantic / user / thread) are the first-party path via `grok.com` account-auth.
 
-Posts still count against the **X account** if we publish. Do not hammer. Draft to `ops/marketing-inbox/`. Joshua approves. Then Grok posts via grok.com tools.
+Posts count against the **X account** if published. Draft all candidates to `ops/marketing-inbox/` first; Founder Joshua Coleman approves before Grok posts.
 
 ---
 
 ## Goal
 
-Company goal: **$5,000** Square membership/access on youandinotai.com ([ANT-64](/ANT/issues/ANT-64) / [ANT-65](/ANT/issues/ANT-65) / [ANT-66](/ANT/issues/ANT-66)). X is a funnel, not a firehose.
+Commercial growth and paid memberships/verification on `youandinotai.com` (and B2B hardware recovery on `onlinerecycle.net` / AI-built MMORPG updates on `dream-online.net`). X is a focused funnel, not a firehose.
 
-## Copy (business-only)
+## Copy (Business-Only Framing)
 
-Allowed: membership, verification, safety, support, uptime, platform access, Square checkout.
-Banned on public X: donate, donation, charity, kids hospitals, revenue split, Stripe.
-Do not invent product claims that are not on the live site.
+- **Allowed**: membership, human verification, `$1 Bot-Shield`, safety, support, uptime, platform access, Square primary + PayPal checkout (`docs/PAYMENTS-TRUTH.md`).
+- **Disallowed**: any non-commercial or unapproved payment phrasing, or unverified product claims not present on the live site.
 
-## Cadence (Grok-native, rate-aware)
+## Cadence (Grok-Native, Rate-Aware)
 
 | Lane | Who | Tool | Volume |
 | --- | --- | --- | --- |
-| Research / listen | X Marketing (Grok) | grok.com `x_keyword_search`, `x_semantic_search`, `x_thread_fetch`, `x_user_search` | Heavy — this is the rate win vs X API search |
-| Draft | X Marketing (Grok) | inbox JSON | Daily if marketing gate is green |
-| Publish | X Marketing (Grok) after Joshua approval | grok.com native post, never `POST /2/tweets` | Sparse: quality threads, not 50 unverified posts/day |
-| Judge | Grok Judge only if an X artifact must be verified | same grok.com tools | Read-only unless Joshua says otherwise |
+| Research / listen | X Marketing (`Grok`) | `grok.com` `x_keyword_search`, `x_semantic_search`, `x_thread_fetch`, `x_user_search` | High-signal discovery without X API quotas |
+| Draft | X Marketing (`Grok`) | `ops/marketing-inbox/` JSON drop | Daily only when preflight checks are green |
+| Publish | X Marketing (`Grok`) after Founder approval | `grok.com` native post (never `POST /2/tweets`) | Sparse: quality threads only |
+| Verify | Grok Judge when X artifact check is needed | `grok.com` native read-only tools | Read-only unless directed otherwise |
 
-Never: twitter-cli, OpenCLI twitter, agent-reach write, Codex/Claude browser posting, OmniRoute as the model that talks to X.
+Never use `twitter-cli`, `OpenCLI` twitter scrapers, `agent-reach` writes, browser posting from non-Grok lanes, or OmniRoute for X access.
 
-## Content that converts (research, 2026)
+## Content That Converts
 
-- Niche first. Dating apps that scale on social pick one sharp audience, not “everyone.”
-- Audience before spend. Starcrossed-style: content in-niche, then paywall/membership CTA.
-- X format: short hook → one proof (verification, safety, uptime) → CTA to youandinotai.com membership. Put the URL only on approved posts (X API charges extra for URL posts; grok.com path still should not spam links).
-- Replies to real dating-pain posts beat cold blasts. Grok search finds them without X API recent-search quotas.
-- IRL / UGC clips belong on Reels/TikTok; X carries the thread + proof + support link.
-- Track D1 interest in Square checkouts, not vanity likes.
+- Niche first: target clear human-verified dating audiences rather than generic blasts.
+- X format: short hook -> concrete product proof (verification, safety, uptime) -> CTA to `youandinotai.com`.
+- Keep `youandinotai.com` (18+ adult-verified dating) strictly walled from `onlinerecycle.net` and `dream-online.net`.
+- Track conversions through live Square / PayPal checkout telemetry (`docs/PAYMENTS-TRUTH.md`), never vanity likes.
 
-## Marketing gate (unchanged)
+## Marketing Gate
 
-No draft/post until CEO checklist is UP this session: frontend, backend db+redis+square, tunnel+DNS, support routes, Mission Control.
+No draft or publish run until T5500 health (`http://192.168.0.15:3200`, `:8000/health`, `:3130` Mission OS, tunnel + DNS) is `UP` and verified for the current session.
 
-## Evidence standard
+## Evidence Standard
 
-Every X claim: VERIFIED / UNVERIFIED / BLOCKED with a handle (post id, search query, inbox path). Invented engagement is forbidden.
+Every X claim must report `VERIFIED`, `UNVERIFIED`, or `BLOCKED` with an evidence handle (post ID, search query, inbox path). Never fabricate engagement metrics.
