@@ -75,6 +75,21 @@ const SITES = ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'];
 // The booking APIs belong to onlinerecycle.net only.
 const BOOKING_HOSTS = new Set(['onlinerecycle.net', 'www.onlinerecycle.net']);
 
+const FOLDED_TOWN_BLOG_SLUGS = new Set([
+  'where-to-recycle-old-computers-in-altamonte-springs-florida',
+  'where-to-recycle-old-computers-in-clermont-florida',
+  'where-to-recycle-old-computers-in-lake-county-florida',
+  'where-to-recycle-old-computers-in-lake-mary-florida',
+  'where-to-recycle-old-computers-in-leesburg-florida',
+  'where-to-recycle-old-computers-in-mount-dora-florida',
+  'where-to-recycle-old-computers-in-oviedo-florida',
+  'where-to-recycle-old-computers-in-sanford-florida',
+  'where-to-recycle-old-computers-in-winter-garden-florida',
+  'where-to-recycle-old-computers-in-winter-park-florida',
+  'where-to-recycle-old-electronics-in-apopka-florida',
+]);
+const FOLDED_TOWN_BLOG_TARGET = '/blog/towns-we-pick-up-from.html';
+
 // Public, unauthenticated booking form: cap submissions per client so a
 // script cannot fill the disk. In-memory, resets on restart.
 const BOOK_LIMIT = 2;
@@ -1046,6 +1061,15 @@ const server = http.createServer(async (req, res) => {
 
     const docRootAbs = path.join(DOMAINS_ROOT, relDocRoot);
     if (isBookingHost && (req.method === 'GET' || req.method === 'HEAD')) {
+      const blogPostMatch = urlPath.match(/^\/blog\/([a-z0-9-]+?)(?:\.html)?\/?$/i);
+      if (blogPostMatch && FOLDED_TOWN_BLOG_SLUGS.has(blogPostMatch[1].toLowerCase())) {
+        res.writeHead(301, {
+          Location: FOLDED_TOWN_BLOG_TARGET,
+          'Content-Type': 'text/plain; charset=utf-8',
+        });
+        res.end(req.method === 'HEAD' ? undefined : `Moved Permanently: ${FOLDED_TOWN_BLOG_TARGET}\n`);
+        return;
+      }
       if (urlPath === '/blog' || urlPath === '/blog/' || urlPath === '/blog/index.html') {
         const html = buildOnlineRecycleBlogIndex(docRootAbs);
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
