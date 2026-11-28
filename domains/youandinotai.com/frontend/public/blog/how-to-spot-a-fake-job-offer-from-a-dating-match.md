@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/how-to-spot-a-fake-job-offer-from-a-da
 
 # How to spot a fake job offer from a dating match
 
-Dating apps connect individuals seeking personal relationships. Some fraudulent profiles use dating conversations to pitch employment schemes instead of romance. On December 12, 2024, the [Federal Trade Commission](https://www.ftc.gov/news-events/data-spotlight/2024/12/paying-get-paid-gamified-job-scams-drive-record-losses) published a Data Spotlight titled "Paying to get paid: gamified job scams drive record losses". The report stated that reported losses to job scams reached $220 million in the first half of 2024. The report stated that approximately 20,000 people reported gamified task scams in the first six months of 2024. Recognizing false employment pitches helps you protect your finances and personal data.
+Dating apps connect individuals seeking personal relationships. Some fraudulent profiles use dating conversations to pitch employment schemes instead of romance. On December 12, 2024, the [Federal Trade Commission](https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2024/12/paying-get-paid-gamified-job-scams-drive-record-losses) published a Data Spotlight titled "Paying to get paid: gamified job scams drive record losses". The report stated that reported losses to job scams topped $220 million in the first half of 2024. The report stated that about 20,000 people reported gamified task scams in the first six months of 2024. Recognizing false employment pitches helps you protect your finances and personal data.
 
 ## Why scammers pitch jobs on dating platforms
 
